@@ -16,7 +16,7 @@ use crate::settings::{NetworkSettings, ResolverInstallerSettings};
 
 /// A [`PythonEnvironment`] stored in the cache.
 #[derive(Debug)]
-pub(crate) struct CachedEnvironment(PythonEnvironment);
+pub struct CachedEnvironment(PythonEnvironment);
 
 impl From<CachedEnvironment> for PythonEnvironment {
     fn from(environment: CachedEnvironment) -> Self {
@@ -26,7 +26,7 @@ impl From<CachedEnvironment> for PythonEnvironment {
 
 impl CachedEnvironment {
     /// Get or create an [`CachedEnvironment`] based on a given set of requirements.
-    pub(crate) async fn from_spec(
+    pub async fn from_spec(
         spec: EnvironmentSpecification<'_>,
         interpreter: &Interpreter,
         settings: &ResolverInstallerSettings,
@@ -122,7 +122,7 @@ impl CachedEnvironment {
 
     /// Set the ephemeral overlay for a Python environment.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn set_overlay(&self, contents: impl AsRef<[u8]>) -> Result<(), ProjectError> {
+    pub fn set_overlay(&self, contents: impl AsRef<[u8]>) -> Result<(), ProjectError> {
         let site_packages = self
             .0
             .site_packages()
@@ -135,7 +135,7 @@ impl CachedEnvironment {
 
     /// Clear the ephemeral overlay for a Python environment, if it exists.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn clear_overlay(&self) -> Result<(), ProjectError> {
+    pub fn clear_overlay(&self) -> Result<(), ProjectError> {
         let site_packages = self
             .0
             .site_packages()
@@ -152,7 +152,7 @@ impl CachedEnvironment {
 
     /// Enable system site packages for a Python environment.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn set_system_site_packages(&self) -> Result<(), ProjectError> {
+    pub fn set_system_site_packages(&self) -> Result<(), ProjectError> {
         self.0
             .set_pyvenv_cfg("include-system-site-packages", "true")?;
         Ok(())
@@ -160,7 +160,7 @@ impl CachedEnvironment {
 
     /// Disable system site packages for a Python environment.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn clear_system_site_packages(&self) -> Result<(), ProjectError> {
+    pub fn clear_system_site_packages(&self) -> Result<(), ProjectError> {
         self.0
             .set_pyvenv_cfg("include-system-site-packages", "false")?;
         Ok(())

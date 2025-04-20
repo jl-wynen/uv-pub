@@ -25,7 +25,7 @@ use crate::settings::NetworkSettings;
 
 /// Uninstall packages from the current environment.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn pip_uninstall(
+pub async fn pip_uninstall(
     sources: &[RequirementsSource],
     python: Option<String>,
     system: bool,

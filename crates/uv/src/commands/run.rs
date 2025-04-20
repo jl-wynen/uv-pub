@@ -7,7 +7,7 @@ use tracing::debug;
 /// Note that this registers handles to ignore some signals in the parent process. This is safe as
 /// long as the command is the last thing that runs in this process; otherwise, we'd need to restore
 /// the default signal handlers after the command completes.
-pub(crate) async fn run_to_completion(mut handle: Child) -> anyhow::Result<ExitStatus> {
+pub async fn run_to_completion(mut handle: Child) -> anyhow::Result<ExitStatus> {
     // On Unix, shells will send SIGINT to the active process group when a user presses `Ctrl-C`. In
     // general, this means that uv should ignore SIGINT, allowing the child process to cleanly exit
     // instead. If uv forwarded the SIGINT immediately, the child process would receive _two_ SIGINT

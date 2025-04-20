@@ -62,7 +62,7 @@ use crate::settings::{NetworkSettings, ResolverInstallerSettings};
 
 /// Add one or more packages to the project requirements.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn add(
+pub async fn add(
     project_dir: &Path,
     locked: bool,
     frozen: bool,

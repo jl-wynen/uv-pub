@@ -51,7 +51,7 @@ use crate::settings::{NetworkSettings, ResolverSettings};
 
 /// The result of running a lock operation.
 #[derive(Debug, Clone)]
-pub(crate) enum LockResult {
+pub enum LockResult {
     /// The lock was unchanged.
     Unchanged(Lock),
     /// The lock was changed.
@@ -59,14 +59,14 @@ pub(crate) enum LockResult {
 }
 
 impl LockResult {
-    pub(crate) fn lock(&self) -> &Lock {
+    pub fn lock(&self) -> &Lock {
         match self {
             LockResult::Unchanged(lock) => lock,
             LockResult::Changed(_, lock) => lock,
         }
     }
 
-    pub(crate) fn into_lock(self) -> Lock {
+    pub fn into_lock(self) -> Lock {
         match self {
             LockResult::Unchanged(lock) => lock,
             LockResult::Changed(_, lock) => lock,
@@ -76,7 +76,7 @@ impl LockResult {
 
 /// Resolve the project requirements into a lockfile.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn lock(
+pub async fn lock(
     project_dir: &Path,
     locked: bool,
     frozen: bool,
@@ -1246,7 +1246,7 @@ impl ValidatedLock {
 
 /// A modification to a lockfile.
 #[derive(Debug, Clone)]
-pub(crate) enum LockEvent<'lock> {
+pub enum LockEvent<'lock> {
     Update(
         DryRun,
         PackageName,
@@ -1259,7 +1259,7 @@ pub(crate) enum LockEvent<'lock> {
 
 impl<'lock> LockEvent<'lock> {
     /// Detect the change events between an (optional) existing and updated lockfile.
-    pub(crate) fn detect_changes(
+    pub fn detect_changes(
         existing_lock: Option<&'lock Lock>,
         new_lock: &'lock Lock,
         dry_run: DryRun,

@@ -52,7 +52,7 @@ use crate::settings::NetworkSettings;
 
 /// Resolve a set of requirements into a set of pinned versions.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn pip_compile(
+pub async fn pip_compile(
     requirements: &[RequirementsSource],
     constraints: &[RequirementsSource],
     overrides: &[RequirementsSource],

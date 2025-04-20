@@ -18,7 +18,7 @@ use crate::commands::project::{find_requires_python, ProjectError};
 
 /// A target that can be resolved into a lockfile.
 #[derive(Debug, Copy, Clone)]
-pub(crate) enum LockTarget<'lock> {
+pub enum LockTarget<'lock> {
     Workspace(&'lock Workspace),
     Script(&'lock Pep723Script),
 }
@@ -38,7 +38,7 @@ impl<'lock> From<&'lock Pep723Script> for LockTarget<'lock> {
 impl<'lock> LockTarget<'lock> {
     /// Return the set of requirements that are attached to the target directly, as opposed to being
     /// attached to any members within the target.
-    pub(crate) fn requirements(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
+    pub fn requirements(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
         match self {
             Self::Workspace(workspace) => workspace.requirements(),
             Self::Script(script) => script.metadata.dependencies.clone().unwrap_or_default(),
@@ -46,7 +46,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of overrides for the [`LockTarget`].
-    pub(crate) fn overrides(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
+    pub fn overrides(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
         match self {
             Self::Workspace(workspace) => workspace.overrides(),
             Self::Script(script) => script
@@ -63,7 +63,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of constraints for the [`LockTarget`].
-    pub(crate) fn constraints(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
+    pub fn constraints(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
         match self {
             Self::Workspace(workspace) => workspace.constraints(),
             Self::Script(script) => script
@@ -80,7 +80,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of build constraints for the [`LockTarget`].
-    pub(crate) fn build_constraints(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
+    pub fn build_constraints(self) -> Vec<uv_pep508::Requirement<VerbatimParsedUrl>> {
         match self {
             Self::Workspace(workspace) => workspace.build_constraints(),
             Self::Script(script) => script
@@ -98,7 +98,7 @@ impl<'lock> LockTarget<'lock> {
 
     /// Return the dependency groups that are attached to the target directly, as opposed to being
     /// attached to any members within the target.
-    pub(crate) fn dependency_groups(
+    pub fn dependency_groups(
         self,
     ) -> Result<
         BTreeMap<GroupName, Vec<uv_pep508::Requirement<VerbatimParsedUrl>>>,
@@ -111,7 +111,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of all members within the target.
-    pub(crate) fn members_requirements(self) -> impl Iterator<Item = Requirement> + 'lock {
+    pub fn members_requirements(self) -> impl Iterator<Item = Requirement> + 'lock {
         match self {
             Self::Workspace(workspace) => Either::Left(workspace.members_requirements()),
             Self::Script(_) => Either::Right(std::iter::empty()),
@@ -119,7 +119,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of all dependency groups within the target.
-    pub(crate) fn group_requirements(self) -> impl Iterator<Item = Requirement> + 'lock {
+    pub fn group_requirements(self) -> impl Iterator<Item = Requirement> + 'lock {
         match self {
             Self::Workspace(workspace) => Either::Left(workspace.group_requirements()),
             Self::Script(_) => Either::Right(std::iter::empty()),
@@ -127,7 +127,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Return the list of members to include in the [`Lock`].
-    pub(crate) fn members(self) -> Vec<PackageName> {
+    pub fn members(self) -> Vec<PackageName> {
         match self {
             Self::Workspace(workspace) => {
                 let mut members = workspace.packages().keys().cloned().collect::<Vec<_>>();
@@ -147,7 +147,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Return the list of packages.
-    pub(crate) fn packages(self) -> &'lock BTreeMap<PackageName, WorkspaceMember> {
+    pub fn packages(self) -> &'lock BTreeMap<PackageName, WorkspaceMember> {
         match self {
             Self::Workspace(workspace) => workspace.packages(),
             Self::Script(_) => {
@@ -158,7 +158,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of supported environments for the [`LockTarget`].
-    pub(crate) fn environments(self) -> Option<&'lock SupportedEnvironments> {
+    pub fn environments(self) -> Option<&'lock SupportedEnvironments> {
         match self {
             Self::Workspace(workspace) => workspace.environments(),
             Self::Script(_) => {
@@ -169,7 +169,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of required platforms for the [`LockTarget`].
-    pub(crate) fn required_environments(self) -> Option<&'lock SupportedEnvironments> {
+    pub fn required_environments(self) -> Option<&'lock SupportedEnvironments> {
         match self {
             Self::Workspace(workspace) => workspace.required_environments(),
             Self::Script(_) => {
@@ -180,7 +180,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Returns the set of conflicts for the [`LockTarget`].
-    pub(crate) fn conflicts(self) -> Conflicts {
+    pub fn conflicts(self) -> Conflicts {
         match self {
             Self::Workspace(workspace) => workspace.conflicts(),
             Self::Script(_) => Conflicts::empty(),
@@ -188,7 +188,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Return an iterator over the [`Index`] definitions in the [`LockTarget`].
-    pub(crate) fn indexes(self) -> impl Iterator<Item = &'lock Index> {
+    pub fn indexes(self) -> impl Iterator<Item = &'lock Index> {
         match self {
             Self::Workspace(workspace) => Either::Left(workspace.indexes().iter().chain(
                 workspace.packages().values().flat_map(|member| {
@@ -217,7 +217,7 @@ impl<'lock> LockTarget<'lock> {
 
     /// Return the `Requires-Python` bound for the [`LockTarget`].
     #[allow(clippy::result_large_err)]
-    pub(crate) fn requires_python(self) -> Result<Option<RequiresPython>, ProjectError> {
+    pub fn requires_python(self) -> Result<Option<RequiresPython>, ProjectError> {
         match self {
             Self::Workspace(workspace) => find_requires_python(workspace),
             Self::Script(script) => Ok(script
@@ -229,7 +229,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Return the path to the lock root.
-    pub(crate) fn install_path(self) -> &'lock Path {
+    pub fn install_path(self) -> &'lock Path {
         match self {
             Self::Workspace(workspace) => workspace.install_path(),
             Self::Script(script) => script.path.parent().unwrap(),
@@ -237,7 +237,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Return the path to the lockfile.
-    pub(crate) fn lock_path(self) -> PathBuf {
+    pub fn lock_path(self) -> PathBuf {
         match self {
             // `uv.lock`
             Self::Workspace(workspace) => workspace.install_path().join("uv.lock"),
@@ -256,7 +256,7 @@ impl<'lock> LockTarget<'lock> {
     /// Read the lockfile from the workspace.
     ///
     /// Returns `Ok(None)` if the lockfile does not exist.
-    pub(crate) async fn read(self) -> Result<Option<Lock>, ProjectError> {
+    pub async fn read(self) -> Result<Option<Lock>, ProjectError> {
         match fs_err::tokio::read_to_string(self.lock_path()).await {
             Ok(encoded) => {
                 match toml::from_str::<Lock>(&encoded) {
@@ -292,7 +292,7 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Read the lockfile from the workspace as bytes.
-    pub(crate) async fn read_bytes(self) -> Result<Option<Vec<u8>>, std::io::Error> {
+    pub async fn read_bytes(self) -> Result<Option<Vec<u8>>, std::io::Error> {
         match fs_err::tokio::read(self.lock_path()).await {
             Ok(encoded) => Ok(Some(encoded)),
             Err(err) if err.kind() == std::io::ErrorKind::NotFound => Ok(None),
@@ -301,14 +301,14 @@ impl<'lock> LockTarget<'lock> {
     }
 
     /// Write the lockfile to disk.
-    pub(crate) async fn commit(self, lock: &Lock) -> Result<(), ProjectError> {
+    pub async fn commit(self, lock: &Lock) -> Result<(), ProjectError> {
         let encoded = lock.to_toml()?;
         fs_err::tokio::write(self.lock_path(), encoded).await?;
         Ok(())
     }
 
     /// Lower the requirements for the [`LockTarget`], relative to the target root.
-    pub(crate) fn lower(
+    pub fn lower(
         self,
         requirements: Vec<uv_pep508::Requirement<VerbatimParsedUrl>>,
         locations: &IndexLocations,

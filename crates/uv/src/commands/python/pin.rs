@@ -20,7 +20,7 @@ use crate::commands::{project::find_requires_python, ExitStatus};
 use crate::printer::Printer;
 
 /// Pin to a specific Python version.
-pub(crate) async fn pin(
+pub async fn pin(
     project_dir: &Path,
     request: Option<String>,
     resolved: bool,

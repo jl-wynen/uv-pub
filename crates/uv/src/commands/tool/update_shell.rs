@@ -15,7 +15,7 @@ use crate::commands::ExitStatus;
 use crate::printer::Printer;
 
 /// Ensure that the executable directory is in PATH.
-pub(crate) async fn update_shell(printer: Printer) -> Result<ExitStatus> {
+pub async fn update_shell(printer: Printer) -> Result<ExitStatus> {
     let executable_directory = tool_executable_dir()?;
     debug!(
         "Ensuring that the executable directory is in PATH: {}",

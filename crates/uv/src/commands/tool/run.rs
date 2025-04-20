@@ -58,7 +58,7 @@ use crate::settings::ResolverInstallerSettings;
 
 /// The user-facing command used to invoke a tool run.
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub(crate) enum ToolRunCommand {
+pub enum ToolRunCommand {
     /// via the `uvx` alias
     Uvx,
     /// via `uv tool run`
@@ -76,7 +76,7 @@ impl Display for ToolRunCommand {
 
 /// Run a command.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn run(
+pub async fn run(
     command: Option<ExternalCommand>,
     from: Option<String>,
     with: &[RequirementsSource],
@@ -566,7 +566,7 @@ fn warn_executable_not_provided_by_package(
 // [`ToolRequirement::Package`] is the more common case and it seems annoying to box it.
 #[derive(Debug)]
 #[allow(clippy::large_enum_variant)]
-pub(crate) enum ToolRequirement {
+pub enum ToolRequirement {
     Python,
     Package {
         executable: String,

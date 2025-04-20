@@ -22,7 +22,7 @@ use crate::commands::{elapsed, ExitStatus};
 use crate::printer::Printer;
 
 /// Uninstall managed Python versions.
-pub(crate) async fn uninstall(
+pub async fn uninstall(
     install_dir: Option<PathBuf>,
     targets: Vec<String>,
     all: bool,

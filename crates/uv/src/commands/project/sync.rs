@@ -48,7 +48,7 @@ use crate::settings::{InstallerSettingsRef, NetworkSettings, ResolverInstallerSe
 
 /// Sync the project environment.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn sync(
+pub async fn sync(
     project_dir: &Path,
     locked: bool,
     frozen: bool,

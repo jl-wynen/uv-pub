@@ -13,7 +13,7 @@ use crate::commands::ExitStatus;
 use crate::printer::Printer;
 
 /// Uninstall a tool.
-pub(crate) async fn uninstall(name: Vec<PackageName>, printer: Printer) -> Result<ExitStatus> {
+pub async fn uninstall(name: Vec<PackageName>, printer: Printer) -> Result<ExitStatus> {
     let installed_tools = InstalledTools::from_settings()?.init()?;
     let _lock = match installed_tools.lock().await {
         Ok(lock) => lock,

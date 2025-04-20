@@ -13,7 +13,7 @@ use crate::commands::ExitStatus;
 use crate::printer::Printer;
 
 /// List installed tools.
-pub(crate) async fn list(
+pub async fn list(
     show_paths: bool,
     show_version_specifiers: bool,
     cache: &Cache,

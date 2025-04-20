@@ -7,46 +7,46 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 use std::{fmt::Display, fmt::Write, process::ExitCode};
 
-pub(crate) use build_frontend::build_frontend;
-pub(crate) use cache_clean::cache_clean;
-pub(crate) use cache_dir::cache_dir;
-pub(crate) use cache_prune::cache_prune;
-pub(crate) use help::help;
-pub(crate) use pip::check::pip_check;
-pub(crate) use pip::compile::pip_compile;
-pub(crate) use pip::freeze::pip_freeze;
-pub(crate) use pip::install::pip_install;
-pub(crate) use pip::list::pip_list;
-pub(crate) use pip::show::pip_show;
-pub(crate) use pip::sync::pip_sync;
-pub(crate) use pip::tree::pip_tree;
-pub(crate) use pip::uninstall::pip_uninstall;
-pub(crate) use project::add::add;
-pub(crate) use project::export::export;
-pub(crate) use project::init::{init, InitKind, InitProjectKind};
-pub(crate) use project::lock::lock;
-pub(crate) use project::remove::remove;
-pub(crate) use project::run::{run, RunCommand};
-pub(crate) use project::sync::sync;
-pub(crate) use project::tree::tree;
-pub(crate) use publish::publish;
-pub(crate) use python::dir::dir as python_dir;
-pub(crate) use python::find::find as python_find;
-pub(crate) use python::find::find_script as python_find_script;
-pub(crate) use python::install::install as python_install;
-pub(crate) use python::list::list as python_list;
-pub(crate) use python::pin::pin as python_pin;
-pub(crate) use python::uninstall::uninstall as python_uninstall;
+pub use build_frontend::build_frontend;
+pub use cache_clean::cache_clean;
+pub use cache_dir::cache_dir;
+pub use cache_prune::cache_prune;
+pub use help::help;
+pub use pip::check::pip_check;
+pub use pip::compile::pip_compile;
+pub use pip::freeze::pip_freeze;
+pub use pip::install::pip_install;
+pub use pip::list::pip_list;
+pub use pip::show::pip_show;
+pub use pip::sync::pip_sync;
+pub use pip::tree::pip_tree;
+pub use pip::uninstall::pip_uninstall;
+pub use project::add::add;
+pub use project::export::export;
+pub use project::init::{init, InitKind, InitProjectKind};
+pub use project::lock::lock;
+pub use project::remove::remove;
+pub use project::run::{run, RunCommand};
+pub use project::sync::sync;
+pub use project::tree::tree;
+pub use publish::publish;
+pub use python::dir::dir as python_dir;
+pub use python::find::find as python_find;
+pub use python::find::find_script as python_find_script;
+pub use python::install::install as python_install;
+pub use python::list::list as python_list;
+pub use python::pin::pin as python_pin;
+pub use python::uninstall::uninstall as python_uninstall;
 #[cfg(feature = "self-update")]
-pub(crate) use self_update::self_update;
-pub(crate) use tool::dir::dir as tool_dir;
-pub(crate) use tool::install::install as tool_install;
-pub(crate) use tool::list::list as tool_list;
-pub(crate) use tool::run::run as tool_run;
-pub(crate) use tool::run::ToolRunCommand;
-pub(crate) use tool::uninstall::uninstall as tool_uninstall;
-pub(crate) use tool::update_shell::update_shell as tool_update_shell;
-pub(crate) use tool::upgrade::upgrade as tool_upgrade;
+pub use self_update::self_update;
+pub use tool::dir::dir as tool_dir;
+pub use tool::install::install as tool_install;
+pub use tool::list::list as tool_list;
+pub use tool::run::run as tool_run;
+pub use tool::run::ToolRunCommand;
+pub use tool::uninstall::uninstall as tool_uninstall;
+pub use tool::update_shell::update_shell as tool_update_shell;
+pub use tool::upgrade::upgrade as tool_upgrade;
 use uv_cache::Cache;
 use uv_configuration::Concurrency;
 use uv_distribution_types::InstalledMetadata;
@@ -55,23 +55,23 @@ use uv_installer::compile_tree;
 use uv_normalize::PackageName;
 use uv_python::PythonEnvironment;
 use uv_scripts::Pep723Script;
-pub(crate) use venv::venv;
-pub(crate) use version::version;
+pub use venv::venv;
+pub use version::version;
 
 use crate::printer::Printer;
 
-pub(crate) mod build_backend;
+pub mod build_backend;
 mod build_frontend;
 mod cache_clean;
 mod cache_dir;
 mod cache_prune;
 mod diagnostics;
 mod help;
-pub(crate) mod pip;
+pub mod pip;
 mod project;
 mod publish;
 mod python;
-pub(crate) mod reporters;
+pub mod reporters;
 mod run;
 #[cfg(feature = "self-update")]
 mod self_update;
@@ -80,7 +80,7 @@ mod venv;
 mod version;
 
 #[derive(Copy, Clone)]
-pub(crate) enum ExitStatus {
+pub enum ExitStatus {
     /// The command succeeded.
     Success,
 
@@ -295,7 +295,7 @@ pub(super) fn capitalize(s: &str) -> String {
 
 /// A Python file that may or may not include an existing PEP 723 script tag.
 #[derive(Debug)]
-pub(crate) enum ScriptPath {
+pub enum ScriptPath {
     /// The Python file already includes a PEP 723 script tag.
     Script(Pep723Script),
     /// The Python file does not include a PEP 723 script tag.

@@ -36,7 +36,7 @@ use crate::settings::NetworkSettings;
 
 /// Enumerate the installed packages in the current environment.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn pip_list(
+pub async fn pip_list(
     editable: Option<bool>,
     exclude: &[PackageName],
     format: &ListFormat,

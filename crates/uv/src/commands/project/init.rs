@@ -36,7 +36,7 @@ use crate::settings::NetworkSettings;
 
 /// Add one or more packages to the project requirements.
 #[allow(clippy::single_match_else, clippy::fn_params_excessive_bools)]
-pub(crate) async fn init(
+pub async fn init(
     project_dir: &Path,
     explicit_path: Option<PathBuf>,
     name: Option<PackageName>,
@@ -663,7 +663,7 @@ async fn init_project(
 
 /// The kind of entity to initialize (either a PEP 723 script or a Python project).
 #[derive(Debug, Copy, Clone)]
-pub(crate) enum InitKind {
+pub enum InitKind {
     /// Initialize a Python project.
     Project(InitProjectKind),
     /// Initialize a PEP 723 script.
@@ -678,7 +678,7 @@ impl Default for InitKind {
 
 /// The kind of Python project to initialize (either an application or a library).
 #[derive(Debug, Copy, Clone, Default)]
-pub(crate) enum InitProjectKind {
+pub enum InitProjectKind {
     /// Initialize a Python application.
     #[default]
     Application,
@@ -688,7 +688,7 @@ pub(crate) enum InitProjectKind {
 
 impl InitKind {
     /// Returns `true` if the project should be packaged by default.
-    pub(crate) fn packaged_by_default(self) -> bool {
+    pub fn packaged_by_default(self) -> bool {
         matches!(self, InitKind::Project(InitProjectKind::Library))
     }
 }

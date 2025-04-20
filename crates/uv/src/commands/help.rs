@@ -18,7 +18,7 @@ use uv_static::EnvVars;
 // hidden subcommands to show in the help command
 const SHOW_HIDDEN_COMMANDS: &[&str] = &["generate-shell-completion"];
 
-pub(crate) fn help(query: &[String], printer: Printer, no_pager: bool) -> Result<ExitStatus> {
+pub fn help(query: &[String], printer: Printer, no_pager: bool) -> Result<ExitStatus> {
     let mut uv: clap::Command = SHOW_HIDDEN_COMMANDS
         .iter()
         .fold(Cli::command(), |uv, &name| {

@@ -39,7 +39,7 @@ use crate::settings::{NetworkSettings, ResolverInstallerSettings};
 
 /// Remove one or more packages from the project requirements.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn remove(
+pub async fn remove(
     project_dir: &Path,
     locked: bool,
     frozen: bool,

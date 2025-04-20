@@ -34,7 +34,7 @@ use crate::printer::Printer;
 use crate::settings::{NetworkSettings, ResolverInstallerSettings};
 
 /// Upgrade a tool.
-pub(crate) async fn upgrade(
+pub async fn upgrade(
     names: Vec<String>,
     python: Option<String>,
     install_mirrors: PythonInstallMirrors,

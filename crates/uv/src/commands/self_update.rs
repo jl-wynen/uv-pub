@@ -12,7 +12,7 @@ use crate::commands::ExitStatus;
 use crate::printer::Printer;
 
 /// Attempt to update the uv binary.
-pub(crate) async fn self_update(
+pub async fn self_update(
     version: Option<String>,
     token: Option<String>,
     printer: Printer,

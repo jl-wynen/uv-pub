@@ -10,7 +10,7 @@ use crate::commands::{human_readable_bytes, ExitStatus};
 use crate::printer::Printer;
 
 /// Prune all unreachable objects from the cache.
-pub(crate) fn cache_prune(ci: bool, cache: &Cache, printer: Printer) -> Result<ExitStatus> {
+pub fn cache_prune(ci: bool, cache: &Cache, printer: Printer) -> Result<ExitStatus> {
     if !cache.root().exists() {
         writeln!(
             printer.stderr(),

@@ -42,7 +42,7 @@ use crate::settings::NetworkSettings;
 
 /// Create a virtual environment.
 #[allow(clippy::unnecessary_wraps, clippy::fn_params_excessive_bools)]
-pub(crate) async fn venv(
+pub async fn venv(
     project_dir: &Path,
     path: Option<PathBuf>,
     python_request: Option<&str>,

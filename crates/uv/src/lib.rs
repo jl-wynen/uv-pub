@@ -45,10 +45,10 @@ use crate::settings::{
     PublishSettings,
 };
 
-pub(crate) mod commands;
-pub(crate) mod logging;
-pub(crate) mod printer;
-pub(crate) mod settings;
+pub mod commands;
+pub mod logging;
+pub mod printer;
+pub mod settings;
 
 #[instrument(skip_all)]
 async fn run(mut cli: Cli) -> Result<ExitStatus> {

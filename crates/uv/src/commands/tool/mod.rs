@@ -6,26 +6,26 @@ use uv_normalize::{ExtraName, PackageName};
 use uv_pep440::Version;
 
 mod common;
-pub(crate) mod dir;
-pub(crate) mod install;
-pub(crate) mod list;
-pub(crate) mod run;
-pub(crate) mod uninstall;
-pub(crate) mod update_shell;
-pub(crate) mod upgrade;
+pub mod dir;
+pub mod install;
+pub mod list;
+pub mod run;
+pub mod uninstall;
+pub mod update_shell;
+pub mod upgrade;
 
 /// A request to run or install a tool (e.g., `uvx ruff@latest`).
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct ToolRequest<'a> {
+pub struct ToolRequest<'a> {
     /// The executable name (e.g., `ruff`), if specified explicitly.
-    pub(crate) executable: Option<&'a str>,
+    pub executable: Option<&'a str>,
     /// The target to install or run (e.g., `ruff@latest` or `ruff==0.6.0`).
-    pub(crate) target: Target<'a>,
+    pub target: Target<'a>,
 }
 
 impl<'a> ToolRequest<'a> {
     /// Parse a tool request into an executable name and a target.
-    pub(crate) fn parse(command: &'a str, from: Option<&'a str>) -> Self {
+    pub fn parse(command: &'a str, from: Option<&'a str>) -> Self {
         if let Some(from) = from {
             let target = Target::parse(from);
             Self {
@@ -42,7 +42,7 @@ impl<'a> ToolRequest<'a> {
     }
 
     /// Returns whether the target package is Python.
-    pub(crate) fn is_python(&self) -> bool {
+    pub fn is_python(&self) -> bool {
         let name = match self.target {
             Target::Unspecified(name) => name,
             Target::Version(name, ..) => name,
@@ -52,13 +52,13 @@ impl<'a> ToolRequest<'a> {
     }
 
     /// Returns `true` if the target is `latest`.
-    pub(crate) fn is_latest(&self) -> bool {
+    pub fn is_latest(&self) -> bool {
         matches!(self.target, Target::Latest(..))
     }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum Target<'a> {
+pub enum Target<'a> {
     /// e.g., `ruff`
     Unspecified(&'a str),
     /// e.g., `ruff[extra]@0.6.0`
@@ -69,7 +69,7 @@ pub(crate) enum Target<'a> {
 
 impl<'a> Target<'a> {
     /// Parse a target into a command name and a requirement.
-    pub(crate) fn parse(target: &'a str) -> Self {
+    pub fn parse(target: &'a str) -> Self {
         // e.g. `ruff`, no special handling
         let Some((name, version)) = target.split_once('@') else {
             return Self::Unspecified(target);
