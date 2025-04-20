@@ -713,6 +713,7 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                 args.dry_run,
                 printer,
                 globals.preview,
+                None,
             )
             .await
         }
