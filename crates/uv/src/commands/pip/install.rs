@@ -96,7 +96,7 @@ pub async fn pip_install(
     dry_run: DryRun,
     printer: Printer,
     preview: PreviewMode,
-    environment: PythonEnvironment,
+    environment: Option<PythonEnvironment>,
 ) -> anyhow::Result<ExitStatus> {
     let start = std::time::Instant::now();
 
@@ -166,31 +166,36 @@ pub async fn pip_install(
             .collect();
 
     // JLW: Use provided environment.
-    // Detect the current Python interpreter.
-    // let environment = if target.is_some() || prefix.is_some() {
-    //     let installation = PythonInstallation::find(
-    //         &python
-    //             .as_deref()
-    //             .map(PythonRequest::parse)
-    //             .unwrap_or_default(),
-    //         EnvironmentPreference::from_system_flag(system, false),
-    //         python_preference,
-    //         &cache,
-    //     )?;
-    //     report_interpreter(&installation, true, printer)?;
-    //     PythonEnvironment::from_installation(installation)
-    // } else {
-    //     let environment = PythonEnvironment::find(
-    //         &python
-    //             .as_deref()
-    //             .map(PythonRequest::parse)
-    //             .unwrap_or_default(),
-    //         EnvironmentPreference::from_system_flag(system, true),
-    //         &cache,
-    //     )?;
-    //     report_target_environment(&environment, &cache, printer)?;
-    //     environment
-    // };
+    let environment = match environment {
+        Some(env) => env,
+        None => {
+            // Detect the current Python interpreter.
+            if target.is_some() || prefix.is_some() {
+                let installation = PythonInstallation::find(
+                    &python
+                        .as_deref()
+                        .map(PythonRequest::parse)
+                        .unwrap_or_default(),
+                    EnvironmentPreference::from_system_flag(system, false),
+                    python_preference,
+                    &cache,
+                )?;
+                report_interpreter(&installation, true, printer)?;
+                PythonEnvironment::from_installation(installation)
+            } else {
+                let environment = PythonEnvironment::find(
+                    &python
+                        .as_deref()
+                        .map(PythonRequest::parse)
+                        .unwrap_or_default(),
+                    EnvironmentPreference::from_system_flag(system, true),
+                    &cache,
+                )?;
+                report_target_environment(&environment, &cache, printer)?;
+                environment
+            }
+        },
+    };    
 
     // Apply any `--target` or `--prefix` directories.
     let environment = if let Some(target) = target {
