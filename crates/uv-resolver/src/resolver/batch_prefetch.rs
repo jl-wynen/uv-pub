@@ -43,7 +43,7 @@ enum BatchPrefetchStrategy {
 ///
 /// Note that these all heuristics that could totally prefetch lots of irrelevant versions.
 #[derive(Clone)]
-pub(crate) struct BatchPrefetcher {
+pub struct BatchPrefetcher {
     // Types to determine whether we need to prefetch.
     tried_versions: FxHashMap<PackageName, FxHashSet<Version>>,
     last_prefetch: FxHashMap<PackageName, usize>,
@@ -56,14 +56,14 @@ pub(crate) struct BatchPrefetcher {
 ///
 /// These types are shared (e.g., `Arc`) so they can be cheaply cloned and moved between threads.
 #[derive(Clone)]
-pub(crate) struct BatchPrefetcherRunner {
+pub struct BatchPrefetcherRunner {
     capabilities: IndexCapabilities,
     index: InMemoryIndex,
     request_sink: Sender<Request>,
 }
 
 impl BatchPrefetcher {
-    pub(crate) fn new(
+    pub fn new(
         capabilities: IndexCapabilities,
         index: InMemoryIndex,
         request_sink: Sender<Request>,
@@ -80,7 +80,7 @@ impl BatchPrefetcher {
     }
 
     /// Prefetch a large number of versions if we already unsuccessfully tried many versions.
-    pub(crate) fn prefetch_batches(
+    pub fn prefetch_batches(
         &mut self,
         next: &PubGrubPackage,
         index: Option<&IndexMetadata>,
@@ -144,7 +144,7 @@ impl BatchPrefetcher {
     }
 
     /// Each time we tried a version for a package, we register that here.
-    pub(crate) fn version_tried(&mut self, package: &PubGrubPackage, version: &Version) {
+    pub fn version_tried(&mut self, package: &PubGrubPackage, version: &Version) {
         // Only track base packages, no virtual packages from extras.
         let PubGrubPackageInner::Package {
             name,
@@ -185,7 +185,7 @@ impl BatchPrefetcher {
     }
 
     /// Log stats about how many versions we tried.
-    pub(crate) fn log_tried_versions(&self) {
+    pub fn log_tried_versions(&self) {
         let total_versions: usize = self.tried_versions.values().map(FxHashSet::len).sum();
         let mut tried_versions: Vec<_> = self
             .tried_versions

@@ -5,7 +5,7 @@ use std::ops::Deref;
 use std::str::FromStr;
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy, Hash)]
-pub struct Os(pub(crate) target_lexicon::OperatingSystem);
+pub struct Os(pub target_lexicon::OperatingSystem);
 
 impl Os {
     pub fn new(os: target_lexicon::OperatingSystem) -> Self {

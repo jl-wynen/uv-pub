@@ -30,18 +30,18 @@ use crate::resolver::{
 use crate::{Flexibility, InMemoryIndex, Options, ResolverEnvironment, VersionsResponse};
 
 #[derive(Debug)]
-pub(crate) struct PubGrubReportFormatter<'a> {
+pub struct PubGrubReportFormatter<'a> {
     /// The versions that were available for each package.
-    pub(crate) available_versions: &'a FxHashMap<PackageName, BTreeSet<Version>>,
+    pub available_versions: &'a FxHashMap<PackageName, BTreeSet<Version>>,
 
     /// The versions that were available for each package.
-    pub(crate) python_requirement: &'a PythonRequirement,
+    pub python_requirement: &'a PythonRequirement,
 
     /// The members of the workspace.
-    pub(crate) workspace_members: &'a BTreeSet<PackageName>,
+    pub workspace_members: &'a BTreeSet<PackageName>,
 
     /// The compatible tags for the resolution.
-    pub(crate) tags: Option<&'a Tags>,
+    pub tags: Option<&'a Tags>,
 }
 
 impl ReportFormatter<PubGrubPackage, Range<Version>, UnavailableReason>
@@ -521,7 +521,7 @@ impl PubGrubReportFormatter<'_> {
     ///
     /// The [`PubGrubHints`] help users resolve errors by providing additional context or modifying
     /// their requirements.
-    pub(crate) fn generate_hints(
+    pub fn generate_hints(
         &self,
         derivation_tree: &ErrorTree,
         index: &InMemoryIndex,
@@ -997,7 +997,7 @@ impl PubGrubReportFormatter<'_> {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum PubGrubHint {
+pub enum PubGrubHint {
     /// There are pre-release versions available for a package, but pre-releases weren't enabled
     /// for that package.
     ///

@@ -55,7 +55,7 @@ use crate::pubgrub::{
 use crate::python_requirement::PythonRequirement;
 use crate::resolution::ResolverOutput;
 use crate::resolution_mode::ResolutionStrategy;
-pub(crate) use crate::resolver::availability::{
+pub use crate::resolver::availability::{
     ResolverVersion, UnavailablePackage, UnavailableReason, UnavailableVersion,
 };
 use crate::resolver::batch_prefetch::BatchPrefetcher;
@@ -64,7 +64,7 @@ pub use crate::resolver::environment::ResolverEnvironment;
 use crate::resolver::environment::{
     ForkingPossibility, fork_version_by_marker, fork_version_by_python_requirement,
 };
-pub(crate) use crate::resolver::fork_map::{ForkMap, ForkSet};
+pub use crate::resolver::fork_map::{ForkMap, ForkSet};
 pub use crate::resolver::index::InMemoryIndex;
 use crate::resolver::indexes::Indexes;
 pub use crate::resolver::provider::{
@@ -73,14 +73,14 @@ pub use crate::resolver::provider::{
 };
 pub use crate::resolver::reporter::{BuildId, Reporter};
 use crate::resolver::system::SystemDependency;
-pub(crate) use crate::resolver::urls::Urls;
+pub use crate::resolver::urls::Urls;
 use crate::universal_marker::{ConflictMarker, UniversalMarker};
 use crate::yanks::AllowedYanks;
 use crate::{
     DependencyMode, ExcludeNewer, Exclusions, FlatIndex, Options, ResolutionMode, VersionMap,
     marker,
 };
-pub(crate) use provider::MetadataUnavailable;
+pub use provider::MetadataUnavailable;
 use uv_torch::TorchStrategy;
 
 mod availability;
@@ -2682,7 +2682,7 @@ impl<InstalledPackages: InstalledPackagesProvider> ResolverState<InstalledPackag
 
 /// State that is used during unit propagation in the resolver, one instance per fork.
 #[derive(Clone)]
-pub(crate) struct ForkState {
+pub struct ForkState {
     /// The internal state used by the resolver.
     ///
     /// Note that not all parts of this state are strictly internal. For
@@ -3272,52 +3272,52 @@ impl ForkState {
 
 /// The resolution from a single fork including the virtual packages and the edges between them.
 #[derive(Debug)]
-pub(crate) struct Resolution {
-    pub(crate) nodes: FxHashMap<ResolutionPackage, Version>,
+pub struct Resolution {
+    pub nodes: FxHashMap<ResolutionPackage, Version>,
     /// The directed connections between the nodes, where the marker is the node weight. We don't
     /// store the requirement itself, but it can be retrieved from the package metadata.
-    pub(crate) edges: Vec<ResolutionDependencyEdge>,
+    pub edges: Vec<ResolutionDependencyEdge>,
     /// Map each package name, version tuple from `packages` to a distribution.
-    pub(crate) pins: FilePins,
+    pub pins: FilePins,
     /// The environment setting this resolution was found under.
-    pub(crate) env: ResolverEnvironment,
+    pub env: ResolverEnvironment,
 }
 
 /// Package representation we used during resolution where each extra and also the dev-dependencies
 /// group are their own package.
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
-pub(crate) struct ResolutionPackage {
-    pub(crate) name: PackageName,
-    pub(crate) extra: Option<ExtraName>,
-    pub(crate) dev: Option<GroupName>,
+pub struct ResolutionPackage {
+    pub name: PackageName,
+    pub extra: Option<ExtraName>,
+    pub dev: Option<GroupName>,
     /// For registry packages, this is `None`; otherwise, the direct URL of the distribution.
-    pub(crate) url: Option<VerbatimParsedUrl>,
+    pub url: Option<VerbatimParsedUrl>,
     /// For URL packages, this is `None`; otherwise, the index URL of the distribution.
-    pub(crate) index: Option<IndexUrl>,
+    pub index: Option<IndexUrl>,
 }
 
 /// The `from_` fields and the `to_` fields allow mapping to the originating and target
 ///  [`ResolutionPackage`] respectively. The `marker` is the edge weight.
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
-pub(crate) struct ResolutionDependencyEdge {
+pub struct ResolutionDependencyEdge {
     /// This value is `None` if the dependency comes from the root package.
-    pub(crate) from: Option<PackageName>,
-    pub(crate) from_version: Version,
-    pub(crate) from_url: Option<VerbatimParsedUrl>,
-    pub(crate) from_index: Option<IndexUrl>,
-    pub(crate) from_extra: Option<ExtraName>,
-    pub(crate) from_dev: Option<GroupName>,
-    pub(crate) to: PackageName,
-    pub(crate) to_version: Version,
-    pub(crate) to_url: Option<VerbatimParsedUrl>,
-    pub(crate) to_index: Option<IndexUrl>,
-    pub(crate) to_extra: Option<ExtraName>,
-    pub(crate) to_dev: Option<GroupName>,
-    pub(crate) marker: MarkerTree,
+    pub from: Option<PackageName>,
+    pub from_version: Version,
+    pub from_url: Option<VerbatimParsedUrl>,
+    pub from_index: Option<IndexUrl>,
+    pub from_extra: Option<ExtraName>,
+    pub from_dev: Option<GroupName>,
+    pub to: PackageName,
+    pub to_version: Version,
+    pub to_url: Option<VerbatimParsedUrl>,
+    pub to_index: Option<IndexUrl>,
+    pub to_extra: Option<ExtraName>,
+    pub to_dev: Option<GroupName>,
+    pub marker: MarkerTree,
 }
 
 impl ResolutionDependencyEdge {
-    pub(crate) fn universal_marker(&self) -> UniversalMarker {
+    pub fn universal_marker(&self) -> UniversalMarker {
         // We specifically do not account for conflict
         // markers here. Instead, those are computed via
         // a traversal on the resolution graph.
@@ -3328,7 +3328,7 @@ impl ResolutionDependencyEdge {
 /// Fetch the metadata for an item
 #[derive(Debug)]
 #[allow(clippy::large_enum_variant)]
-pub(crate) enum Request {
+pub enum Request {
     /// A request to fetch the metadata for a package.
     Package(PackageName, Option<IndexMetadata>),
     /// A request to fetch the metadata for a built or source distribution.
@@ -3865,7 +3865,7 @@ impl PartialEq for Fork {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct VersionFork {
+pub struct VersionFork {
     /// The environment to use in the fork.
     env: ResolverEnvironment,
     /// The initial package to select in the fork.

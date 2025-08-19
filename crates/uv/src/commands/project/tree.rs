@@ -32,7 +32,7 @@ use crate::settings::{NetworkSettings, ResolverSettings};
 
 /// Run a command.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn tree(
+pub async fn tree(
     project_dir: &Path,
     groups: DependencyGroups,
     locked: bool,

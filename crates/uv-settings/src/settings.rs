@@ -30,15 +30,15 @@ use uv_workspace::pyproject_mut::AddBoundsKind;
 /// A `pyproject.toml` with an (optional) `[tool.uv]` section.
 #[allow(dead_code)]
 #[derive(Debug, Clone, Default, Deserialize)]
-pub(crate) struct PyProjectToml {
-    pub(crate) tool: Option<Tools>,
+pub struct PyProjectToml {
+    pub tool: Option<Tools>,
 }
 
 /// A `[tool]` section.
 #[allow(dead_code)]
 #[derive(Debug, Clone, Default, Deserialize)]
-pub(crate) struct Tools {
-    pub(crate) uv: Option<Options>,
+pub struct Tools {
+    pub uv: Option<Options>,
 }
 
 /// A `[tool.uv]` section.

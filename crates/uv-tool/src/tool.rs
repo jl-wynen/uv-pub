@@ -190,7 +190,7 @@ impl Tool {
     }
 
     /// Returns the TOML table for this tool.
-    pub(crate) fn to_toml(&self) -> Result<Table, toml_edit::ser::Error> {
+    pub fn to_toml(&self) -> Result<Table, toml_edit::ser::Error> {
         let mut table = Table::new();
 
         if !self.requirements.is_empty() {
@@ -358,7 +358,7 @@ impl ToolEntrypoint {
     }
 
     /// Returns the TOML table for this entrypoint.
-    pub(crate) fn to_toml(&self) -> Table {
+    pub fn to_toml(&self) -> Table {
         let mut table = Table::new();
         table.insert("name", value(&self.name));
         table.insert(

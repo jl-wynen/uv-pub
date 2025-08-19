@@ -20,7 +20,7 @@ use crate::commands::pip::operations::report_target_environment;
 use crate::printer::Printer;
 
 /// Show information about one or more installed packages.
-pub(crate) fn pip_show(
+pub fn pip_show(
     mut packages: Vec<PackageName>,
     strict: bool,
     python: Option<&str>,

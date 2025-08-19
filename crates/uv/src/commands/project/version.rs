@@ -39,7 +39,7 @@ use crate::printer::Printer;
 use crate::settings::{NetworkSettings, ResolverInstallerSettings};
 
 /// Display version information for uv itself (`uv self version`)
-pub(crate) fn self_version(
+pub fn self_version(
     short: bool,
     output_format: VersionFormat,
     printer: Printer,
@@ -52,7 +52,7 @@ pub(crate) fn self_version(
 
 /// Read or update project version (`uv version`)
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn project_version(
+pub async fn project_version(
     value: Option<String>,
     mut bump: Vec<VersionBump>,
     short: bool,

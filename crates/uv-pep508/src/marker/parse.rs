@@ -72,7 +72,7 @@ fn parse_marker_operator<T: Pep508Url>(
 /// '`os_name`', '`sys_platform`', '`platform_release`', '`platform_system`', '`platform_version`',
 /// '`platform_machine`', '`platform_python_implementation`', '`implementation_name`',
 /// '`implementation_version`', 'extra'
-pub(crate) fn parse_marker_value<T: Pep508Url>(
+pub fn parse_marker_value<T: Pep508Url>(
     cursor: &mut Cursor,
     reporter: &mut impl Reporter,
 ) -> Result<MarkerValue, Pep508Error<T>> {
@@ -165,7 +165,7 @@ pub(crate) fn parse_marker_value<T: Pep508Url>(
 /// ```text
 /// marker_var:l marker_op:o marker_var:r
 /// ```
-pub(crate) fn parse_marker_key_op_value<T: Pep508Url>(
+pub fn parse_marker_key_op_value<T: Pep508Url>(
     cursor: &mut Cursor,
     reporter: &mut impl Reporter,
 ) -> Result<Option<MarkerExpression>, Pep508Error<T>> {
@@ -651,7 +651,7 @@ fn parse_marker_op<T: Pep508Url, R: Reporter>(
 /// ```text
 /// marker        = marker_or^
 /// ```
-pub(crate) fn parse_markers_cursor<T: Pep508Url>(
+pub fn parse_markers_cursor<T: Pep508Url>(
     cursor: &mut Cursor,
     reporter: &mut impl Reporter,
 ) -> Result<Option<MarkerTree>, Pep508Error<T>> {
@@ -675,7 +675,7 @@ pub(crate) fn parse_markers_cursor<T: Pep508Url>(
 
 /// Parses markers such as `python_version < '3.8'` or
 /// `python_version == "3.10" and (sys_platform == "win32" or (os_name == "linux" and implementation_name == 'cpython'))`
-pub(crate) fn parse_markers<T: Pep508Url>(
+pub fn parse_markers<T: Pep508Url>(
     markers: &str,
     reporter: &mut impl Reporter,
 ) -> Result<MarkerTree, Pep508Error<T>> {

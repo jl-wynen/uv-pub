@@ -5,7 +5,7 @@ use tracing::warn;
 use walkdir::WalkDir;
 
 #[derive(Debug, thiserror::Error)]
-pub(crate) enum GitInfoError {
+pub enum GitInfoError {
     #[error("The repository at {0} is missing a `.git` directory")]
     MissingGitDir(PathBuf),
     #[error("The repository at {0} is missing a `HEAD` file")]
@@ -24,11 +24,11 @@ pub(crate) enum GitInfoError {
 
 /// The current commit for a repository (i.e., a 40-character hexadecimal string).
 #[derive(Default, Debug, Clone, Hash, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
-pub(crate) struct Commit(String);
+pub struct Commit(String);
 
 impl Commit {
     /// Return the [`Commit`] for the repository at the given path.
-    pub(crate) fn from_repository(path: &Path) -> Result<Self, GitInfoError> {
+    pub fn from_repository(path: &Path) -> Result<Self, GitInfoError> {
         // Find the `.git` directory, searching through parent directories if necessary.
         let git_dir = path
             .ancestors()
@@ -71,11 +71,11 @@ impl Commit {
 
 /// The set of tags visible in a repository.
 #[derive(Default, Debug, Clone, Hash, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
-pub(crate) struct Tags(BTreeMap<String, String>);
+pub struct Tags(BTreeMap<String, String>);
 
 impl Tags {
     /// Return the [`Tags`] for the repository at the given path.
-    pub(crate) fn from_repository(path: &Path) -> Result<Self, GitInfoError> {
+    pub fn from_repository(path: &Path) -> Result<Self, GitInfoError> {
         // Find the `.git` directory, searching through parent directories if necessary.
         let git_dir = path
             .ancestors()

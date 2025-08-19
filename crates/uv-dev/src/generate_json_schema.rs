@@ -26,12 +26,12 @@ struct CombinedOptions {
 }
 
 #[derive(clap::Args)]
-pub(crate) struct Args {
+pub struct Args {
     #[arg(long, default_value_t, value_enum)]
-    pub(crate) mode: Mode,
+    pub mode: Mode,
 }
 
-pub(crate) fn main(args: &Args) -> Result<()> {
+pub fn main(args: &Args) -> Result<()> {
     // Generate the schema.
     let schema_string = generate();
     let filename = "uv.schema.json";

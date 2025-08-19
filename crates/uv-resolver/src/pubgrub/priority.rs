@@ -26,14 +26,14 @@ use crate::{FxHashbrownMap, SentinelRange};
 /// priority. This way, all virtual packages of the same name will be applied in a batch. To ensure
 /// determinism, we also track the discovery order of virtual packages as secondary order.
 #[derive(Clone, Debug, Default)]
-pub(crate) struct PubGrubPriorities {
+pub struct PubGrubPriorities {
     package_priority: FxHashbrownMap<PackageName, PubGrubPriority>,
     virtual_package_tiebreaker: FxHashbrownMap<PubGrubPackage, PubGrubTiebreaker>,
 }
 
 impl PubGrubPriorities {
     /// Add a [`PubGrubPackage`] to the priority map.
-    pub(crate) fn insert(
+    pub fn insert(
         &mut self,
         package: &PubGrubPackage,
         version: &Range<Version>,
@@ -114,7 +114,7 @@ impl PubGrubPriorities {
     }
 
     /// Return the [`PubGrubPriority`] of the given package, if it exists.
-    pub(crate) fn get(
+    pub fn get(
         &self,
         package: &PubGrubPackage,
     ) -> <UvDependencyProvider as DependencyProvider>::Priority {
@@ -169,7 +169,7 @@ impl PubGrubPriorities {
     ///
     /// Returns whether the priority was changed, i.e., it's the first time we hit this condition
     /// for the package.
-    pub(crate) fn mark_conflict_early(&mut self, package: &PubGrubPackage) -> bool {
+    pub fn mark_conflict_early(&mut self, package: &PubGrubPackage) -> bool {
         let Some(name) = package.name_no_root() else {
             // Not a correctness bug
             if cfg!(debug_assertions) {
@@ -202,7 +202,7 @@ impl PubGrubPriorities {
     ///
     /// Returns whether the priority was changed, i.e., it's the first time this package was
     /// marked as conflicting above the threshold.
-    pub(crate) fn mark_conflict_late(&mut self, package: &PubGrubPackage) -> bool {
+    pub fn mark_conflict_late(&mut self, package: &PubGrubPackage) -> bool {
         let Some(name) = package.name_no_root() else {
             // Not a correctness bug
             if cfg!(debug_assertions) {
@@ -236,7 +236,7 @@ impl PubGrubPriorities {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) enum PubGrubPriority {
+pub enum PubGrubPriority {
     /// The package has no specific priority.
     ///
     /// As such, its priority is based on the order in which the packages were added (FIFO), such
@@ -270,7 +270,7 @@ pub(crate) enum PubGrubPriority {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) struct PubGrubTiebreaker(Reverse<u32>);
+pub struct PubGrubTiebreaker(Reverse<u32>);
 
 impl From<u32> for PubGrubTiebreaker {
     fn from(value: u32) -> Self {

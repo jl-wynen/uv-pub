@@ -75,7 +75,7 @@ use crate::settings::{NetworkSettings, ResolverInstallerSettings, ResolverSettin
 
 /// Run a command.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn run(
+pub async fn run(
     project_dir: &Path,
     script: Option<Pep723Item>,
     command: Option<RunCommand>,
@@ -1396,7 +1396,7 @@ fn can_skip_ephemeral(
 }
 
 #[derive(Debug)]
-pub(crate) enum RunCommand {
+pub enum RunCommand {
     /// Execute `python`.
     Python(Vec<OsString>),
     /// Execute a `python` script.
@@ -1709,7 +1709,7 @@ async fn resolve_gist_url(
 impl RunCommand {
     /// Determine the [`RunCommand`] for a given set of arguments.
     #[allow(clippy::fn_params_excessive_bools)]
-    pub(crate) async fn from_args(
+    pub async fn from_args(
         command: &ExternalCommand,
         network_settings: NetworkSettings,
         module: bool,

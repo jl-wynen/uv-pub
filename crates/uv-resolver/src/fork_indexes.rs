@@ -7,16 +7,16 @@ use crate::resolver::ResolverEnvironment;
 
 /// See [`crate::resolver::ForkState`].
 #[derive(Default, Debug, Clone)]
-pub(crate) struct ForkIndexes(FxHashMap<PackageName, IndexMetadata>);
+pub struct ForkIndexes(FxHashMap<PackageName, IndexMetadata>);
 
 impl ForkIndexes {
     /// Get the [`Index`] previously used for a package in this fork.
-    pub(crate) fn get(&self, package_name: &PackageName) -> Option<&IndexMetadata> {
+    pub fn get(&self, package_name: &PackageName) -> Option<&IndexMetadata> {
         self.0.get(package_name)
     }
 
     /// Check that this is the only [`Index`] used for this package in this fork.
-    pub(crate) fn insert(
+    pub fn insert(
         &mut self,
         package_name: &PackageName,
         index: &IndexMetadata,

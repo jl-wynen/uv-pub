@@ -12,18 +12,18 @@ use crate::Error;
 #[derive(Debug, Clone)]
 pub struct LocalWheel {
     /// The remote distribution from which this wheel was downloaded.
-    pub(crate) dist: Dist,
+    pub dist: Dist,
     /// The parsed filename.
-    pub(crate) filename: WheelFilename,
+    pub filename: WheelFilename,
     /// The canonicalized path in the cache directory to which the wheel was downloaded.
     /// Typically, a directory within the archive bucket.
-    pub(crate) archive: Box<Path>,
+    pub archive: Box<Path>,
     /// The cache info of the wheel.
-    pub(crate) cache: CacheInfo,
+    pub cache: CacheInfo,
     /// The build info, if available.
-    pub(crate) build: Option<BuildInfo>,
+    pub build: Option<BuildInfo>,
     /// The computed hashes of the wheel.
-    pub(crate) hashes: HashDigests,
+    pub hashes: HashDigests,
 }
 
 impl LocalWheel {

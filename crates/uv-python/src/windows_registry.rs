@@ -26,13 +26,13 @@ const ERROR_NOT_FOUND: HRESULT = HRESULT::from_win32(ERROR_FILE_NOT_FOUND);
 /// There are a lot more (optional) fields defined in PEP 514, but we only care about path and
 /// version here, for everything else we probe with a Python script.
 #[derive(Debug, Clone)]
-pub(crate) struct WindowsPython {
-    pub(crate) path: PathBuf,
-    pub(crate) version: Option<PythonVersion>,
+pub struct WindowsPython {
+    pub path: PathBuf,
+    pub version: Option<PythonVersion>,
 }
 
 /// Find all Pythons registered in the Windows registry following PEP 514.
-pub(crate) fn registry_pythons() -> Result<Vec<WindowsPython>, windows_result::Error> {
+pub fn registry_pythons() -> Result<Vec<WindowsPython>, windows_result::Error> {
     let mut registry_pythons = Vec::new();
     // Prefer `HKEY_CURRENT_USER` over `HKEY_LOCAL_MACHINE`.
     // By default, a 64-bit program does not see a 32-bit global (HKLM) installation of Python in

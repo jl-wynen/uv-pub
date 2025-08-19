@@ -57,27 +57,27 @@ mod built_wheel_metadata;
 mod revision;
 
 /// Fetch and build a source distribution from a remote source, or from a local cache.
-pub(crate) struct SourceDistributionBuilder<'a, T: BuildContext> {
+pub struct SourceDistributionBuilder<'a, T: BuildContext> {
     build_context: &'a T,
     build_stack: Option<&'a BuildStack>,
     reporter: Option<Arc<dyn Reporter>>,
 }
 
 /// The name of the file that contains the revision ID for a remote distribution, encoded via `MsgPack`.
-pub(crate) const HTTP_REVISION: &str = "revision.http";
+pub const HTTP_REVISION: &str = "revision.http";
 
 /// The name of the file that contains the revision ID for a local distribution, encoded via `MsgPack`.
-pub(crate) const LOCAL_REVISION: &str = "revision.rev";
+pub const LOCAL_REVISION: &str = "revision.rev";
 
 /// The name of the file that contains the cached distribution metadata, encoded via `MsgPack`.
-pub(crate) const METADATA: &str = "metadata.msgpack";
+pub const METADATA: &str = "metadata.msgpack";
 
 /// The directory within each entry under which to store the unpacked source distribution.
-pub(crate) const SOURCE: &str = "src";
+pub const SOURCE: &str = "src";
 
 impl<'a, T: BuildContext> SourceDistributionBuilder<'a, T> {
     /// Initialize a [`SourceDistributionBuilder`] from a [`BuildContext`].
-    pub(crate) fn new(build_context: &'a T) -> Self {
+    pub fn new(build_context: &'a T) -> Self {
         Self {
             build_context,
             build_stack: None,
@@ -87,7 +87,7 @@ impl<'a, T: BuildContext> SourceDistributionBuilder<'a, T> {
 
     /// Set the [`BuildStack`] to use for the [`SourceDistributionBuilder`].
     #[must_use]
-    pub(crate) fn with_build_stack(self, build_stack: &'a BuildStack) -> Self {
+    pub fn with_build_stack(self, build_stack: &'a BuildStack) -> Self {
         Self {
             build_stack: Some(build_stack),
             ..self
@@ -96,7 +96,7 @@ impl<'a, T: BuildContext> SourceDistributionBuilder<'a, T> {
 
     /// Set the [`Reporter`] to use for the [`SourceDistributionBuilder`].
     #[must_use]
-    pub(crate) fn with_reporter(self, reporter: Arc<dyn Reporter>) -> Self {
+    pub fn with_reporter(self, reporter: Arc<dyn Reporter>) -> Self {
         Self {
             reporter: Some(reporter),
             ..self
@@ -104,7 +104,7 @@ impl<'a, T: BuildContext> SourceDistributionBuilder<'a, T> {
     }
 
     /// Download and build a [`SourceDist`].
-    pub(crate) async fn download_and_build(
+    pub async fn download_and_build(
         &self,
         source: &BuildableSource<'_>,
         tags: &Tags,
@@ -253,7 +253,7 @@ impl<'a, T: BuildContext> SourceDistributionBuilder<'a, T> {
     /// Download a [`SourceDist`] and determine its metadata. This typically involves building the
     /// source distribution into a wheel; however, some build backends support determining the
     /// metadata without building the source distribution.
-    pub(crate) async fn download_and_build_metadata(
+    pub async fn download_and_build_metadata(
         &self,
         source: &BuildableSource<'_>,
         hashes: HashPolicy<'_>,
@@ -1488,7 +1488,7 @@ impl<'a, T: BuildContext> SourceDistributionBuilder<'a, T> {
     }
 
     /// Return the [`RequiresDist`] from a `pyproject.toml`, if it can be statically extracted.
-    pub(crate) async fn source_tree_requires_dist(
+    pub async fn source_tree_requires_dist(
         &self,
         source_tree: &Path,
     ) -> Result<Option<RequiresDist>, Error> {
@@ -1961,7 +1961,7 @@ impl<'a, T: BuildContext> SourceDistributionBuilder<'a, T> {
     }
 
     /// Resolve a source to a specific revision.
-    pub(crate) async fn resolve_revision(
+    pub async fn resolve_revision(
         &self,
         source: &BuildableSource<'_>,
         client: &ManagedClient<'_>,
@@ -2908,14 +2908,14 @@ fn validate_filename(filename: &WheelFilename, metadata: &ResolutionMetadata) ->
 ///
 /// Encoded with `MsgPack`, and represented on disk by a `.http` file.
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub(crate) struct HttpRevisionPointer {
+pub struct HttpRevisionPointer {
     // STOPSHIP(charlie): This probably needs a `CacheInfo` field, too, at least for build info.
     revision: Revision,
 }
 
 impl HttpRevisionPointer {
     /// Read an [`HttpRevisionPointer`] from the cache.
-    pub(crate) fn read_from(path: impl AsRef<Path>) -> Result<Option<Self>, Error> {
+    pub fn read_from(path: impl AsRef<Path>) -> Result<Option<Self>, Error> {
         match fs_err::File::open(path.as_ref()) {
             Ok(file) => {
                 let data = DataWithCachePolicy::from_reader(file)?.data;
@@ -2928,7 +2928,7 @@ impl HttpRevisionPointer {
     }
 
     /// Return the [`Revision`] from the pointer.
-    pub(crate) fn into_revision(self) -> Revision {
+    pub fn into_revision(self) -> Revision {
         self.revision
     }
 }
@@ -2937,14 +2937,14 @@ impl HttpRevisionPointer {
 ///
 /// Encoded with `MsgPack`, and represented on disk by a `.rev` file.
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub(crate) struct LocalRevisionPointer {
+pub struct LocalRevisionPointer {
     cache_info: CacheInfo,
     revision: Revision,
 }
 
 impl LocalRevisionPointer {
     /// Read an [`LocalRevisionPointer`] from the cache.
-    pub(crate) fn read_from(path: impl AsRef<Path>) -> Result<Option<Self>, Error> {
+    pub fn read_from(path: impl AsRef<Path>) -> Result<Option<Self>, Error> {
         match fs_err::read(path) {
             Ok(cached) => Ok(Some(rmp_serde::from_slice::<Self>(&cached)?)),
             Err(err) if err.kind() == std::io::ErrorKind::NotFound => Ok(None),
@@ -2963,17 +2963,17 @@ impl LocalRevisionPointer {
     }
 
     /// Return the [`CacheInfo`] for the pointer.
-    pub(crate) fn cache_info(&self) -> &CacheInfo {
+    pub fn cache_info(&self) -> &CacheInfo {
         &self.cache_info
     }
 
     /// Return the [`Revision`] for the pointer.
-    pub(crate) fn revision(&self) -> &Revision {
+    pub fn revision(&self) -> &Revision {
         &self.revision
     }
 
     /// Return the [`Revision`] for the pointer.
-    pub(crate) fn into_revision(self) -> Revision {
+    pub fn into_revision(self) -> Revision {
         self.revision
     }
 }

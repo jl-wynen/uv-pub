@@ -50,17 +50,17 @@ mod virtualenv;
 pub mod windows_registry;
 
 #[cfg(windows)]
-pub(crate) const COMPANY_KEY: &str = "Astral";
+pub const COMPANY_KEY: &str = "Astral";
 #[cfg(windows)]
-pub(crate) const COMPANY_DISPLAY_NAME: &str = "Astral Software Inc.";
+pub const COMPANY_DISPLAY_NAME: &str = "Astral Software Inc.";
 
 #[cfg(not(test))]
-pub(crate) fn current_dir() -> Result<std::path::PathBuf, std::io::Error> {
+pub fn current_dir() -> Result<std::path::PathBuf, std::io::Error> {
     std::env::current_dir()
 }
 
 #[cfg(test)]
-pub(crate) fn current_dir() -> Result<std::path::PathBuf, std::io::Error> {
+pub fn current_dir() -> Result<std::path::PathBuf, std::io::Error> {
     std::env::var_os(EnvVars::PWD)
         .map(std::path::PathBuf::from)
         .map(Ok)
@@ -102,7 +102,7 @@ pub enum Error {
 }
 
 impl Error {
-    pub(crate) fn with_missing_python_hint(self, hint: String) -> Self {
+    pub fn with_missing_python_hint(self, hint: String) -> Self {
         match self {
             Self::MissingPython(err, _) => Self::MissingPython(err, Some(hint)),
             _ => self,

@@ -369,7 +369,7 @@ impl Display for MissingHeaderError {
 
 impl Error {
     /// Construct an [`Error`] from the output of a failed command.
-    pub(crate) fn from_command_output(
+    pub fn from_command_output(
         message: String,
         output: &PythonRunnerOutput,
         level: BuildOutput,

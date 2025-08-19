@@ -12,7 +12,7 @@ use crate::commands::{ExitStatus, human_readable_bytes};
 use crate::printer::Printer;
 
 /// Clear the cache, removing all entries or those linked to specific packages.
-pub(crate) fn cache_clean(
+pub fn cache_clean(
     packages: &[PackageName],
     cache: &Cache,
     printer: Printer,

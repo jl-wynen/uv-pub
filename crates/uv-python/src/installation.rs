@@ -28,13 +28,13 @@ use crate::{
 #[derive(Clone, Debug)]
 pub struct PythonInstallation {
     // Public in the crate for test assertions
-    pub(crate) source: PythonSource,
-    pub(crate) interpreter: Interpreter,
+    pub source: PythonSource,
+    pub interpreter: Interpreter,
 }
 
 impl PythonInstallation {
     /// Create a new [`PythonInstallation`] from a source, interpreter tuple.
-    pub(crate) fn from_tuple(tuple: (PythonSource, Interpreter)) -> Self {
+    pub fn from_tuple(tuple: (PythonSource, Interpreter)) -> Self {
         let (source, interpreter) = tuple;
         Self {
             source,
@@ -307,7 +307,7 @@ impl PythonInstallation {
     /// Whether this is a CPython installation.
     ///
     /// Returns false if it is an alternative implementation, e.g., PyPy.
-    pub(crate) fn is_alternative_implementation(&self) -> bool {
+    pub fn is_alternative_implementation(&self) -> bool {
         !matches!(
             self.implementation(),
             LenientImplementationName::Known(ImplementationName::CPython)
@@ -348,13 +348,13 @@ pub enum PythonInstallationKeyError {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct PythonInstallationKey {
-    pub(crate) implementation: LenientImplementationName,
-    pub(crate) major: u8,
-    pub(crate) minor: u8,
-    pub(crate) patch: u8,
-    pub(crate) prerelease: Option<Prerelease>,
-    pub(crate) platform: Platform,
-    pub(crate) variant: PythonVariant,
+    pub implementation: LenientImplementationName,
+    pub major: u8,
+    pub minor: u8,
+    pub patch: u8,
+    pub prerelease: Option<Prerelease>,
+    pub platform: Platform,
+    pub variant: PythonVariant,
 }
 
 impl PythonInstallationKey {

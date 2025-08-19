@@ -42,7 +42,7 @@ use crate::settings::{NetworkSettings, ResolverInstallerSettings, ResolverSettin
 
 /// Install a tool.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn install(
+pub async fn install(
     package: String,
     editable: bool,
     from: Option<String>,

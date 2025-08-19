@@ -220,10 +220,10 @@ pub struct Project {
 
     /// Used to determine whether a `gui-scripts` section is present.
     #[serde(default, skip_serializing)]
-    pub(crate) gui_scripts: Option<serde::de::IgnoredAny>,
+    pub gui_scripts: Option<serde::de::IgnoredAny>,
     /// Used to determine whether a `scripts` section is present.
     #[serde(default, skip_serializing)]
-    pub(crate) scripts: Option<serde::de::IgnoredAny>,
+    pub scripts: Option<serde::de::IgnoredAny>,
 }
 
 #[derive(Deserialize, Debug)]

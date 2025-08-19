@@ -159,7 +159,7 @@ pub enum PreferenceIndex {
 
 impl PreferenceIndex {
     /// Returns `true` if the preference matches the given explicit [`IndexUrl`].
-    pub(crate) fn matches(&self, index: &IndexUrl) -> bool {
+    pub fn matches(&self, index: &IndexUrl) -> bool {
         match self {
             Self::Any => true,
             Self::Implicit => false,
@@ -178,7 +178,7 @@ impl From<Option<IndexUrl>> for PreferenceIndex {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) enum PreferenceSource {
+pub enum PreferenceSource {
     /// The preference is from an installed package in the environment.
     Environment,
     /// The preference is from a `uv.ock` file.
@@ -190,7 +190,7 @@ pub(crate) enum PreferenceSource {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct Entry {
+pub struct Entry {
     marker: UniversalMarker,
     index: PreferenceIndex,
     pin: Pin,
@@ -199,22 +199,22 @@ pub(crate) struct Entry {
 
 impl Entry {
     /// Return the [`UniversalMarker`] associated with the entry.
-    pub(crate) fn marker(&self) -> &UniversalMarker {
+    pub fn marker(&self) -> &UniversalMarker {
         &self.marker
     }
 
     /// Return the [`IndexUrl`] associated with the entry, if any.
-    pub(crate) fn index(&self) -> &PreferenceIndex {
+    pub fn index(&self) -> &PreferenceIndex {
         &self.index
     }
 
     /// Return the pinned data associated with the entry.
-    pub(crate) fn pin(&self) -> &Pin {
+    pub fn pin(&self) -> &Pin {
         &self.pin
     }
 
     /// Return the source of the entry.
-    pub(crate) fn source(&self) -> PreferenceSource {
+    pub fn source(&self) -> PreferenceSource {
         self.source
     }
 }
@@ -290,7 +290,7 @@ impl Preferences {
     }
 
     /// Insert a preference at the back.
-    pub(crate) fn insert(
+    pub fn insert(
         &mut self,
         package_name: PackageName,
         index: Option<IndexUrl>,
@@ -326,7 +326,7 @@ impl Preferences {
     }
 
     /// Return the pinned version for a package, if any.
-    pub(crate) fn get(&self, package_name: &PackageName) -> &[Entry] {
+    pub fn get(&self, package_name: &PackageName) -> &[Entry] {
         self.0
             .get(package_name)
             .map(Vec::as_slice)
@@ -334,7 +334,7 @@ impl Preferences {
     }
 
     /// Return the hashes for a package, if the version matches that of the pin.
-    pub(crate) fn match_hashes(
+    pub fn match_hashes(
         &self,
         package_name: &PackageName,
         version: &Version,
@@ -356,19 +356,19 @@ impl std::fmt::Display for Preference {
 
 /// The pinned data associated with a package in a locked `requirements.txt` file (e.g., `flask==1.2.3`).
 #[derive(Debug, Clone)]
-pub(crate) struct Pin {
+pub struct Pin {
     version: Version,
     hashes: HashDigests,
 }
 
 impl Pin {
     /// Return the version of the pinned package.
-    pub(crate) fn version(&self) -> &Version {
+    pub fn version(&self) -> &Version {
         &self.version
     }
 
     /// Return the hashes of the pinned package.
-    pub(crate) fn hashes(&self) -> &[HashDigest] {
+    pub fn hashes(&self) -> &[HashDigest] {
         self.hashes.as_slice()
     }
 }

@@ -192,7 +192,7 @@ pub struct NoSolutionError {
 
 impl NoSolutionError {
     /// Create a new [`NoSolutionError`] from a [`pubgrub::NoSolutionError`].
-    pub(crate) fn new(
+    pub fn new(
         error: pubgrub::NoSolutionError<UvDependencyProvider>,
         index: InMemoryIndex,
         available_versions: FxHashMap<PackageName, BTreeSet<Version>>,
@@ -234,7 +234,7 @@ impl NoSolutionError {
 
     /// Given a [`DerivationTree`], collapse any [`External::FromDependencyOf`] incompatibilities
     /// wrap an [`PubGrubPackageInner::Extra`] package.
-    pub(crate) fn collapse_proxies(derivation_tree: ErrorTree) -> ErrorTree {
+    pub fn collapse_proxies(derivation_tree: ErrorTree) -> ErrorTree {
         fn collapse(derivation_tree: ErrorTree) -> Option<ErrorTree> {
             match derivation_tree {
                 DerivationTree::Derived(derived) => {
@@ -281,7 +281,7 @@ impl NoSolutionError {
     /// The `[max]` sentinel is used to represent the maximum local version of a package, to
     /// implement PEP 440 semantics for local version equality. For example, `1.0.0+foo` needs to
     /// satisfy `==1.0.0`.
-    pub(crate) fn collapse_local_version_segments(derivation_tree: ErrorTree) -> ErrorTree {
+    pub fn collapse_local_version_segments(derivation_tree: ErrorTree) -> ErrorTree {
         fn strip(derivation_tree: ErrorTree) -> Option<ErrorTree> {
             match derivation_tree {
                 DerivationTree::External(External::NotRoot(_, _)) => Some(derivation_tree),
@@ -1248,7 +1248,7 @@ impl SentinelRange<'_> {
 
 /// A prefix match, e.g., `==2.4.*`, which is desugared to a range like `>=2.4.dev0,<2.5.dev0`.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct PrefixMatch<'a> {
+pub struct PrefixMatch<'a> {
     version: &'a Version,
 }
 
@@ -1257,7 +1257,7 @@ impl<'a> PrefixMatch<'a> {
     ///
     /// Prefix matches are desugared to (e.g.) `>=2.4.dev0,<2.5.dev0`, but we want to render them
     /// as `==2.4.*` in error messages.
-    pub(crate) fn from_range(lower: &'a Bound<Version>, upper: &'a Bound<Version>) -> Option<Self> {
+    pub fn from_range(lower: &'a Bound<Version>, upper: &'a Bound<Version>) -> Option<Self> {
         let Bound::Included(lower) = lower else {
             return None;
         };

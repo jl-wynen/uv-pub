@@ -12,17 +12,17 @@ use uv_redacted::DisplaySafeUrl;
 
 /// A parsed structure from PyPI "HTML" index format for a single package.
 #[derive(Debug, Clone)]
-pub(crate) struct SimpleHtml {
+pub struct SimpleHtml {
     /// The [`BaseUrl`] to which all relative URLs should be resolved.
-    pub(crate) base: BaseUrl,
+    pub base: BaseUrl,
     /// The list of [`File`]s available for download sorted by filename.
-    pub(crate) files: Vec<File>,
+    pub files: Vec<File>,
 }
 
 impl SimpleHtml {
     /// Parse the list of [`File`]s from the simple HTML page returned by the given URL.
     #[instrument(skip_all, fields(url = % url))]
-    pub(crate) fn parse(text: &str, url: &Url) -> Result<Self, Error> {
+    pub fn parse(text: &str, url: &Url) -> Result<Self, Error> {
         let dom = tl::parse(text, tl::ParserOptions::default())?;
 
         // Parse the first `<base>` tag, if any, to determine the base URL to which all

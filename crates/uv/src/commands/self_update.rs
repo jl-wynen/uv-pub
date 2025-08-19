@@ -13,7 +13,7 @@ use crate::printer::Printer;
 use crate::settings::NetworkSettings;
 
 /// Attempt to update the uv binary.
-pub(crate) async fn self_update(
+pub async fn self_update(
     version: Option<String>,
     token: Option<String>,
     dry_run: bool,

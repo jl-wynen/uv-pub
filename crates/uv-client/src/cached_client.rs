@@ -54,7 +54,7 @@ pub trait Cacheable: Sized {
 /// implement `Cacheable`.
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(transparent)]
-pub(crate) struct SerdeCacheable<T> {
+pub struct SerdeCacheable<T> {
     inner: T,
 }
 

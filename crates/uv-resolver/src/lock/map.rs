@@ -19,7 +19,7 @@ impl<T> PackageMap<T> {
     }
 
     /// Get a value by [`PackageId`].
-    pub(crate) fn get(&self, package_id: &PackageId) -> Option<&T> {
+    pub fn get(&self, package_id: &PackageId) -> Option<&T> {
         self.0.get(package_id)
     }
 }

@@ -21,7 +21,7 @@ use crate::{Exclusions, Manifest, Options, ResolverEnvironment};
 
 #[derive(Debug, Clone)]
 #[allow(clippy::struct_field_names)]
-pub(crate) struct CandidateSelector {
+pub struct CandidateSelector {
     resolution_strategy: ResolutionStrategy,
     prerelease_strategy: PrereleaseStrategy,
     index_strategy: IndexStrategy,
@@ -29,7 +29,7 @@ pub(crate) struct CandidateSelector {
 
 impl CandidateSelector {
     /// Return a [`CandidateSelector`] for the given [`Manifest`].
-    pub(crate) fn for_resolution(
+    pub fn for_resolution(
         options: &Options,
         manifest: &Manifest,
         env: &ResolverEnvironment,
@@ -53,19 +53,19 @@ impl CandidateSelector {
 
     #[inline]
     #[allow(dead_code)]
-    pub(crate) fn resolution_strategy(&self) -> &ResolutionStrategy {
+    pub fn resolution_strategy(&self) -> &ResolutionStrategy {
         &self.resolution_strategy
     }
 
     #[inline]
     #[allow(dead_code)]
-    pub(crate) fn prerelease_strategy(&self) -> &PrereleaseStrategy {
+    pub fn prerelease_strategy(&self) -> &PrereleaseStrategy {
         &self.prerelease_strategy
     }
 
     #[inline]
     #[allow(dead_code)]
-    pub(crate) fn index_strategy(&self) -> &IndexStrategy {
+    pub fn index_strategy(&self) -> &IndexStrategy {
         &self.index_strategy
     }
 
@@ -74,7 +74,7 @@ impl CandidateSelector {
     /// Unless present in the provided [`Exclusions`], local distributions from the
     /// [`InstalledPackagesProvider`] are preferred over remote distributions in
     /// the [`VersionMap`].
-    pub(crate) fn select<'a, InstalledPackages: InstalledPackagesProvider>(
+    pub fn select<'a, InstalledPackages: InstalledPackagesProvider>(
         &'a self,
         package_name: &'a PackageName,
         range: &Range<Version>,
@@ -384,7 +384,7 @@ impl CandidateSelector {
 
     /// Select a [`Candidate`] without checking for version preference such as an existing
     /// lockfile.
-    pub(crate) fn select_no_preference<'a>(
+    pub fn select_no_preference<'a>(
         &'a self,
         package_name: &'a PackageName,
         range: &Range<Version>,
@@ -478,7 +478,7 @@ impl CandidateSelector {
 
     /// By default, we select the latest version, but we also allow using the lowest version instead
     /// to check the lower bounds.
-    pub(crate) fn use_highest_version(
+    pub fn use_highest_version(
         &self,
         package_name: &PackageName,
         env: &ResolverEnvironment,
@@ -602,7 +602,7 @@ impl CandidateSelector {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum CandidateDist<'a> {
+pub enum CandidateDist<'a> {
     Compatible(CompatibleDist<'a>),
     Incompatible {
         /// The reason the prioritized distribution is incompatible.
@@ -652,7 +652,7 @@ impl<'a> From<&'a PrioritizedDist> for CandidateDist<'a> {
 /// The reason why we selected the version of the candidate version, either a preference or being
 /// compatible.
 #[derive(Debug, Clone, Copy)]
-pub(crate) enum VersionChoiceKind {
+pub enum VersionChoiceKind {
     /// A preference from an output file such as `-o requirements.txt` or `uv.lock`.
     Preference,
     /// A preference from an installed version.
@@ -672,7 +672,7 @@ impl Display for VersionChoiceKind {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct Candidate<'a> {
+pub struct Candidate<'a> {
     /// The name of the package.
     name: &'a PackageName,
     /// The version of the package.
@@ -699,17 +699,17 @@ impl<'a> Candidate<'a> {
     }
 
     /// Return the name of the package.
-    pub(crate) fn name(&self) -> &PackageName {
+    pub fn name(&self) -> &PackageName {
         self.name
     }
 
     /// Return the version of the package.
-    pub(crate) fn version(&self) -> &Version {
+    pub fn version(&self) -> &Version {
         self.version
     }
 
     /// Return the distribution for the package, if compatible.
-    pub(crate) fn compatible(&self) -> Option<&CompatibleDist<'a>> {
+    pub fn compatible(&self) -> Option<&CompatibleDist<'a>> {
         if let CandidateDist::Compatible(ref dist) = self.dist {
             Some(dist)
         } else {
@@ -718,17 +718,17 @@ impl<'a> Candidate<'a> {
     }
 
     /// Return this candidate was selected from a preference.
-    pub(crate) fn choice_kind(&self) -> VersionChoiceKind {
+    pub fn choice_kind(&self) -> VersionChoiceKind {
         self.choice_kind
     }
 
     /// Return the distribution for the candidate.
-    pub(crate) fn dist(&self) -> &CandidateDist<'a> {
+    pub fn dist(&self) -> &CandidateDist<'a> {
         &self.dist
     }
 
     /// Return the prioritized distribution for the candidate.
-    pub(crate) fn prioritized(&self) -> Option<&PrioritizedDist> {
+    pub fn prioritized(&self) -> Option<&PrioritizedDist> {
         self.dist.prioritized()
     }
 }

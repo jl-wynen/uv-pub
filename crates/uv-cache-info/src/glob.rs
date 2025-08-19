@@ -130,7 +130,7 @@ impl<'a> Trie<'a> {
 /// - base doesn't contain any glob symbols
 /// - each directory would only be walked at most once
 /// - base of each group is the longest common prefix of globs in the group
-pub(crate) fn cluster_globs(patterns: &[impl AsRef<str>]) -> Vec<(PathBuf, Vec<String>)> {
+pub fn cluster_globs(patterns: &[impl AsRef<str>]) -> Vec<(PathBuf, Vec<String>)> {
     // split all globs into base/pattern
     let globs: Vec<_> = patterns.iter().map(split_glob).collect();
 

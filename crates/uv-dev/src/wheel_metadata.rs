@@ -12,13 +12,13 @@ use uv_pep508::VerbatimUrl;
 use uv_pypi_types::ParsedUrl;
 
 #[derive(Parser)]
-pub(crate) struct WheelMetadataArgs {
+pub struct WheelMetadataArgs {
     url: VerbatimUrl,
     #[command(flatten)]
     cache_args: CacheArgs,
 }
 
-pub(crate) async fn wheel_metadata(args: WheelMetadataArgs) -> Result<()> {
+pub async fn wheel_metadata(args: WheelMetadataArgs) -> Result<()> {
     let cache = Cache::try_from(args.cache_args)?.init()?;
     let client = RegistryClientBuilder::new(cache).build();
     let capabilities = IndexCapabilities::default();

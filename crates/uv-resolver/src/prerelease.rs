@@ -44,7 +44,7 @@ impl std::fmt::Display for PrereleaseMode {
 /// Like [`PrereleaseMode`], but with any additional information required to select a candidate,
 /// like the set of direct dependencies.
 #[derive(Debug, Clone)]
-pub(crate) enum PrereleaseStrategy {
+pub enum PrereleaseStrategy {
     /// Disallow all pre-release versions.
     Disallow,
 
@@ -64,7 +64,7 @@ pub(crate) enum PrereleaseStrategy {
 }
 
 impl PrereleaseStrategy {
-    pub(crate) fn from_mode(
+    pub fn from_mode(
         mode: PrereleaseMode,
         manifest: &Manifest,
         env: &ResolverEnvironment,
@@ -103,7 +103,7 @@ impl PrereleaseStrategy {
     }
 
     /// Returns `true` if a [`PackageName`] is allowed to have pre-release versions.
-    pub(crate) fn allows(
+    pub fn allows(
         &self,
         package_name: &PackageName,
         env: &ResolverEnvironment,
@@ -132,7 +132,7 @@ impl PrereleaseStrategy {
 
 /// The pre-release strategy for a given package.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) enum AllowPrerelease {
+pub enum AllowPrerelease {
     /// Allow all pre-release versions.
     Yes,
 

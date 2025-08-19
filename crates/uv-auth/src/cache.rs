@@ -17,7 +17,7 @@ use crate::credentials::{Credentials, Username};
 type FxOnceMap<K, V> = OnceMap<K, V, BuildHasherDefault<FxHasher>>;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub(crate) enum FetchUrl {
+pub enum FetchUrl {
     /// A full index URL
     Index(DisplaySafeUrl),
     /// A realm URL
@@ -37,7 +37,7 @@ pub struct CredentialsCache {
     /// A cache per realm and username
     realms: RwLock<FxHashMap<(Realm, Username), Arc<Credentials>>>,
     /// A cache tracking the result of realm or index URL fetches from external services
-    pub(crate) fetches: FxOnceMap<(FetchUrl, Username), Option<Arc<Credentials>>>,
+    pub fetches: FxOnceMap<(FetchUrl, Username), Option<Arc<Credentials>>>,
     /// A cache per URL, uses a trie for efficient prefix queries.
     urls: RwLock<UrlTrie>,
 }
@@ -59,7 +59,7 @@ impl CredentialsCache {
     }
 
     /// Return the credentials that should be used for a realm and username, if any.
-    pub(crate) fn get_realm(&self, realm: Realm, username: Username) -> Option<Arc<Credentials>> {
+    pub fn get_realm(&self, realm: Realm, username: Username) -> Option<Arc<Credentials>> {
         let realms = self.realms.read().unwrap();
         let given_username = username.is_some();
         let key = (realm, username);
@@ -93,7 +93,7 @@ impl CredentialsCache {
     /// Note we do not cache per username, but if a username is passed we will confirm that the
     /// cached credentials have a username equal to the provided one — otherwise `None` is returned.
     /// If multiple usernames are used per URL, the realm cache should be queried instead.
-    pub(crate) fn get_url(&self, url: &Url, username: &Username) -> Option<Arc<Credentials>> {
+    pub fn get_url(&self, url: &Url, username: &Username) -> Option<Arc<Credentials>> {
         let urls = self.urls.read().unwrap();
         let credentials = urls.get(url);
         if let Some(credentials) = credentials {
@@ -112,7 +112,7 @@ impl CredentialsCache {
     }
 
     /// Update the cache with the given credentials.
-    pub(crate) fn insert(&self, url: &Url, credentials: Arc<Credentials>) {
+    pub fn insert(&self, url: &Url, credentials: Arc<Credentials>) {
         // Do not cache empty credentials
         if credentials.is_empty() {
             return;

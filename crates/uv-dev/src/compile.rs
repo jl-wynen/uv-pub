@@ -8,7 +8,7 @@ use uv_configuration::{Concurrency, Preview};
 use uv_python::{EnvironmentPreference, PythonEnvironment, PythonPreference, PythonRequest};
 
 #[derive(Parser)]
-pub(crate) struct CompileArgs {
+pub struct CompileArgs {
     /// Compile all `.py` in this or any subdirectory to bytecode
     root: PathBuf,
     python: Option<PathBuf>,
@@ -16,7 +16,7 @@ pub(crate) struct CompileArgs {
     cache_args: CacheArgs,
 }
 
-pub(crate) async fn compile(args: CompileArgs) -> anyhow::Result<()> {
+pub async fn compile(args: CompileArgs) -> anyhow::Result<()> {
     let cache = Cache::try_from(args.cache_args)?.init()?;
 
     let interpreter = if let Some(python) = args.python {

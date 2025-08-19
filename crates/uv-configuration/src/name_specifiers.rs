@@ -89,7 +89,7 @@ pub enum PackageNameSpecifiers {
 }
 
 impl PackageNameSpecifiers {
-    pub(crate) fn from_iter(specifiers: impl Iterator<Item = PackageNameSpecifier>) -> Self {
+    pub fn from_iter(specifiers: impl Iterator<Item = PackageNameSpecifier>) -> Self {
         let mut packages = Vec::new();
         let mut all: bool = false;
 

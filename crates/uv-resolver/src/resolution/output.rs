@@ -40,40 +40,40 @@ use crate::{
 #[derive(Debug)]
 pub struct ResolverOutput {
     /// The underlying graph.
-    pub(crate) graph: Graph<ResolutionGraphNode, UniversalMarker, Directed>,
+    pub graph: Graph<ResolutionGraphNode, UniversalMarker, Directed>,
     /// The range of supported Python versions.
-    pub(crate) requires_python: RequiresPython,
+    pub requires_python: RequiresPython,
     /// If the resolution had non-identical forks, store the forks in the lockfile so we can
     /// recreate them in subsequent resolutions.
-    pub(crate) fork_markers: Vec<UniversalMarker>,
+    pub fork_markers: Vec<UniversalMarker>,
     /// Any diagnostics that were encountered while building the graph.
-    pub(crate) diagnostics: Vec<ResolutionDiagnostic>,
+    pub diagnostics: Vec<ResolutionDiagnostic>,
     /// The requirements that were used to build the graph.
-    pub(crate) requirements: Vec<Requirement>,
+    pub requirements: Vec<Requirement>,
     /// The constraints that were used to build the graph.
-    pub(crate) constraints: Constraints,
+    pub constraints: Constraints,
     /// The overrides that were used to build the graph.
-    pub(crate) overrides: Overrides,
+    pub overrides: Overrides,
     /// The options that were used to build the graph.
-    pub(crate) options: Options,
+    pub options: Options,
 }
 
 #[derive(Debug, Clone)]
 #[allow(clippy::large_enum_variant)]
-pub(crate) enum ResolutionGraphNode {
+pub enum ResolutionGraphNode {
     Root,
     Dist(AnnotatedDist),
 }
 
 impl ResolutionGraphNode {
-    pub(crate) fn marker(&self) -> &UniversalMarker {
+    pub fn marker(&self) -> &UniversalMarker {
         match self {
             Self::Root => &UniversalMarker::TRUE,
             Self::Dist(dist) => &dist.marker,
         }
     }
 
-    pub(crate) fn package_extra_names(&self) -> Option<(&PackageName, &ExtraName)> {
+    pub fn package_extra_names(&self) -> Option<(&PackageName, &ExtraName)> {
         match self {
             Self::Root => None,
             Self::Dist(dist) => {
@@ -83,7 +83,7 @@ impl ResolutionGraphNode {
         }
     }
 
-    pub(crate) fn package_group_names(&self) -> Option<(&PackageName, &GroupName)> {
+    pub fn package_group_names(&self) -> Option<(&PackageName, &GroupName)> {
         match self {
             Self::Root => None,
             Self::Dist(dist) => {
@@ -93,7 +93,7 @@ impl ResolutionGraphNode {
         }
     }
 
-    pub(crate) fn package_name(&self) -> Option<&PackageName> {
+    pub fn package_name(&self) -> Option<&PackageName> {
         match self {
             Self::Root => None,
             Self::Dist(dist) => Some(&dist.name),
@@ -122,7 +122,7 @@ struct PackageRef<'a> {
 
 impl ResolverOutput {
     /// Create a new [`ResolverOutput`] from the resolved PubGrub state.
-    pub(crate) fn from_state(
+    pub fn from_state(
         resolutions: &[Resolution],
         requirements: &[Requirement],
         constraints: &Constraints,

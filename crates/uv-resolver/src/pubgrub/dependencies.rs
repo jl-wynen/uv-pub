@@ -15,9 +15,9 @@ use uv_pypi_types::{
 use crate::pubgrub::{PubGrubPackage, PubGrubPackageInner};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub(crate) struct PubGrubDependency {
-    pub(crate) package: PubGrubPackage,
-    pub(crate) version: Ranges<Version>,
+pub struct PubGrubDependency {
+    pub package: PubGrubPackage,
+    pub version: Ranges<Version>,
 
     /// When the parent that created this dependency is a "normal" package
     /// (non-extra non-group), this corresponds to its name.
@@ -32,16 +32,16 @@ pub(crate) struct PubGrubDependency {
     /// group as a dependency of that package. So if you filter out the package
     /// in a fork due to a conflict, you also filter out the group. Therefore,
     /// we introduce this parent field to enable "delayed" filtering.
-    pub(crate) parent: Option<PackageName>,
+    pub parent: Option<PackageName>,
 
     /// This field is set if the [`Requirement`] had a URL. We still use a URL from [`Urls`]
     /// even if this field is None where there is an override with a URL or there is a different
     /// requirement or constraint for the same package that has a URL.
-    pub(crate) url: Option<VerbatimParsedUrl>,
+    pub url: Option<VerbatimParsedUrl>,
 }
 
 impl PubGrubDependency {
-    pub(crate) fn from_requirement<'a>(
+    pub fn from_requirement<'a>(
         conflicts: &Conflicts,
         requirement: Cow<'a, Requirement>,
         dev: Option<&'a GroupName>,
@@ -168,23 +168,23 @@ impl PubGrubDependency {
     ///
     /// If this package can't possibly be classified as conflicting, then this
     /// returns `None`.
-    pub(crate) fn conflicting_item(&self) -> Option<ConflictItemRef<'_>> {
+    pub fn conflicting_item(&self) -> Option<ConflictItemRef<'_>> {
         self.package.conflicting_item()
     }
 }
 
 /// A PubGrub-compatible package and version range.
 #[derive(Debug, Clone)]
-pub(crate) struct PubGrubRequirement {
-    pub(crate) package: PubGrubPackage,
-    pub(crate) version: Ranges<Version>,
-    pub(crate) url: Option<VerbatimParsedUrl>,
+pub struct PubGrubRequirement {
+    pub package: PubGrubPackage,
+    pub version: Ranges<Version>,
+    pub url: Option<VerbatimParsedUrl>,
 }
 
 impl PubGrubRequirement {
     /// Convert a [`Requirement`] to a PubGrub-compatible package and range, while returning the URL
     /// on the [`Requirement`], if any.
-    pub(crate) fn from_requirement(
+    pub fn from_requirement(
         requirement: &Requirement,
         extra: Option<ExtraName>,
         group: Option<GroupName>,

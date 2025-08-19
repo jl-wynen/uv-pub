@@ -56,7 +56,7 @@ pub(super) fn matching_packages(name: &str, site_packages: &SitePackages) -> Vec
 }
 
 /// Remove any entrypoints attached to the [`Tool`].
-pub(crate) fn remove_entrypoints(tool: &Tool) {
+pub fn remove_entrypoints(tool: &Tool) {
     for executable in tool
         .entrypoints()
         .iter()
@@ -74,7 +74,7 @@ pub(crate) fn remove_entrypoints(tool: &Tool) {
 
 /// Given a no-solution error and the [`Interpreter`] that was used during the solve, attempt to
 /// discover an alternate [`Interpreter`] that satisfies the `requires-python` constraint.
-pub(crate) async fn refine_interpreter(
+pub async fn refine_interpreter(
     interpreter: &Interpreter,
     python_request: Option<&PythonRequest>,
     err: &pip::operations::Error,
@@ -169,7 +169,7 @@ pub(crate) async fn refine_interpreter(
 /// Installs tool executables for a given package, handling any conflicts.
 ///
 /// Adds a receipt for the tool.
-pub(crate) fn finalize_tool_install(
+pub fn finalize_tool_install(
     environment: &PythonEnvironment,
     name: &PackageName,
     entrypoints: &[PackageName],

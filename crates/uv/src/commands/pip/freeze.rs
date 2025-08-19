@@ -17,7 +17,7 @@ use crate::commands::pip::operations::report_target_environment;
 use crate::printer::Printer;
 
 /// Enumerate the installed packages in the current environment.
-pub(crate) fn pip_freeze(
+pub fn pip_freeze(
     exclude_editable: bool,
     strict: bool,
     python: Option<&str>,

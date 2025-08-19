@@ -16,7 +16,7 @@ pub struct KeyringProvider {
 }
 
 #[derive(Debug)]
-pub(crate) enum KeyringProviderBackend {
+pub enum KeyringProviderBackend {
     /// Use the `keyring` command to fetch credentials.
     Subprocess,
     #[cfg(test)]

@@ -20,7 +20,7 @@ use crate::{ExtraOperator, MarkerExpression, MarkerOperator, MarkerTree, MarkerT
 /// which can be used to create a CNF expression.
 ///
 /// We choose DNF as it is easier to simplify for user-facing output.
-pub(crate) fn to_dnf(tree: MarkerTree) -> Vec<Vec<MarkerExpression>> {
+pub fn to_dnf(tree: MarkerTree) -> Vec<Vec<MarkerExpression>> {
     let mut dnf = Vec::new();
     collect_dnf(tree, &mut dnf, &mut Vec::new());
     simplify(&mut dnf);
@@ -315,7 +315,7 @@ fn sort(dnf: &mut [Vec<MarkerExpression>]) {
 }
 
 /// Merge any edges that lead to identical subtrees into a single range.
-pub(crate) fn collect_edges<'a, T>(
+pub fn collect_edges<'a, T>(
     map: impl ExactSizeIterator<Item = (&'a Ranges<T>, MarkerTree)>,
 ) -> IndexMap<MarkerTree, Ranges<T>, FxBuildHasher>
 where

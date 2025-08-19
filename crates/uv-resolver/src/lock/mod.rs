@@ -50,7 +50,7 @@ use uv_types::{BuildContext, HashStrategy};
 use uv_workspace::WorkspaceMember;
 
 use crate::fork_strategy::ForkStrategy;
-pub(crate) use crate::lock::export::PylockTomlPackage;
+pub use crate::lock::export::PylockTomlPackage;
 pub use crate::lock::export::RequirementsTxtExport;
 pub use crate::lock::export::{PylockToml, PylockTomlErrorKind};
 pub use crate::lock::installable::Installable;
@@ -2282,7 +2282,7 @@ impl LockVersion {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Package {
-    pub(crate) id: PackageId,
+    pub id: PackageId,
     sdist: Option<SourceDist>,
     wheels: Vec<Wheel>,
     /// If there are multiple versions or sources for the same package name, we add the markers of
@@ -3261,9 +3261,9 @@ impl PackageWire {
 /// of the name, the version and the source url.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd, Ord, serde::Deserialize)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) struct PackageId {
-    pub(crate) name: PackageName,
-    pub(crate) version: Option<Version>,
+pub struct PackageId {
+    pub name: PackageName,
+    pub version: Option<Version>,
     source: Source,
 }
 
@@ -3950,7 +3950,7 @@ impl SourceDist {
         }
     }
 
-    pub(crate) fn hash(&self) -> Option<&Hash> {
+    pub fn hash(&self) -> Option<&Hash> {
         match self {
             Self::Metadata { metadata } => metadata.hash.as_ref(),
             Self::Url { metadata, .. } => metadata.hash.as_ref(),
@@ -3958,7 +3958,7 @@ impl SourceDist {
         }
     }
 
-    pub(crate) fn size(&self) -> Option<u64> {
+    pub fn size(&self) -> Option<u64> {
         match self {
             Self::Metadata { metadata } => metadata.size,
             Self::Url { metadata, .. } => metadata.size,
@@ -3966,7 +3966,7 @@ impl SourceDist {
         }
     }
 
-    pub(crate) fn upload_time(&self) -> Option<Timestamp> {
+    pub fn upload_time(&self) -> Option<Timestamp> {
         match self {
             Self::Metadata { metadata } => metadata.upload_time,
             Self::Url { metadata, .. } => metadata.upload_time,
@@ -4470,7 +4470,7 @@ impl Wheel {
         }
     }
 
-    pub(crate) fn to_registry_wheel(
+    pub fn to_registry_wheel(
         &self,
         source: &RegistrySource,
         root: &Path,

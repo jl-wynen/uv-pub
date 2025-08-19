@@ -32,7 +32,7 @@ use crate::settings::NetworkSettings;
 
 /// Display the installed packages in the current environment as a dependency tree.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn pip_tree(
+pub async fn pip_tree(
     show_version_specifiers: bool,
     depth: u8,
     prune: &[PackageName],
@@ -192,7 +192,7 @@ pub(crate) async fn pip_tree(
 }
 
 #[derive(Debug)]
-pub(crate) struct DisplayDependencyGraph<'env> {
+pub struct DisplayDependencyGraph<'env> {
     /// The constructed dependency graph.
     graph: petgraph::graph::Graph<
         &'env ResolutionMetadata,
@@ -215,7 +215,7 @@ pub(crate) struct DisplayDependencyGraph<'env> {
 
 impl<'env> DisplayDependencyGraph<'env> {
     /// Create a new [`DisplayDependencyGraph`] for the set of installed distributions.
-    pub(crate) fn new(
+    pub fn new(
         depth: usize,
         prune: &[PackageName],
         package: &[PackageName],
@@ -499,7 +499,7 @@ impl<'env> DisplayDependencyGraph<'env> {
     }
 
     /// Depth-first traverse the nodes to render the tree.
-    pub(crate) fn render(&self) -> Vec<String> {
+    pub fn render(&self) -> Vec<String> {
         let mut path = Vec::new();
         let mut lines = Vec::with_capacity(self.graph.node_count());
         let mut visited =

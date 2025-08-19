@@ -52,7 +52,7 @@ impl<'lock> From<&'lock ExportTarget> for LockTarget<'lock> {
 
 /// Export the project's `uv.lock` in an alternate format.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn export(
+pub async fn export(
     project_dir: &Path,
     format: Option<ExportFormat>,
     all_packages: bool,

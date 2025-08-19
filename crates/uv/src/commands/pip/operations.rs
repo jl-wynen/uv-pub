@@ -49,7 +49,7 @@ use crate::commands::{ChangeEventKind, DryRunEvent, compile_bytecode};
 use crate::printer::Printer;
 
 /// Consolidate the requirements for an installation.
-pub(crate) async fn read_requirements(
+pub async fn read_requirements(
     requirements: &[RequirementsSource],
     constraints: &[RequirementsSource],
     overrides: &[RequirementsSource],
@@ -86,7 +86,7 @@ pub(crate) async fn read_requirements(
 }
 
 /// Resolve a set of constraints.
-pub(crate) async fn read_constraints(
+pub async fn read_constraints(
     constraints: &[RequirementsSource],
     client_builder: &BaseClientBuilder<'_>,
 ) -> Result<Vec<NameRequirementSpecification>, Error> {
@@ -98,7 +98,7 @@ pub(crate) async fn read_constraints(
 }
 
 /// Resolve a set of requirements, similar to running `pip compile`.
-pub(crate) async fn resolve<InstalledPackages: InstalledPackagesProvider>(
+pub async fn resolve<InstalledPackages: InstalledPackagesProvider>(
     requirements: Vec<UnresolvedRequirementSpecification>,
     constraints: Vec<NameRequirementSpecification>,
     overrides: Vec<UnresolvedRequirementSpecification>,
@@ -361,7 +361,7 @@ pub(crate) async fn resolve<InstalledPackages: InstalledPackagesProvider>(
 }
 
 #[derive(Debug, Clone, Copy)]
-pub(crate) enum Modifications {
+pub enum Modifications {
     /// Use `pip install` semantics, whereby existing installations are left as-is, unless they are
     /// marked for re-installation or upgrade.
     ///
@@ -377,18 +377,18 @@ pub(crate) enum Modifications {
 
 /// A summary of the changes made to the environment during an installation.
 #[derive(Debug, Clone, Default)]
-pub(crate) struct Changelog {
+pub struct Changelog {
     /// The distributions that were installed.
-    pub(crate) installed: HashSet<LocalDist>,
+    pub installed: HashSet<LocalDist>,
     /// The distributions that were uninstalled.
-    pub(crate) uninstalled: HashSet<LocalDist>,
+    pub uninstalled: HashSet<LocalDist>,
     /// The distributions that were reinstalled.
-    pub(crate) reinstalled: HashSet<LocalDist>,
+    pub reinstalled: HashSet<LocalDist>,
 }
 
 impl Changelog {
     /// Create a [`Changelog`] from a list of installed and uninstalled distributions.
-    pub(crate) fn new(installed: Vec<CachedDist>, uninstalled: Vec<InstalledDist>) -> Self {
+    pub fn new(installed: Vec<CachedDist>, uninstalled: Vec<InstalledDist>) -> Self {
         let mut uninstalled: HashSet<_> = uninstalled.into_iter().map(LocalDist::from).collect();
 
         let (reinstalled, installed): (HashSet<_>, HashSet<_>) = installed
@@ -406,7 +406,7 @@ impl Changelog {
     }
 
     /// Create a [`Changelog`] from a list of installed distributions.
-    pub(crate) fn from_installed(installed: Vec<CachedDist>) -> Self {
+    pub fn from_installed(installed: Vec<CachedDist>) -> Self {
         Self {
             installed: installed.into_iter().map(LocalDist::from).collect(),
             uninstalled: HashSet::default(),
@@ -416,13 +416,13 @@ impl Changelog {
 
     /// Returns `true` if the changelog includes a distribution with the given name, either via
     /// an installation or uninstallation.
-    pub(crate) fn includes(&self, name: &PackageName) -> bool {
+    pub fn includes(&self, name: &PackageName) -> bool {
         self.installed.iter().any(|dist| dist.name() == name)
             || self.uninstalled.iter().any(|dist| dist.name() == name)
     }
 
     /// Returns `true` if the changelog is empty.
-    pub(crate) fn is_empty(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         self.installed.is_empty() && self.uninstalled.is_empty()
     }
 }
@@ -430,7 +430,7 @@ impl Changelog {
 /// Install a set of requirements into the current environment.
 ///
 /// Returns a [`Changelog`] summarizing the changes made to the environment.
-pub(crate) async fn install(
+pub async fn install(
     resolution: &Resolution,
     site_packages: SitePackages,
     modifications: Modifications,
@@ -718,7 +718,7 @@ async fn execute_plan(
 
 /// Display a message about the interpreter that was selected for the operation.
 #[allow(clippy::result_large_err)]
-pub(crate) fn report_interpreter(
+pub fn report_interpreter(
     python: &PythonInstallation,
     dimmed: bool,
     printer: Printer,
@@ -776,7 +776,7 @@ pub(crate) fn report_interpreter(
 
 /// Display a message about the target environment for the operation.
 #[allow(clippy::result_large_err)]
-pub(crate) fn report_target_environment(
+pub fn report_target_environment(
     env: &PythonEnvironment,
     cache: &Cache,
     printer: Printer,
@@ -953,7 +953,7 @@ fn report_dry_run(
 
 /// Report any diagnostics on resolved distributions.
 #[allow(clippy::result_large_err)]
-pub(crate) fn diagnose_resolution(
+pub fn diagnose_resolution(
     diagnostics: &[ResolutionDiagnostic],
     printer: Printer,
 ) -> Result<(), Error> {
@@ -971,7 +971,7 @@ pub(crate) fn diagnose_resolution(
 
 /// Report any diagnostics on installed distributions in the Python environment.
 #[allow(clippy::result_large_err)]
-pub(crate) fn diagnose_environment(
+pub fn diagnose_environment(
     resolution: &Resolution,
     venv: &PythonEnvironment,
     markers: &ResolverMarkerEnvironment,
@@ -997,7 +997,7 @@ pub(crate) fn diagnose_environment(
 }
 
 #[derive(thiserror::Error, Debug)]
-pub(crate) enum Error {
+pub enum Error {
     #[error("Failed to prepare distributions")]
     Prepare(#[from] uv_installer::PrepareError),
 

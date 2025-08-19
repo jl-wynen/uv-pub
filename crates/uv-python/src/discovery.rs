@@ -157,7 +157,7 @@ pub enum EnvironmentPreference {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub(crate) struct DiscoveryPreferences {
+pub struct DiscoveryPreferences {
     python_preference: PythonPreference,
     environment_preference: EnvironmentPreference,
 }
@@ -936,7 +936,7 @@ pub fn satisfies_python_preference(
     }
 }
 
-pub(crate) fn is_system_interpreter(source: PythonSource, interpreter: &Interpreter) -> bool {
+pub fn is_system_interpreter(source: PythonSource, interpreter: &Interpreter) -> bool {
     match source {
         // A managed interpreter is never a system interpreter
         PythonSource::Managed => false,
@@ -1240,7 +1240,7 @@ pub fn find_python_installations<'a>(
 ///
 /// If an error is encountered while locating or inspecting a candidate installation,
 /// the error will raised instead of attempting further candidates.
-pub(crate) fn find_python_installation(
+pub fn find_python_installation(
     request: &PythonRequest,
     environments: EnvironmentPreference,
     preference: PythonPreference,
@@ -1369,7 +1369,7 @@ pub(crate) fn find_python_installation(
 ///
 /// See [`find_python_installation`] for more details on installation discovery.
 #[instrument(skip_all, fields(request))]
-pub(crate) fn find_best_python_installation(
+pub fn find_best_python_installation(
     request: &PythonRequest,
     environments: EnvironmentPreference,
     preference: PythonPreference,
@@ -1466,7 +1466,7 @@ fn warn_on_unsupported_python(interpreter: &Interpreter) {
 ///
 /// See: <https://github.com/astral-sh/rye/blob/b0e9eccf05fe4ff0ae7b0250a248c54f2d780b4d/rye/src/cli/shim.rs#L108>
 #[cfg(windows)]
-pub(crate) fn is_windows_store_shim(path: &Path) -> bool {
+pub fn is_windows_store_shim(path: &Path) -> bool {
     use std::os::windows::fs::MetadataExt;
     use std::os::windows::prelude::OsStrExt;
     use windows_sys::Win32::Foundation::{CloseHandle, INVALID_HANDLE_VALUE};
@@ -1923,7 +1923,7 @@ impl PythonRequest {
     }
 
     /// Whether this request opts-in to a pre-release Python version.
-    pub(crate) fn allows_prereleases(&self) -> bool {
+    pub fn allows_prereleases(&self) -> bool {
         match self {
             Self::Default => false,
             Self::Any => true,
@@ -1936,7 +1936,7 @@ impl PythonRequest {
     }
 
     /// Whether this request opts-in to an alternative Python implementation, e.g., PyPy.
-    pub(crate) fn allows_alternative_implementations(&self) -> bool {
+    pub fn allows_alternative_implementations(&self) -> bool {
         match self {
             Self::Default => false,
             Self::Any => true,
@@ -1950,7 +1950,7 @@ impl PythonRequest {
         }
     }
 
-    pub(crate) fn is_explicit_system(&self) -> bool {
+    pub fn is_explicit_system(&self) -> bool {
         matches!(self, Self::File(_) | Self::Directory(_))
     }
 
@@ -1980,7 +1980,7 @@ impl PythonSource {
     }
 
     /// Whether a pre-release Python installation from this source can be used without opt-in.
-    pub(crate) fn allows_prereleases(self) -> bool {
+    pub fn allows_prereleases(self) -> bool {
         match self {
             Self::Managed | Self::Registry | Self::MicrosoftStore => false,
             Self::SearchPath
@@ -1995,7 +1995,7 @@ impl PythonSource {
     }
 
     /// Whether an alternative Python implementation from this source can be used without opt-in.
-    pub(crate) fn allows_alternative_implementations(self) -> bool {
+    pub fn allows_alternative_implementations(self) -> bool {
         match self {
             Self::Managed
             | Self::Registry
@@ -2024,7 +2024,7 @@ impl PythonSource {
     /// This enables targeting the virtual environment with uv by putting its `bin/` on the `PATH`
     /// without setting `VIRTUAL_ENV` — but if there's another interpreter before it we will ignore
     /// it.
-    pub(crate) fn is_maybe_virtualenv(self) -> bool {
+    pub fn is_maybe_virtualenv(self) -> bool {
         match self {
             Self::ProvidedPath
             | Self::ActiveEnvironment
@@ -2038,7 +2038,7 @@ impl PythonSource {
     }
 
     /// Whether this source **could** be a system interpreter.
-    pub(crate) fn is_maybe_system(self) -> bool {
+    pub fn is_maybe_system(self) -> bool {
         match self {
             Self::CondaPrefix
             | Self::BaseCondaPrefix
@@ -2076,7 +2076,7 @@ impl PythonPreference {
         }
     }
 
-    pub(crate) fn allows_managed(self) -> bool {
+    pub fn allows_managed(self) -> bool {
         match self {
             Self::OnlySystem => false,
             Self::Managed | Self::System | Self::OnlyManaged => true,
@@ -2128,7 +2128,7 @@ impl EnvironmentPreference {
 }
 
 #[derive(Debug, Clone, Default, Copy, PartialEq, Eq)]
-pub(crate) struct ExecutableName {
+pub struct ExecutableName {
     implementation: Option<ImplementationName>,
     major: Option<u8>,
     minor: Option<u8>,
@@ -2301,7 +2301,7 @@ impl VersionRequest {
     }
 
     /// Return possible executable names for the given version request.
-    pub(crate) fn executable_names(
+    pub fn executable_names(
         &self,
         implementation: Option<&ImplementationName>,
     ) -> Vec<ExecutableName> {
@@ -2388,7 +2388,7 @@ impl VersionRequest {
     }
 
     /// Return the major version segment of the request, if any.
-    pub(crate) fn major(&self) -> Option<u8> {
+    pub fn major(&self) -> Option<u8> {
         match self {
             Self::Any | Self::Default | Self::Range(_, _) => None,
             Self::Major(major, _) => Some(*major),
@@ -2399,7 +2399,7 @@ impl VersionRequest {
     }
 
     /// Return the minor version segment of the request, if any.
-    pub(crate) fn minor(&self) -> Option<u8> {
+    pub fn minor(&self) -> Option<u8> {
         match self {
             Self::Any | Self::Default | Self::Range(_, _) => None,
             Self::Major(_, _) => None,
@@ -2410,7 +2410,7 @@ impl VersionRequest {
     }
 
     /// Return the patch version segment of the request, if any.
-    pub(crate) fn patch(&self) -> Option<u8> {
+    pub fn patch(&self) -> Option<u8> {
         match self {
             Self::Any | Self::Default | Self::Range(_, _) => None,
             Self::Major(_, _) => None,
@@ -2423,7 +2423,7 @@ impl VersionRequest {
     /// Check if the request is for a version supported by uv.
     ///
     /// If not, an `Err` is returned with an explanatory message.
-    pub(crate) fn check_supported(&self) -> Result<(), String> {
+    pub fn check_supported(&self) -> Result<(), String> {
         match self {
             Self::Any | Self::Default => (),
             Self::Major(major, _) => {
@@ -2477,7 +2477,7 @@ impl VersionRequest {
     /// [`VersionRequest::Any`] for sources that should allow non-default interpreters like
     /// free-threaded variants.
     #[must_use]
-    pub(crate) fn into_request_for_source(self, source: PythonSource) -> Self {
+    pub fn into_request_for_source(self, source: PythonSource) -> Self {
         match self {
             Self::Default => match source {
                 PythonSource::ParentInterpreter
@@ -2497,7 +2497,7 @@ impl VersionRequest {
     }
 
     /// Check if a interpreter matches the request.
-    pub(crate) fn matches_interpreter(&self, interpreter: &Interpreter) -> bool {
+    pub fn matches_interpreter(&self, interpreter: &Interpreter) -> bool {
         match self {
             Self::Any => true,
             // Do not use free-threaded interpreters by default
@@ -2540,7 +2540,7 @@ impl VersionRequest {
     ///
     /// WARNING: Use [`VersionRequest::matches_interpreter`] too. This method is only suitable to
     /// avoid querying interpreters if it's clear it cannot fulfill the request.
-    pub(crate) fn matches_version(&self, version: &PythonVersion) -> bool {
+    pub fn matches_version(&self, version: &PythonVersion) -> bool {
         match self {
             Self::Any | Self::Default => true,
             Self::Major(major, _) => version.major() == *major,
@@ -2603,7 +2603,7 @@ impl VersionRequest {
     ///
     /// WARNING: Use [`VersionRequest::matches_interpreter`] too. This method is only suitable to
     /// avoid querying interpreters if it's clear it cannot fulfill the request.
-    pub(crate) fn matches_major_minor_patch_prerelease(
+    pub fn matches_major_minor_patch_prerelease(
         &self,
         major: u8,
         minor: u8,
@@ -2664,7 +2664,7 @@ impl VersionRequest {
     }
 
     /// Whether this request should allow selection of pre-release versions.
-    pub(crate) fn allows_prereleases(&self) -> bool {
+    pub fn allows_prereleases(&self) -> bool {
         match self {
             Self::Default => false,
             Self::Any => true,
@@ -2677,7 +2677,7 @@ impl VersionRequest {
     }
 
     /// Whether this request is for a free-threaded Python variant.
-    pub(crate) fn is_freethreaded(&self) -> bool {
+    pub fn is_freethreaded(&self) -> bool {
         match self {
             Self::Any | Self::Default => false,
             Self::Major(_, variant)
@@ -2712,7 +2712,7 @@ impl VersionRequest {
     }
 
     /// Return the [`PythonVariant`] of the request, if any.
-    pub(crate) fn variant(&self) -> Option<PythonVariant> {
+    pub fn variant(&self) -> Option<PythonVariant> {
         match self {
             Self::Any => None,
             Self::Default => Some(PythonVariant::Default),

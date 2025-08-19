@@ -40,13 +40,13 @@ pub enum Error {
 
 impl Error {
     /// Create an [`Error`] from a distribution error.
-    pub(crate) fn from_dist(dist: Dist, err: uv_distribution::Error) -> Self {
+    pub fn from_dist(dist: Dist, err: uv_distribution::Error) -> Self {
         Self::Dist(DistErrorKind::from_dist(&dist, &err), Box::new(dist), err)
     }
 }
 
 /// Convert a [`Requirement`] into a [`Dist`], if it is a direct URL.
-pub(crate) fn required_dist(
+pub fn required_dist(
     requirement: &Requirement,
 ) -> Result<Option<Dist>, uv_distribution_types::Error> {
     Ok(Some(match &requirement.source {

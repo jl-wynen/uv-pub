@@ -41,7 +41,7 @@ mod parser;
 mod replacements;
 
 /// Update the `sysconfig` data in a Python installation.
-pub(crate) fn update_sysconfig(
+pub fn update_sysconfig(
     install_root: &Path,
     major: u8,
     minor: u8,

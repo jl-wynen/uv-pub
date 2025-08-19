@@ -17,12 +17,12 @@ use crate::resolution::AnnotatedDist;
 
 #[derive(Debug, Clone)]
 /// A pinned package with its resolved distribution and all the extras that were pinned for it.
-pub(crate) struct RequirementsTxtDist<'dist> {
-    pub(crate) dist: &'dist ResolvedDist,
-    pub(crate) version: &'dist Version,
-    pub(crate) hashes: &'dist [HashDigest],
-    pub(crate) markers: MarkerTree,
-    pub(crate) extras: Vec<ExtraName>,
+pub struct RequirementsTxtDist<'dist> {
+    pub dist: &'dist ResolvedDist,
+    pub version: &'dist Version,
+    pub hashes: &'dist [HashDigest],
+    pub markers: MarkerTree,
+    pub extras: Vec<ExtraName>,
 }
 
 impl<'dist> RequirementsTxtDist<'dist> {
@@ -32,7 +32,7 @@ impl<'dist> RequirementsTxtDist<'dist> {
     /// This typically results in a PEP 508 representation of the requirement, but will write an
     /// unnamed requirement for relative paths, which can't be represented with PEP 508 (but are
     /// supported in `requirements.txt`).
-    pub(crate) fn to_requirements_txt(
+    pub fn to_requirements_txt(
         &self,
         requires_python: &RequiresPython,
         include_markers: bool,
@@ -143,7 +143,7 @@ impl<'dist> RequirementsTxtDist<'dist> {
 
     /// Convert the [`RequirementsTxtDist`] to a comparator that can be used to sort the requirements
     /// in a `requirements.txt` file.
-    pub(crate) fn to_comparator(&self) -> RequirementsTxtComparator<'_> {
+    pub fn to_comparator(&self) -> RequirementsTxtComparator<'_> {
         if self.dist.is_editable() {
             if let VersionOrUrlRef::Url(url) = self.dist.version_or_url() {
                 return RequirementsTxtComparator::Url(url.verbatim());
@@ -167,7 +167,7 @@ impl<'dist> RequirementsTxtDist<'dist> {
         }
     }
 
-    pub(crate) fn from_annotated_dist(annotated: &'dist AnnotatedDist) -> Self {
+    pub fn from_annotated_dist(annotated: &'dist AnnotatedDist) -> Self {
         assert!(
             annotated.marker.conflict().is_true(),
             "found dist {annotated} with non-trivial conflicting marker {marker:?}, \
@@ -193,7 +193,7 @@ impl<'dist> RequirementsTxtDist<'dist> {
 
 /// A comparator for sorting requirements in a `requirements.txt` file.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) enum RequirementsTxtComparator<'a> {
+pub enum RequirementsTxtComparator<'a> {
     /// Sort by URL for editable requirements.
     Url(Cow<'a, str>),
     /// In universal mode, we can have multiple versions for a package, so we track the version and

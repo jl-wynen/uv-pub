@@ -17,8 +17,8 @@ pub enum ArchVariant {
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy, Hash)]
 pub struct Arch {
-    pub(crate) family: target_lexicon::Architecture,
-    pub(crate) variant: Option<ArchVariant>,
+    pub family: target_lexicon::Architecture,
+    pub variant: Option<ArchVariant>,
 }
 
 impl Ord for Arch {
@@ -232,7 +232,7 @@ impl From<&uv_platform_tags::Arch> for Arch {
 }
 
 #[cfg(test)]
-pub(crate) mod test_support {
+pub mod test_support {
     use super::*;
     use std::cell::RefCell;
 
@@ -240,7 +240,7 @@ pub(crate) mod test_support {
         static MOCK_ARCH: RefCell<Option<Arch>> = const { RefCell::new(None) };
     }
 
-    pub(crate) fn get_mock_arch() -> Option<Arch> {
+    pub fn get_mock_arch() -> Option<Arch> {
         MOCK_ARCH.with(|arch| *arch.borrow())
     }
 
@@ -248,12 +248,12 @@ pub(crate) mod test_support {
         MOCK_ARCH.with(|mock| *mock.borrow_mut() = arch);
     }
 
-    pub(crate) struct MockArchGuard {
+    pub struct MockArchGuard {
         previous: Option<Arch>,
     }
 
     impl MockArchGuard {
-        pub(crate) fn new(arch: Arch) -> Self {
+        pub fn new(arch: Arch) -> Self {
             let previous = get_mock_arch();
             set_mock_arch(Some(arch));
             Self { previous }
@@ -268,7 +268,7 @@ pub(crate) mod test_support {
 
     /// Run a function with a mocked architecture.
     /// The mock is automatically cleaned up after the function returns.
-    pub(crate) fn run_with_arch<F, R>(arch: Arch, f: F) -> R
+    pub fn run_with_arch<F, R>(arch: Arch, f: F) -> R
     where
         F: FnOnce() -> R,
     {
@@ -276,11 +276,11 @@ pub(crate) mod test_support {
         f()
     }
 
-    pub(crate) fn x86_64() -> Arch {
+    pub fn x86_64() -> Arch {
         Arch::new(target_lexicon::Architecture::X86_64, None)
     }
 
-    pub(crate) fn aarch64() -> Arch {
+    pub fn aarch64() -> Arch {
         Arch::new(
             target_lexicon::Architecture::Aarch64(target_lexicon::Aarch64Architecture::Aarch64),
             None,

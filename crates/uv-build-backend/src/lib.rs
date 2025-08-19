@@ -106,16 +106,16 @@ trait DirectoryWriter {
 }
 
 /// Name of the file in the archive and path outside, if it wasn't generated.
-pub(crate) type FileList = Vec<(String, Option<PathBuf>)>;
+pub type FileList = Vec<(String, Option<PathBuf>)>;
 
 /// A dummy writer to collect the file names that would be included in a build.
-pub(crate) struct ListWriter<'a> {
+pub struct ListWriter<'a> {
     files: &'a mut FileList,
 }
 
 impl<'a> ListWriter<'a> {
     /// Convert the writer to the collected file names.
-    pub(crate) fn new(files: &'a mut FileList) -> Self {
+    pub fn new(files: &'a mut FileList) -> Self {
         Self { files }
     }
 }

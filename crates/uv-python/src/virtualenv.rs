@@ -34,17 +34,17 @@ pub struct VirtualEnvironment {
 #[derive(Debug, Clone)]
 pub struct PyVenvConfiguration {
     /// Was the virtual environment created with the `virtualenv` package?
-    pub(crate) virtualenv: bool,
+    pub virtualenv: bool,
     /// Was the virtual environment created with the `uv` package?
-    pub(crate) uv: bool,
+    pub uv: bool,
     /// Is the virtual environment relocatable?
-    pub(crate) relocatable: bool,
+    pub relocatable: bool,
     /// Was the virtual environment populated with seed packages?
-    pub(crate) seed: bool,
+    pub seed: bool,
     /// Should the virtual environment include system site packages?
-    pub(crate) include_system_site_packages: bool,
+    pub include_system_site_packages: bool,
     /// The Python version the virtual environment was created with
-    pub(crate) version: Option<PythonVersion>,
+    pub version: Option<PythonVersion>,
 }
 
 #[derive(Debug, Error)]
@@ -60,7 +60,7 @@ pub enum Error {
 /// Locate an active virtual environment by inspecting environment variables.
 ///
 /// Supports `VIRTUAL_ENV`.
-pub(crate) fn virtualenv_from_env() -> Option<PathBuf> {
+pub fn virtualenv_from_env() -> Option<PathBuf> {
     if let Some(dir) = env::var_os(EnvVars::VIRTUAL_ENV).filter(|value| !value.is_empty()) {
         return Some(PathBuf::from(dir));
     }
@@ -69,7 +69,7 @@ pub(crate) fn virtualenv_from_env() -> Option<PathBuf> {
 }
 
 #[derive(Debug, PartialEq, Eq, Copy, Clone)]
-pub(crate) enum CondaEnvironmentKind {
+pub enum CondaEnvironmentKind {
     /// The base Conda environment; treated like a system Python environment.
     Base,
     /// Any other Conda environment; treated like a virtual environment.
@@ -109,7 +109,7 @@ impl CondaEnvironmentKind {
 ///
 /// If `base` is true, the active environment must be the base environment or `None` is returned,
 /// and vice-versa.
-pub(crate) fn conda_environment_from_env(kind: CondaEnvironmentKind) -> Option<PathBuf> {
+pub fn conda_environment_from_env(kind: CondaEnvironmentKind) -> Option<PathBuf> {
     let dir = env::var_os(EnvVars::CONDA_PREFIX).filter(|value| !value.is_empty())?;
     let path = PathBuf::from(dir);
 
@@ -125,7 +125,7 @@ pub(crate) fn conda_environment_from_env(kind: CondaEnvironmentKind) -> Option<P
 /// Searches for a `.venv` directory in the current or any parent directory. If the current
 /// directory is itself a virtual environment (or a subdirectory of a virtual environment), the
 /// containing virtual environment is returned.
-pub(crate) fn virtualenv_from_working_dir() -> Result<Option<PathBuf>, Error> {
+pub fn virtualenv_from_working_dir() -> Result<Option<PathBuf>, Error> {
     let current_dir = crate::current_dir()?;
 
     for dir in current_dir.ancestors() {
@@ -148,7 +148,7 @@ pub(crate) fn virtualenv_from_working_dir() -> Result<Option<PathBuf>, Error> {
 }
 
 /// Returns the path to the `python` executable inside a virtual environment.
-pub(crate) fn virtualenv_python_executable(venv: impl AsRef<Path>) -> PathBuf {
+pub fn virtualenv_python_executable(venv: impl AsRef<Path>) -> PathBuf {
     let venv = venv.as_ref();
     if cfg!(windows) {
         // Search for `python.exe` in the `Scripts` directory.

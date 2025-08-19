@@ -46,7 +46,7 @@ pub enum UnavailableVersion {
 }
 
 impl UnavailableVersion {
-    pub(crate) fn message(&self) -> String {
+    pub fn message(&self) -> String {
         match self {
             Self::IncompatibleDist(invalid_dist) => format!("{invalid_dist}"),
             Self::InvalidMetadata => "invalid metadata".into(),
@@ -59,7 +59,7 @@ impl UnavailableVersion {
         }
     }
 
-    pub(crate) fn singular_message(&self) -> String {
+    pub fn singular_message(&self) -> String {
         match self {
             Self::IncompatibleDist(invalid_dist) => invalid_dist.singular_message(),
             Self::InvalidMetadata => format!("has {self}"),
@@ -70,7 +70,7 @@ impl UnavailableVersion {
         }
     }
 
-    pub(crate) fn plural_message(&self) -> String {
+    pub fn plural_message(&self) -> String {
         match self {
             Self::IncompatibleDist(invalid_dist) => invalid_dist.plural_message(),
             Self::InvalidMetadata => format!("have {self}"),
@@ -81,7 +81,7 @@ impl UnavailableVersion {
         }
     }
 
-    pub(crate) fn context_message(
+    pub fn context_message(
         &self,
         tags: Option<&Tags>,
         requires_python: Option<AbiTag>,
@@ -135,7 +135,7 @@ pub enum UnavailablePackage {
 }
 
 impl UnavailablePackage {
-    pub(crate) fn message(&self) -> &'static str {
+    pub fn message(&self) -> &'static str {
         match self {
             Self::NoIndex => "not found in the provided package locations",
             Self::Offline => "not found in the cache",
@@ -145,7 +145,7 @@ impl UnavailablePackage {
         }
     }
 
-    pub(crate) fn singular_message(&self) -> String {
+    pub fn singular_message(&self) -> String {
         match self {
             Self::NoIndex => format!("was {self}"),
             Self::Offline => format!("was {self}"),
@@ -179,7 +179,7 @@ impl From<&MetadataUnavailable> for UnavailablePackage {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum ResolverVersion {
+pub enum ResolverVersion {
     /// A version that is not usable for some reason
     Unavailable(Version, UnavailableVersion),
     /// A usable version

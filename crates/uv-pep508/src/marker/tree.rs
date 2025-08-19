@@ -254,7 +254,7 @@ pub enum MarkerOperator {
 
 impl MarkerOperator {
     /// Compare two versions, returning `None` for `in` and `not in`.
-    pub(crate) fn to_pep440_operator(self) -> Option<uv_pep440::Operator> {
+    pub fn to_pep440_operator(self) -> Option<uv_pep440::Operator> {
         match self {
             Self::Equal => Some(uv_pep440::Operator::Equal),
             Self::NotEqual => Some(uv_pep440::Operator::NotEqual),
@@ -268,7 +268,7 @@ impl MarkerOperator {
     }
 
     /// Inverts this marker operator.
-    pub(crate) fn invert(self) -> Self {
+    pub fn invert(self) -> Self {
         match self {
             Self::LessThan => Self::GreaterThan,
             Self::LessEqual => Self::GreaterEqual,
@@ -288,7 +288,7 @@ impl MarkerOperator {
     ///
     /// If a negation doesn't exist, which is only the case for ~=, then this
     /// returns `None`.
-    pub(crate) fn negate(self) -> Option<Self> {
+    pub fn negate(self) -> Option<Self> {
         Some(match self {
             Self::Equal => Self::NotEqual,
             Self::NotEqual => Self::Equal,
@@ -545,7 +545,7 @@ pub enum MarkerExpression {
 
 /// The kind of a [`MarkerExpression`].
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
-pub(crate) enum MarkerExpressionKind {
+pub enum MarkerExpressionKind {
     /// A version expression, e.g. `<version key> <version op> <quoted PEP 440 version>`.
     Version(MarkerValueVersion),
     /// A version `in` expression, e.g. `<version key> in <quoted list of PEP 440 versions>`.
@@ -571,7 +571,7 @@ impl ExtraOperator {
     /// Creates a [`ExtraOperator`] from an equivalent [`MarkerOperator`].
     ///
     /// Returns `None` if the operator is not supported for extras.
-    pub(crate) fn from_marker_operator(operator: MarkerOperator) -> Option<Self> {
+    pub fn from_marker_operator(operator: MarkerOperator) -> Option<Self> {
         match operator {
             MarkerOperator::Equal => Some(Self::Equal),
             MarkerOperator::NotEqual => Some(Self::NotEqual),
@@ -580,7 +580,7 @@ impl ExtraOperator {
     }
 
     /// Negates this operator.
-    pub(crate) fn negate(&self) -> Self {
+    pub fn negate(&self) -> Self {
         match self {
             Self::Equal => Self::NotEqual,
             Self::NotEqual => Self::Equal,
@@ -610,7 +610,7 @@ impl ContainerOperator {
     /// Creates a [`ContainerOperator`] from an equivalent [`MarkerOperator`].
     ///
     /// Returns `None` if the operator is not supported for containers.
-    pub(crate) fn from_marker_operator(operator: MarkerOperator) -> Option<Self> {
+    pub fn from_marker_operator(operator: MarkerOperator) -> Option<Self> {
         match operator {
             MarkerOperator::In => Some(Self::In),
             MarkerOperator::NotIn => Some(Self::NotIn),
@@ -661,7 +661,7 @@ impl MarkerExpression {
     }
 
     /// Return the kind of this marker expression.
-    pub(crate) fn kind(&self) -> MarkerExpressionKind {
+    pub fn kind(&self) -> MarkerExpressionKind {
         match self {
             Self::Version { key, .. } => MarkerExpressionKind::Version(*key),
             Self::VersionIn { key, .. } => MarkerExpressionKind::VersionIn(*key),

@@ -32,11 +32,11 @@ static HUGGING_FACE_TOKEN: LazyLock<Option<Vec<u8>>> = LazyLock::new(|| {
 
 /// A provider for authentication credentials for the Hugging Face platform.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct HuggingFaceProvider;
+pub struct HuggingFaceProvider;
 
 impl HuggingFaceProvider {
     /// Returns the credentials for the Hugging Face platform, if available.
-    pub(crate) fn credentials_for(url: &Url) -> Option<Credentials> {
+    pub fn credentials_for(url: &Url) -> Option<Credentials> {
         if RealmRef::from(url) == *HUGGING_FACE_REALM {
             if let Some(token) = HUGGING_FACE_TOKEN.as_ref() {
                 return Some(Credentials::Bearer {

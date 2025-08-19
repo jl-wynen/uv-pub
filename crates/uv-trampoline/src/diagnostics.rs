@@ -32,7 +32,7 @@ macro_rules! format {
 }
 
 #[derive(Default)]
-pub(crate) struct StringBuffer(pub(crate) String);
+pub struct StringBuffer(pub String);
 
 impl uWrite for StringBuffer {
     type Error = Infallible;
@@ -44,7 +44,7 @@ impl uWrite for StringBuffer {
 }
 
 #[cold]
-pub(crate) fn write_diagnostic(message: &str, is_error: bool) {
+pub fn write_diagnostic(message: &str, is_error: bool) {
     let mut stderr = std::io::stderr();
     if !stderr.as_raw_handle().is_null() {
         let _ = stderr.write_all(message.as_bytes());

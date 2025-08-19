@@ -53,7 +53,7 @@ impl WheelCache<'_> {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub(crate) enum WheelCacheKind {
+pub enum WheelCacheKind {
     /// A cache of data from PyPI.
     Pypi,
     /// A cache of data from an alternative index.
@@ -69,7 +69,7 @@ pub(crate) enum WheelCacheKind {
 }
 
 impl WheelCacheKind {
-    pub(crate) fn to_str(self) -> &'static str {
+    pub fn to_str(self) -> &'static str {
         match self {
             Self::Pypi => "pypi",
             Self::Index => "index",
@@ -80,7 +80,7 @@ impl WheelCacheKind {
         }
     }
 
-    pub(crate) fn root(self) -> PathBuf {
+    pub fn root(self) -> PathBuf {
         Path::new(self.to_str()).to_path_buf()
     }
 }

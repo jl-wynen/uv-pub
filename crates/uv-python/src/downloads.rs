@@ -148,15 +148,15 @@ pub struct ManagedPythonDownload {
 
 #[derive(Debug, Clone, Default, Eq, PartialEq, Hash)]
 pub struct PythonDownloadRequest {
-    pub(crate) version: Option<VersionRequest>,
-    pub(crate) implementation: Option<ImplementationName>,
-    pub(crate) arch: Option<ArchRequest>,
-    pub(crate) os: Option<Os>,
-    pub(crate) libc: Option<Libc>,
+    pub version: Option<VersionRequest>,
+    pub implementation: Option<ImplementationName>,
+    pub arch: Option<ArchRequest>,
+    pub os: Option<Os>,
+    pub libc: Option<Libc>,
 
     /// Whether to allow pre-releases or not. If not set, defaults to true if [`Self::version`] is
     /// not None, and false otherwise.
-    pub(crate) prereleases: Option<bool>,
+    pub prereleases: Option<bool>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -167,9 +167,9 @@ pub enum ArchRequest {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct PlatformRequest {
-    pub(crate) os: Option<Os>,
-    pub(crate) arch: Option<ArchRequest>,
-    pub(crate) libc: Option<Libc>,
+    pub os: Option<Os>,
+    pub arch: Option<ArchRequest>,
+    pub libc: Option<Libc>,
 }
 
 impl PlatformRequest {
@@ -222,7 +222,7 @@ impl Display for ArchRequest {
 }
 
 impl ArchRequest {
-    pub(crate) fn satisfied_by(self, platform: &Platform) -> bool {
+    pub fn satisfied_by(self, platform: &Platform) -> bool {
         match self {
             Self::Explicit(request) => request == platform.arch,
             Self::Environment(env) => {
@@ -560,7 +560,7 @@ impl FromStr for PythonDownloadRequest {
         }
 
         impl Position {
-            pub(crate) fn next(&self) -> Self {
+            pub fn next(&self) -> Self {
                 match self {
                     Self::Start => Self::Implementation,
                     Self::Implementation => Self::Version,
@@ -1358,7 +1358,7 @@ fn parse_json_downloads(
 }
 
 impl Error {
-    pub(crate) fn from_reqwest(
+    pub fn from_reqwest(
         url: DisplaySafeUrl,
         err: reqwest::Error,
         retries: Option<u32>,
@@ -1374,7 +1374,7 @@ impl Error {
         }
     }
 
-    pub(crate) fn from_reqwest_middleware(
+    pub fn from_reqwest_middleware(
         url: DisplaySafeUrl,
         err: reqwest_middleware::Error,
     ) -> Self {

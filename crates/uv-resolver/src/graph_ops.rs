@@ -19,7 +19,7 @@ use crate::universal_marker::UniversalMarker;
 /// marker), we re-queue the node and update all its children. This implicitly handles cycles,
 /// whenever we re-reach a node through a cycle the marker we have is a more
 /// specific marker/longer path, so we don't update the node and don't re-queue it.
-pub(crate) fn marker_reachability<
+pub fn marker_reachability<
     Marker: Boolean + Copy + PartialEq,
     Node,
     Edge: Reachable<Marker>,
@@ -96,7 +96,7 @@ pub(crate) fn marker_reachability<
 /// `x1` is activated. This in turn can be used to simplify any downstream
 /// conflict markers with `extra == "x1"` in them (by replacing `extra == "x1"`
 /// with `true`).
-pub(crate) fn simplify_conflict_markers(
+pub fn simplify_conflict_markers(
     conflicts: &Conflicts,
     graph: &mut Graph<ResolutionGraphNode, UniversalMarker>,
 ) {
@@ -275,7 +275,7 @@ pub(crate) fn simplify_conflict_markers(
     }
 }
 
-pub(crate) trait Reachable<T> {
+pub trait Reachable<T> {
     /// The marker representing the "true" value.
     fn true_marker() -> T;
 
@@ -315,7 +315,7 @@ impl Reachable<Self> for UniversalMarker {
 }
 
 /// A trait for types that can be used as markers in the dependency graph.
-pub(crate) trait Boolean {
+pub trait Boolean {
     /// Perform a logical AND operation with another marker.
     fn and(&mut self, other: Self);
 

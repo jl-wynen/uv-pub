@@ -35,24 +35,24 @@ impl Username {
     /// Create a new username.
     ///
     /// Unlike `reqwest`, empty usernames are be encoded as `None` instead of an empty string.
-    pub(crate) fn new(value: Option<String>) -> Self {
+    pub fn new(value: Option<String>) -> Self {
         // Ensure empty strings are `None`
         Self(value.filter(|s| !s.is_empty()))
     }
 
-    pub(crate) fn none() -> Self {
+    pub fn none() -> Self {
         Self::new(None)
     }
 
-    pub(crate) fn is_none(&self) -> bool {
+    pub fn is_none(&self) -> bool {
         self.0.is_none()
     }
 
-    pub(crate) fn is_some(&self) -> bool {
+    pub fn is_some(&self) -> bool {
         self.0.is_some()
     }
 
-    pub(crate) fn as_deref(&self) -> Option<&str> {
+    pub fn as_deref(&self) -> Option<&str> {
         self.0.as_deref()
     }
 }
@@ -111,14 +111,14 @@ impl Credentials {
         }
     }
 
-    pub(crate) fn to_username(&self) -> Username {
+    pub fn to_username(&self) -> Username {
         match self {
             Self::Basic { username, .. } => username.clone(),
             Self::Bearer { .. } => Username::none(),
         }
     }
 
-    pub(crate) fn as_username(&self) -> Cow<'_, Username> {
+    pub fn as_username(&self) -> Cow<'_, Username> {
         match self {
             Self::Basic { username, .. } => Cow::Borrowed(username),
             Self::Bearer { .. } => Cow::Owned(Username::none()),
@@ -132,7 +132,7 @@ impl Credentials {
         }
     }
 
-    pub(crate) fn is_empty(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         match self {
             Self::Basic { username, password } => username.is_none() && password.is_none(),
             Self::Bearer { token } => token.is_empty(),
@@ -142,7 +142,7 @@ impl Credentials {
     /// Return [`Credentials`] for a [`Url`] from a [`Netrc`] file, if any.
     ///
     /// If a username is provided, it must match the login in the netrc file or [`None`] is returned.
-    pub(crate) fn from_netrc(
+    pub fn from_netrc(
         netrc: &Netrc,
         url: &DisplaySafeUrl,
         username: Option<&str>,
@@ -213,7 +213,7 @@ impl Credentials {
     /// Parse [`Credentials`] from an HTTP request, if any.
     ///
     /// Only HTTP Basic Authentication is supported.
-    pub(crate) fn from_request(request: &Request) -> Option<Self> {
+    pub fn from_request(request: &Request) -> Option<Self> {
         // First, attempt to retrieve the credentials from the URL
         Self::from_url(request.url()).or(
             // Then, attempt to pull the credentials from the headers
@@ -232,7 +232,7 @@ impl Credentials {
     /// Panics if the authentication is not conformant to the HTTP Basic Authentication scheme:
     /// - The contents must be base64 encoded
     /// - There must be a `:` separator
-    pub(crate) fn from_header_value(header: &HeaderValue) -> Option<Self> {
+    pub fn from_header_value(header: &HeaderValue) -> Option<Self> {
         // Parse a `Basic` authentication header.
         if let Some(mut value) = header.as_bytes().strip_prefix(b"Basic ") {
             let mut decoder = DecoderReader::new(&mut value, &BASE64_STANDARD);

@@ -17,7 +17,7 @@ use uv_normalize::PackageName;
 use uv_pypi_types::{DirInfo, DirectUrl, VcsInfo, VcsKind};
 
 #[derive(Debug, Copy, Clone)]
-pub(crate) enum RequirementSatisfaction {
+pub enum RequirementSatisfaction {
     Mismatch,
     Satisfied,
     OutOfDate,
@@ -28,7 +28,7 @@ impl RequirementSatisfaction {
     /// Returns true if a requirement is satisfied by an installed distribution.
     ///
     /// Returns an error if IO fails during a freshness check for a local path.
-    pub(crate) fn check(
+    pub fn check(
         name: &PackageName,
         distribution: &InstalledDist,
         source: &RequirementSource,

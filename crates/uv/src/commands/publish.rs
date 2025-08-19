@@ -23,7 +23,7 @@ use crate::commands::{ExitStatus, human_readable_bytes};
 use crate::printer::Printer;
 use crate::settings::NetworkSettings;
 
-pub(crate) async fn publish(
+pub async fn publish(
     paths: Vec<String>,
     publish_url: DisplaySafeUrl,
     trusted_publishing: TrustedPublishing,

@@ -68,7 +68,7 @@ impl CanonicalMarkerValueString {
     ///
     /// For example, `sys_platform == 'win32'` and `platform_system == 'Darwin'` are known to
     /// never be true at the same time.
-    pub(crate) fn is_conflicting(self) -> bool {
+    pub fn is_conflicting(self) -> bool {
         self <= Self::PlatformSystem
     }
 }
@@ -176,7 +176,7 @@ pub enum CanonicalMarkerListPair {
 
 impl CanonicalMarkerListPair {
     /// The key (RHS) of the marker expression.
-    pub(crate) fn key(&self) -> MarkerValueList {
+    pub fn key(&self) -> MarkerValueList {
         match self {
             Self::Extras(_) => MarkerValueList::Extras,
             Self::DependencyGroup(_) => MarkerValueList::DependencyGroups,
@@ -185,7 +185,7 @@ impl CanonicalMarkerListPair {
     }
 
     /// The value (LHS) of the marker expression.
-    pub(crate) fn value(&self) -> String {
+    pub fn value(&self) -> String {
         match self {
             Self::Extras(extra) => extra.to_string(),
             Self::DependencyGroup(group) => group.to_string(),

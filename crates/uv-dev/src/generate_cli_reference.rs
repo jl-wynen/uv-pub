@@ -30,12 +30,12 @@ const REPLACEMENTS: &[(&str, &str)] = &[
 const SHOW_HIDDEN_COMMANDS: &[&str] = &["generate-shell-completion"];
 
 #[derive(clap::Args)]
-pub(crate) struct Args {
+pub struct Args {
     #[arg(long, default_value_t, value_enum)]
-    pub(crate) mode: Mode,
+    pub mode: Mode,
 }
 
-pub(crate) fn main(args: &Args) -> Result<()> {
+pub fn main(args: &Args) -> Result<()> {
     let reference_string = generate();
     let filename = "cli.md";
     let reference_path = PathBuf::from(ROOT_DIR)

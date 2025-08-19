@@ -65,7 +65,7 @@ pub enum MetadataUnavailable {
 impl MetadataUnavailable {
     /// Like [`std::error::Error::source`], but we don't want to derive the std error since our
     /// formatting system is more custom.
-    pub(crate) fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+    pub fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Self::Offline => None,
             Self::InvalidMetadata(err) => Some(err),

@@ -86,7 +86,7 @@ impl Operator {
     /// specifiers [spec].
     ///
     /// [spec]: https://packaging.python.org/en/latest/specifications/version-specifiers/
-    pub(crate) fn is_local_compatible(self) -> bool {
+    pub fn is_local_compatible(self) -> bool {
         !matches!(
             self,
             Self::GreaterThan
@@ -103,7 +103,7 @@ impl Operator {
     ///
     /// This returns `None` when this operator doesn't have an analogous
     /// wildcard operator.
-    pub(crate) fn to_star(self) -> Option<Self> {
+    pub fn to_star(self) -> Option<Self> {
         match self {
             Self::Equal => Some(Self::EqualStar),
             Self::NotEqual => Some(Self::NotEqualStar),
@@ -177,7 +177,7 @@ impl std::fmt::Display for Operator {
 /// An error that occurs when parsing an invalid version specifier operator.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OperatorParseError {
-    pub(crate) got: String,
+    pub got: String,
 }
 
 impl std::error::Error for OperatorParseError {}
@@ -2590,7 +2590,7 @@ impl std::fmt::Display for VersionParseError {
 
 /// The kind of error that occurs when parsing a `Version`.
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub(crate) enum ErrorKind {
+pub enum ErrorKind {
     /// Occurs when a version pattern is found but a normal verbatim version is
     /// expected.
     Wildcard,
@@ -2656,7 +2656,7 @@ impl std::fmt::Display for VersionPatternParseError {
 
 /// The kind of error that occurs when parsing a `VersionPattern`.
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub(crate) enum PatternErrorKind {
+pub enum PatternErrorKind {
     Version(VersionParseError),
     WildcardNotTrailing,
 }
@@ -2685,7 +2685,7 @@ impl From<VersionParseError> for VersionPatternParseError {
 
 /// Compare the release parts of two versions, e.g. `4.3.1` > `4.2`, `1.1.0` ==
 /// `1.1` and `1.16` < `1.19`
-pub(crate) fn compare_release(this: &[u64], other: &[u64]) -> Ordering {
+pub fn compare_release(this: &[u64], other: &[u64]) -> Ordering {
     if this.len() == other.len() {
         return this.cmp(other);
     }
@@ -4201,7 +4201,7 @@ mod tests {
     }
 
     impl Version {
-        pub(crate) fn as_bloated_debug(&self) -> impl std::fmt::Debug + '_ {
+        pub fn as_bloated_debug(&self) -> impl std::fmt::Debug + '_ {
             VersionBloatedDebug(self)
         }
     }

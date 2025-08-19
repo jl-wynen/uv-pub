@@ -19,7 +19,7 @@ use uv_workspace::{
 use crate::{commands::ExitStatus, printer::Printer};
 
 /// Display version information for uv itself (`uv self version`)
-pub(crate) fn self_version(
+pub fn self_version(
     short: bool,
     output_format: VersionFormat,
     printer: Printer,
@@ -31,7 +31,7 @@ pub(crate) fn self_version(
 }
 
 /// Read or update project version (`uv version`)
-pub(crate) async fn project_version(
+pub async fn project_version(
     project_dir: &Path,
     value: Option<String>,
     bump: Option<VersionBump>,

@@ -26,7 +26,7 @@ use crate::settings::NetworkSettings;
 
 /// Pin to a specific Python version.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn pin(
+pub async fn pin(
     project_dir: &Path,
     request: Option<String>,
     resolved: bool,

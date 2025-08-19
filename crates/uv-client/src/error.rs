@@ -66,22 +66,22 @@ impl Error {
     }
 
     /// Create a new error from a JSON parsing error.
-    pub(crate) fn from_json_err(err: serde_json::Error, url: DisplaySafeUrl) -> Self {
+    pub fn from_json_err(err: serde_json::Error, url: DisplaySafeUrl) -> Self {
         ErrorKind::BadJson { source: err, url }.into()
     }
 
     /// Create a new error from an HTML parsing error.
-    pub(crate) fn from_html_err(err: html::Error, url: DisplaySafeUrl) -> Self {
+    pub fn from_html_err(err: html::Error, url: DisplaySafeUrl) -> Self {
         ErrorKind::BadHtml { source: err, url }.into()
     }
 
     /// Returns `true` if this error corresponds to an offline error.
-    pub(crate) fn is_offline(&self) -> bool {
+    pub fn is_offline(&self) -> bool {
         matches!(&*self.kind, ErrorKind::Offline(_))
     }
 
     /// Returns `true` if this error corresponds to an I/O "not found" error.
-    pub(crate) fn is_file_not_exists(&self) -> bool {
+    pub fn is_file_not_exists(&self) -> bool {
         let ErrorKind::Io(err) = &*self.kind else {
             return false;
         };
@@ -304,12 +304,12 @@ pub enum ErrorKind {
 
 impl ErrorKind {
     /// Create an [`ErrorKind`] from a [`reqwest::Error`].
-    pub(crate) fn from_reqwest(url: DisplaySafeUrl, error: reqwest::Error) -> Self {
+    pub fn from_reqwest(url: DisplaySafeUrl, error: reqwest::Error) -> Self {
         Self::WrappedReqwestError(url, WrappedReqwestError::from(error))
     }
 
     /// Create an [`ErrorKind`] from a [`reqwest_middleware::Error`].
-    pub(crate) fn from_reqwest_middleware(
+    pub fn from_reqwest_middleware(
         url: DisplaySafeUrl,
         err: reqwest_middleware::Error,
     ) -> Self {

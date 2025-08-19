@@ -12,7 +12,7 @@ use std::sync::LazyLock;
 use crate::sysconfig::replacements::{ReplacementEntry, ReplacementMode};
 
 /// Mapping for sysconfig keys to lookup and replace with the appropriate entry.
-pub(crate) static DEFAULT_VARIABLE_UPDATES: LazyLock<BTreeMap<String, Vec<ReplacementEntry>>> = LazyLock::new(|| {
+pub static DEFAULT_VARIABLE_UPDATES: LazyLock<BTreeMap<String, Vec<ReplacementEntry>>> = LazyLock::new(|| {
     BTreeMap::from_iter([
         ("BLDSHARED".to_string(), vec![
             ReplacementEntry { mode: ReplacementMode::Partial { from: "/usr/bin/arm-linux-gnueabi-gcc".to_string() }, to: "cc".to_string() },

@@ -1,5 +1,5 @@
 /// A simple splitter that uses `memchr` to find the next delimiter.
-pub(crate) struct MemchrSplitter<'a> {
+pub struct MemchrSplitter<'a> {
     memchr: memchr::Memchr<'a>,
     haystack: &'a str,
     offset: usize,
@@ -7,7 +7,7 @@ pub(crate) struct MemchrSplitter<'a> {
 
 impl<'a> MemchrSplitter<'a> {
     #[inline]
-    pub(crate) fn split(haystack: &'a str, delimiter: u8) -> Self {
+    pub fn split(haystack: &'a str, delimiter: u8) -> Self {
         Self {
             memchr: memchr::Memchr::new(delimiter, haystack.as_bytes()),
             haystack,

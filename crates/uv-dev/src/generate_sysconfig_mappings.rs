@@ -14,9 +14,9 @@ use crate::generate_all::Mode;
 const TARGETS_YML_URL: &str = "https://raw.githubusercontent.com/astral-sh/python-build-standalone/refs/tags/20250818/cpython-unix/targets.yml";
 
 #[derive(clap::Args)]
-pub(crate) struct Args {
+pub struct Args {
     #[arg(long, default_value_t, value_enum)]
-    pub(crate) mode: Mode,
+    pub mode: Mode,
 }
 
 #[derive(Debug, Deserialize)]
@@ -27,7 +27,7 @@ struct TargetConfig {
     target_cxx: Option<String>,
 }
 
-pub(crate) async fn main(args: &Args) -> Result<()> {
+pub async fn main(args: &Args) -> Result<()> {
     let reference_string = generate().await?;
     let filename = "generated_mappings.rs";
     let reference_path = PathBuf::from(ROOT_DIR)
@@ -145,7 +145,7 @@ async fn generate() -> Result<String> {
     output.push_str(
         "/// Mapping for sysconfig keys to lookup and replace with the appropriate entry.\n",
     );
-    output.push_str("pub(crate) static DEFAULT_VARIABLE_UPDATES: LazyLock<BTreeMap<String, Vec<ReplacementEntry>>> = LazyLock::new(|| {\n");
+    output.push_str("pub static DEFAULT_VARIABLE_UPDATES: LazyLock<BTreeMap<String, Vec<ReplacementEntry>>> = LazyLock::new(|| {\n");
     output.push_str("    BTreeMap::from_iter([\n");
 
     // Add Replacement Entries for CC, CXX, etc.

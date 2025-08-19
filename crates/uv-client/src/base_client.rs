@@ -812,7 +812,7 @@ fn make_referer(
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
-pub(crate) enum CrossOriginCredentialsPolicy {
+pub enum CrossOriginCredentialsPolicy {
     /// Do not propagate credentials on cross-origin requests.
     #[default]
     Secure,

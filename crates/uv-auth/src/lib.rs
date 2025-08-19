@@ -23,7 +23,7 @@ mod realm;
 /// Global authentication cache for a uv invocation
 ///
 /// This is used to share credentials across uv clients.
-pub(crate) static CREDENTIALS_CACHE: LazyLock<CredentialsCache> =
+pub static CREDENTIALS_CACHE: LazyLock<CredentialsCache> =
     LazyLock::new(CredentialsCache::default);
 
 /// Populate the global authentication store with credentials on a URL, if there are any.

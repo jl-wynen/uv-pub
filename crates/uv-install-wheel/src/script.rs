@@ -9,10 +9,10 @@ use crate::{Error, wheel};
 /// A script defining the name of the runnable entrypoint and the module and function that should be
 /// run.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Script {
-    pub(crate) name: String,
-    pub(crate) module: String,
-    pub(crate) function: String,
+pub struct Script {
+    pub name: String,
+    pub module: String,
+    pub function: String,
 }
 
 impl Script {
@@ -21,7 +21,7 @@ impl Script {
     /// <https://packaging.python.org/en/latest/specifications/entry-points/>
     ///
     /// Extras are supposed to be ignored, which happens if you pass None for extras
-    pub(crate) fn from_value(
+    pub fn from_value(
         script_name: &str,
         value: &str,
         extras: Option<&[String]>,
@@ -57,14 +57,14 @@ impl Script {
         }))
     }
 
-    pub(crate) fn import_name(&self) -> &str {
+    pub fn import_name(&self) -> &str {
         self.function
             .split_once('.')
             .map_or(&self.function, |(import_name, _)| import_name)
     }
 }
 
-pub(crate) fn scripts_from_ini(
+pub fn scripts_from_ini(
     extras: Option<&[String]>,
     python_minor: u8,
     ini: String,

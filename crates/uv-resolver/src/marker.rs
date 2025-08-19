@@ -8,7 +8,7 @@ use uv_pep508::{CanonicalMarkerValueVersion, MarkerTree, MarkerTreeKind};
 use uv_distribution_types::RequiresPythonRange;
 
 /// Returns the bounding Python versions that can satisfy the [`MarkerTree`], if it's constrained.
-pub(crate) fn requires_python(tree: MarkerTree) -> Option<RequiresPythonRange> {
+pub fn requires_python(tree: MarkerTree) -> Option<RequiresPythonRange> {
     /// A small vector of Python version markers.
     type Markers = SmallVec<[Ranges<Version>; 3]>;
 

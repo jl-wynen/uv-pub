@@ -8,13 +8,13 @@ use crate::{
 };
 
 #[derive(clap::Args)]
-pub(crate) struct Args {
+pub struct Args {
     #[arg(long, default_value_t, value_enum)]
     mode: Mode,
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, clap::ValueEnum, Default)]
-pub(crate) enum Mode {
+pub enum Mode {
     /// Update the content in the `configuration.md`.
     #[default]
     Write,
@@ -26,7 +26,7 @@ pub(crate) enum Mode {
     DryRun,
 }
 
-pub(crate) async fn main(args: &Args) -> Result<()> {
+pub async fn main(args: &Args) -> Result<()> {
     generate_json_schema::main(&generate_json_schema::Args { mode: args.mode })?;
     generate_options_reference::main(&generate_options_reference::Args { mode: args.mode })?;
     generate_cli_reference::main(&generate_cli_reference::Args { mode: args.mode })?;

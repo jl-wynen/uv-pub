@@ -28,15 +28,15 @@ pub enum LenientImplementationName {
 }
 
 impl ImplementationName {
-    pub(crate) fn short_names() -> impl Iterator<Item = &'static str> {
+    pub fn short_names() -> impl Iterator<Item = &'static str> {
         ["cp", "pp", "gp"].into_iter()
     }
 
-    pub(crate) fn long_names() -> impl Iterator<Item = &'static str> {
+    pub fn long_names() -> impl Iterator<Item = &'static str> {
         ["cpython", "pypy", "graalpy", "pyodide"].into_iter()
     }
 
-    pub(crate) fn iter_all() -> impl Iterator<Item = Self> {
+    pub fn iter_all() -> impl Iterator<Item = Self> {
         [Self::CPython, Self::PyPy, Self::GraalPy, Self::Pyodide].into_iter()
     }
 

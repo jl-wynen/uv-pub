@@ -163,7 +163,7 @@ impl PythonRequirement {
     ///
     /// When this `PythonRequirement` isn't `RequiresPython`, the given markers
     /// are returned unchanged.
-    pub(crate) fn simplify_markers(&self, marker: MarkerTree) -> MarkerTree {
+    pub fn simplify_markers(&self, marker: MarkerTree) -> MarkerTree {
         self.target.simplify_markers(marker)
     }
 

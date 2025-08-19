@@ -16,7 +16,7 @@ use crate::commands::{ExitStatus, elapsed};
 use crate::printer::Printer;
 
 /// Check for incompatibilities in installed packages.
-pub(crate) fn pip_check(
+pub fn pip_check(
     python: Option<&str>,
     system: bool,
     cache: &Cache,

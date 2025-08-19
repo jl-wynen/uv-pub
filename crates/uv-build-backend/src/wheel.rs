@@ -414,7 +414,7 @@ fn write_record(
 }
 
 /// Build a globset matcher for excludes.
-pub(crate) fn build_exclude_matcher(
+pub fn build_exclude_matcher(
     excludes: impl IntoIterator<Item = impl AsRef<str>>,
 ) -> Result<GlobSet, Error> {
     let mut exclude_builder = GlobSetBuilder::new();

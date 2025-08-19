@@ -1,10 +1,10 @@
-pub(crate) mod dir;
-pub(crate) mod find;
-pub(crate) mod install;
-pub(crate) mod list;
-pub(crate) mod pin;
-pub(crate) mod uninstall;
-pub(crate) mod update_shell;
+pub mod dir;
+pub mod find;
+pub mod install;
+pub mod list;
+pub mod pin;
+pub mod uninstall;
+pub mod update_shell;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub(super) enum ChangeEventKind {

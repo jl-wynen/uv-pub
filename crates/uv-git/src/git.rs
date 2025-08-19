@@ -133,20 +133,20 @@ impl Display for ReferenceOrOid<'_> {
 
 /// A remote repository. It gets cloned into a local [`GitDatabase`].
 #[derive(PartialEq, Clone, Debug)]
-pub(crate) struct GitRemote {
+pub struct GitRemote {
     /// URL to a remote repository.
     url: DisplaySafeUrl,
 }
 
 /// A local clone of a remote repository's database. Multiple [`GitCheckout`]s
 /// can be cloned from a single [`GitDatabase`].
-pub(crate) struct GitDatabase {
+pub struct GitDatabase {
     /// Underlying Git repository instance for this database.
     repo: GitRepository,
 }
 
 /// A local checkout of a particular revision from a [`GitRepository`].
-pub(crate) struct GitCheckout {
+pub struct GitCheckout {
     /// The git revision this checkout is for.
     revision: GitOid,
     /// Underlying Git repository instance for this checkout.
@@ -154,14 +154,14 @@ pub(crate) struct GitCheckout {
 }
 
 /// A local Git repository.
-pub(crate) struct GitRepository {
+pub struct GitRepository {
     /// Path to the underlying Git repository on the local filesystem.
     path: PathBuf,
 }
 
 impl GitRepository {
     /// Opens an existing Git repository at `path`.
-    pub(crate) fn open(path: &Path) -> Result<Self> {
+    pub fn open(path: &Path) -> Result<Self> {
         // Make sure there is a Git repository at the specified path.
         ProcessBuilder::new(GIT.as_ref()?)
             .arg("rev-parse")
@@ -208,12 +208,12 @@ impl GitRepository {
 
 impl GitRemote {
     /// Creates an instance for a remote repository URL.
-    pub(crate) fn new(url: &DisplaySafeUrl) -> Self {
+    pub fn new(url: &DisplaySafeUrl) -> Self {
         Self { url: url.clone() }
     }
 
     /// Gets the remote repository URL.
-    pub(crate) fn url(&self) -> &DisplaySafeUrl {
+    pub fn url(&self) -> &DisplaySafeUrl {
         &self.url
     }
 
@@ -229,7 +229,7 @@ impl GitRemote {
     /// if we can. If that can successfully load our revision then we've
     /// populated the database with the latest version of `reference`, so
     /// return that database and the rev we resolve to.
-    pub(crate) fn checkout(
+    pub fn checkout(
         &self,
         into: &Path,
         db: Option<GitDatabase>,
@@ -303,7 +303,7 @@ impl GitRemote {
 
     /// Creates a [`GitDatabase`] of this remote at `db_path`.
     #[allow(clippy::unused_self)]
-    pub(crate) fn db_at(&self, db_path: &Path) -> Result<GitDatabase> {
+    pub fn db_at(&self, db_path: &Path) -> Result<GitDatabase> {
         let repo = GitRepository::open(db_path)?;
         Ok(GitDatabase { repo })
     }
@@ -311,7 +311,7 @@ impl GitRemote {
 
 impl GitDatabase {
     /// Checkouts to a revision at `destination` from this database.
-    pub(crate) fn copy_to(&self, rev: GitOid, destination: &Path) -> Result<GitCheckout> {
+    pub fn copy_to(&self, rev: GitOid, destination: &Path) -> Result<GitCheckout> {
         // If the existing checkout exists, and it is fresh, use it.
         // A non-fresh checkout can happen if the checkout operation was
         // interrupted. In that case, the checkout gets deleted and a new
@@ -328,7 +328,7 @@ impl GitDatabase {
     }
 
     /// Get a short OID for a `revision`, usually 7 chars or more if ambiguous.
-    pub(crate) fn to_short_id(&self, revision: GitOid) -> Result<String> {
+    pub fn to_short_id(&self, revision: GitOid) -> Result<String> {
         let output = ProcessBuilder::new(GIT.as_ref()?)
             .arg("rev-parse")
             .arg("--short")
@@ -342,7 +342,7 @@ impl GitDatabase {
     }
 
     /// Checks if `oid` resolves to a commit in this database.
-    pub(crate) fn contains(&self, oid: GitOid) -> bool {
+    pub fn contains(&self, oid: GitOid) -> bool {
         self.repo.rev_parse(&format!("{oid}^0")).is_ok()
     }
 }

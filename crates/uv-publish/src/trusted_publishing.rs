@@ -94,7 +94,7 @@ pub struct OidcTokenClaims {
 }
 
 /// Returns the short-lived token to use for uploading.
-pub(crate) async fn get_token(
+pub async fn get_token(
     registry: &DisplaySafeUrl,
     client: &ClientWithMiddleware,
 ) -> Result<TrustedPublishingToken, TrustedPublishingError> {

@@ -91,7 +91,7 @@ const MICROSOFT_STORE_PYTHONS: &[MicrosoftStorePython] = &[
 /// in known locations.
 ///
 /// Effectively a port of <https://github.com/python/cpython/blob/58ce131037ecb34d506a613f21993cde2056f628/PC/launcher2.c#L1744>
-pub(crate) fn find_microsoft_store_pythons() -> impl Iterator<Item = WindowsPython> {
+pub fn find_microsoft_store_pythons() -> impl Iterator<Item = WindowsPython> {
     let Ok(local_app_data) = env::var(EnvVars::LOCALAPPDATA) else {
         debug!("`LOCALAPPDATA` not set, ignoring Microsoft store Pythons");
         return Either::Left(std::iter::empty());

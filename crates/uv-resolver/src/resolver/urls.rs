@@ -21,7 +21,7 @@ use crate::{DependencyMode, Manifest, ResolveError, ResolverEnvironment};
 /// This type contains all URLs without checking, the validation happens in
 /// [`crate::fork_urls::ForkUrls`].
 #[derive(Debug, Default)]
-pub(crate) struct Urls {
+pub struct Urls {
     /// URL requirements in overrides. An override URL replaces all requirements and constraints
     /// URLs. There can be multiple URLs for the same package as long as they are in different
     /// forks.
@@ -32,7 +32,7 @@ pub(crate) struct Urls {
 }
 
 impl Urls {
-    pub(crate) fn from_manifest(
+    pub fn from_manifest(
         manifest: &Manifest,
         env: &ResolverEnvironment,
         git: &GitResolver,
@@ -101,7 +101,7 @@ impl Urls {
     /// URL is allowed and return its canonical form.
     ///
     /// For registry requirements, we return an empty iterator.
-    pub(crate) fn get_url<'a>(
+    pub fn get_url<'a>(
         &'a self,
         env: &'a ResolverEnvironment,
         name: &'a PackageName,
@@ -128,7 +128,7 @@ impl Urls {
     }
 
     /// Return `true` if the package has any URL (from overrides or regular requirements).
-    pub(crate) fn any_url(&self, name: &PackageName) -> bool {
+    pub fn any_url(&self, name: &PackageName) -> bool {
         self.get_overrides(name).is_some() || self.get_regular(name).is_some()
     }
 

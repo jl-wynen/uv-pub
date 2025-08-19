@@ -6,7 +6,7 @@ use uv_fs::Simplified;
 use uv_python::managed::{ManagedPythonInstallations, python_executable_dir};
 
 /// Show the Python installation directory.
-pub(crate) fn dir(bin: bool) -> anyhow::Result<()> {
+pub fn dir(bin: bool) -> anyhow::Result<()> {
     if bin {
         let bin = python_executable_dir()?;
         println!("{}", bin.simplified_display().cyan());

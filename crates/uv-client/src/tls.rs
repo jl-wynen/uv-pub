@@ -3,7 +3,7 @@ use std::ffi::OsStr;
 use std::io::Read;
 
 #[derive(thiserror::Error, Debug)]
-pub(crate) enum CertificateError {
+pub enum CertificateError {
     #[error(transparent)]
     Io(#[from] std::io::Error),
     #[error(transparent)]
@@ -11,7 +11,7 @@ pub(crate) enum CertificateError {
 }
 
 /// Return the `Identity` from the provided file.
-pub(crate) fn read_identity(ssl_client_cert: &OsStr) -> Result<Identity, CertificateError> {
+pub fn read_identity(ssl_client_cert: &OsStr) -> Result<Identity, CertificateError> {
     let mut buf = Vec::new();
     fs_err::File::open(ssl_client_cert)?.read_to_end(&mut buf)?;
     Identity::from_pem(&buf).map_err(|tls_err| {

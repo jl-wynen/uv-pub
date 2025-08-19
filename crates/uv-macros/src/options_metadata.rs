@@ -12,7 +12,7 @@ use syn::{
 };
 use textwrap::dedent;
 
-pub(crate) fn derive_impl(input: DeriveInput) -> syn::Result<TokenStream> {
+pub fn derive_impl(input: DeriveInput) -> syn::Result<TokenStream> {
     let DeriveInput {
         ident,
         data,

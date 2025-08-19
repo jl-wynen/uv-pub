@@ -15,13 +15,13 @@ pub fn rm_rf(path: impl AsRef<Path>) -> io::Result<Removal> {
 
 /// A builder for a [`Remover`] that can remove files and directories.
 #[derive(Default)]
-pub(crate) struct Remover {
+pub struct Remover {
     reporter: Option<Box<dyn CleanReporter>>,
 }
 
 impl Remover {
     /// Create a new [`Remover`] with the given reporter.
-    pub(crate) fn new(reporter: Box<dyn CleanReporter>) -> Self {
+    pub fn new(reporter: Box<dyn CleanReporter>) -> Self {
         Self {
             reporter: Some(reporter),
         }
@@ -29,7 +29,7 @@ impl Remover {
 
     /// Remove a file or directory and all its contents, returning a [`Removal`] with
     /// the number of files and directories removed, along with a total byte count.
-    pub(crate) fn rm_rf(&self, path: impl AsRef<Path>) -> io::Result<Removal> {
+    pub fn rm_rf(&self, path: impl AsRef<Path>) -> io::Result<Removal> {
         let mut removal = Removal::default();
         removal.rm_rf(path.as_ref(), self.reporter.as_deref())?;
         Ok(removal)

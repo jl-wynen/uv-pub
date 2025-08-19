@@ -5,20 +5,20 @@ use uv_platform_tags::{Tags, TagsError};
 use uv_pypi_types::ResolverMarkerEnvironment;
 use uv_python::{Interpreter, PythonVersion};
 
-pub(crate) mod check;
-pub(crate) mod compile;
-pub(crate) mod freeze;
-pub(crate) mod install;
-pub(crate) mod latest;
-pub(crate) mod list;
-pub(crate) mod loggers;
-pub(crate) mod operations;
-pub(crate) mod show;
-pub(crate) mod sync;
-pub(crate) mod tree;
-pub(crate) mod uninstall;
+pub mod check;
+pub mod compile;
+pub mod freeze;
+pub mod install;
+pub mod latest;
+pub mod list;
+pub mod loggers;
+pub mod operations;
+pub mod show;
+pub mod sync;
+pub mod tree;
+pub mod uninstall;
 
-pub(crate) fn resolution_markers(
+pub fn resolution_markers(
     python_version: Option<&PythonVersion>,
     python_platform: Option<&TargetTriple>,
     interpreter: &Interpreter,
@@ -37,7 +37,7 @@ pub(crate) fn resolution_markers(
     }
 }
 
-pub(crate) fn resolution_tags<'env>(
+pub fn resolution_tags<'env>(
     python_version: Option<&PythonVersion>,
     python_platform: Option<&TargetTriple>,
     interpreter: &'env Interpreter,
@@ -72,7 +72,7 @@ pub(crate) fn resolution_tags<'env>(
 }
 
 /// Determine the tags, markers, and interpreter to use for resolution.
-pub(crate) fn resolution_environment(
+pub fn resolution_environment(
     python_version: Option<PythonVersion>,
     python_platform: Option<TargetTriple>,
     interpreter: &Interpreter,

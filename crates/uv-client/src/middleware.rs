@@ -7,13 +7,13 @@ use reqwest_middleware::{Middleware, Next};
 
 /// A custom error type for the offline middleware.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct OfflineError {
+pub struct OfflineError {
     url: DisplaySafeUrl,
 }
 
 impl OfflineError {
     /// Returns the URL that caused the error.
-    pub(crate) fn url(&self) -> &DisplaySafeUrl {
+    pub fn url(&self) -> &DisplaySafeUrl {
         &self.url
     }
 }
@@ -31,7 +31,7 @@ impl std::fmt::Display for OfflineError {
 impl std::error::Error for OfflineError {}
 
 /// A middleware that always returns an error indicating that the client is offline.
-pub(crate) struct OfflineMiddleware;
+pub struct OfflineMiddleware;
 
 #[async_trait::async_trait]
 impl Middleware for OfflineMiddleware {

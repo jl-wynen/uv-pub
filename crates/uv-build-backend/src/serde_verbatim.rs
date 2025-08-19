@@ -5,13 +5,13 @@ use std::str::FromStr;
 
 /// Preserves the verbatim string representation when deserializing `T`.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub(crate) struct SerdeVerbatim<T> {
+pub struct SerdeVerbatim<T> {
     verbatim: String,
     inner: T,
 }
 
 impl<T> SerdeVerbatim<T> {
-    pub(crate) fn verbatim(&self) -> &str {
+    pub fn verbatim(&self) -> &str {
         &self.verbatim
     }
 }

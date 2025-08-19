@@ -14,7 +14,7 @@ mod group_name;
 mod package_name;
 
 /// Validate and normalize an unowned package or extra name.
-pub(crate) fn validate_and_normalize_ref(
+pub fn validate_and_normalize_ref(
     name: impl AsRef<str>,
 ) -> Result<SmallString, InvalidNameError> {
     let name = name.as_ref();

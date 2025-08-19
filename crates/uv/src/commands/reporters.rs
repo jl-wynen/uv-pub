@@ -417,7 +417,7 @@ impl ProgressReporter {
 }
 
 #[derive(Debug)]
-pub(crate) struct PrepareReporter {
+pub struct PrepareReporter {
     reporter: ProgressReporter,
 }
 
@@ -440,7 +440,7 @@ impl From<Printer> for PrepareReporter {
 
 impl PrepareReporter {
     #[must_use]
-    pub(crate) fn with_length(self, length: u64) -> Self {
+    pub fn with_length(self, length: u64) -> Self {
         self.reporter.root.set_length(length);
         self
     }
@@ -488,13 +488,13 @@ impl uv_installer::PrepareReporter for PrepareReporter {
 }
 
 #[derive(Debug)]
-pub(crate) struct ResolverReporter {
+pub struct ResolverReporter {
     reporter: ProgressReporter,
 }
 
 impl ResolverReporter {
     #[must_use]
-    pub(crate) fn with_length(self, length: u64) -> Self {
+    pub fn with_length(self, length: u64) -> Self {
         self.reporter.root.set_length(length);
         self
     }
@@ -594,7 +594,7 @@ impl uv_distribution::Reporter for ResolverReporter {
 }
 
 #[derive(Debug)]
-pub(crate) struct InstallReporter {
+pub struct InstallReporter {
     progress: ProgressBar,
 }
 
@@ -611,7 +611,7 @@ impl From<Printer> for InstallReporter {
 
 impl InstallReporter {
     #[must_use]
-    pub(crate) fn with_length(self, length: u64) -> Self {
+    pub fn with_length(self, length: u64) -> Self {
         self.progress.set_length(length);
         self
     }
@@ -630,18 +630,18 @@ impl uv_installer::InstallReporter for InstallReporter {
 }
 
 #[derive(Debug)]
-pub(crate) struct PythonDownloadReporter {
+pub struct PythonDownloadReporter {
     reporter: ProgressReporter,
 }
 
 impl PythonDownloadReporter {
     /// Initialize a [`PythonDownloadReporter`] for a single Python download.
-    pub(crate) fn single(printer: Printer) -> Self {
+    pub fn single(printer: Printer) -> Self {
         Self::new(printer, 1)
     }
 
     /// Initialize a [`PythonDownloadReporter`] for multiple Python downloads.
-    pub(crate) fn new(printer: Printer, length: u64) -> Self {
+    pub fn new(printer: Printer, length: u64) -> Self {
         let multi_progress = MultiProgress::with_draw_target(printer.target());
         let root = multi_progress.add(ProgressBar::with_draw_target(
             Some(length),
@@ -673,18 +673,18 @@ impl uv_python::downloads::Reporter for PythonDownloadReporter {
 }
 
 #[derive(Debug)]
-pub(crate) struct PublishReporter {
+pub struct PublishReporter {
     reporter: ProgressReporter,
 }
 
 impl PublishReporter {
     /// Initialize a [`PublishReporter`] for a single upload.
-    pub(crate) fn single(printer: Printer) -> Self {
+    pub fn single(printer: Printer) -> Self {
         Self::new(printer, 1)
     }
 
     /// Initialize a [`PublishReporter`] for multiple uploads.
-    pub(crate) fn new(printer: Printer, length: u64) -> Self {
+    pub fn new(printer: Printer, length: u64) -> Self {
         let multi_progress = MultiProgress::with_draw_target(printer.target());
         let root = multi_progress.add(ProgressBar::with_draw_target(
             Some(length),
@@ -714,7 +714,7 @@ impl uv_publish::Reporter for PublishReporter {
 }
 
 #[derive(Debug)]
-pub(crate) struct LatestVersionReporter {
+pub struct LatestVersionReporter {
     progress: ProgressBar,
 }
 
@@ -731,34 +731,34 @@ impl From<Printer> for LatestVersionReporter {
 
 impl LatestVersionReporter {
     #[must_use]
-    pub(crate) fn with_length(self, length: u64) -> Self {
+    pub fn with_length(self, length: u64) -> Self {
         self.progress.set_length(length);
         self
     }
 
-    pub(crate) fn on_fetch_progress(&self) {
+    pub fn on_fetch_progress(&self) {
         self.progress.inc(1);
     }
 
-    pub(crate) fn on_fetch_version(&self, name: &PackageName, version: &Version) {
+    pub fn on_fetch_version(&self, name: &PackageName, version: &Version) {
         self.progress.set_message(format!("{name} v{version}"));
         self.progress.inc(1);
     }
 
-    pub(crate) fn on_fetch_complete(&self) {
+    pub fn on_fetch_complete(&self) {
         self.progress.set_message("");
         self.progress.finish_and_clear();
     }
 }
 
 #[derive(Debug)]
-pub(crate) struct CleaningDirectoryReporter {
+pub struct CleaningDirectoryReporter {
     bar: ProgressBar,
 }
 
 impl CleaningDirectoryReporter {
     /// Initialize a [`CleaningDirectoryReporter`] for cleaning the cache directory.
-    pub(crate) fn new(printer: Printer, max: usize) -> Self {
+    pub fn new(printer: Printer, max: usize) -> Self {
         let bar = ProgressBar::with_draw_target(Some(max as u64), printer.target());
         bar.set_style(
             ProgressStyle::with_template("{prefix} [{bar:20}] {percent}%")
@@ -781,13 +781,13 @@ impl uv_cache::CleanReporter for CleaningDirectoryReporter {
 }
 
 #[derive(Debug)]
-pub(crate) struct CleaningPackageReporter {
+pub struct CleaningPackageReporter {
     bar: ProgressBar,
 }
 
 impl CleaningPackageReporter {
     /// Initialize a [`CleaningPackageReporter`] for cleaning packages from the cache.
-    pub(crate) fn new(printer: Printer, max: usize) -> Self {
+    pub fn new(printer: Printer, max: usize) -> Self {
         let bar = ProgressBar::with_draw_target(Some(max as u64), printer.target());
         bar.set_style(
             ProgressStyle::with_template("{prefix} [{bar:20}] {pos}/{len}{msg}")
@@ -798,7 +798,7 @@ impl CleaningPackageReporter {
         Self { bar }
     }
 
-    pub(crate) fn on_clean(&self, package: &str, removal: &Removal) {
+    pub fn on_clean(&self, package: &str, removal: &Removal) {
         self.bar.inc(1);
         self.bar.set_message(format!(
             ": {}, {} files {} folders removed",
@@ -806,7 +806,7 @@ impl CleaningPackageReporter {
         ));
     }
 
-    pub(crate) fn on_complete(&self) {
+    pub fn on_complete(&self) {
         self.bar.finish_and_clear();
     }
 }

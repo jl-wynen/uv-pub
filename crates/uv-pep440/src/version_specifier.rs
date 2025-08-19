@@ -287,9 +287,9 @@ impl std::error::Error for VersionSpecifiersParseError {}
 #[cfg_attr(feature = "rkyv", rkyv(derive(Debug)))]
 pub struct VersionSpecifier {
     /// ~=|==|!=|<=|>=|<|>|===, plus whether the version ended with a star
-    pub(crate) operator: Operator,
+    pub operator: Operator,
     /// The whole version part behind the operator
-    pub(crate) version: Version,
+    pub version: Version,
 }
 
 impl<'de> Deserialize<'de> for VersionSpecifier {
@@ -858,7 +858,7 @@ impl From<ParseErrorKind> for VersionSpecifierParseError {
 }
 
 /// Parse a list of specifiers such as `>= 1.0, != 1.3.*, < 2.0`.
-pub(crate) fn parse_version_specifiers(
+pub fn parse_version_specifiers(
     spec: &str,
 ) -> Result<Vec<VersionSpecifier>, VersionSpecifiersParseError> {
     let mut version_ranges = Vec::new();

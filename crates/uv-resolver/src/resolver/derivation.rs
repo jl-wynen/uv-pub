@@ -16,7 +16,7 @@ impl DerivationChainBuilder {
     /// Compute a [`DerivationChain`] from the current PubGrub state.
     ///
     /// This is used to construct a derivation chain upon resolution failure.
-    pub(crate) fn from_state(
+    pub fn from_state(
         id: Id<PubGrubPackage>,
         version: &Version,
         state: &State<UvDependencyProvider>,

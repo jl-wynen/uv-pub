@@ -51,11 +51,11 @@ use crate::settings::{
     PublishSettings,
 };
 
-pub(crate) mod child;
-pub(crate) mod commands;
-pub(crate) mod logging;
-pub(crate) mod printer;
-pub(crate) mod settings;
+pub mod child;
+pub mod commands;
+pub mod logging;
+pub mod printer;
+pub mod settings;
 #[cfg(windows)]
 mod windows_exception;
 

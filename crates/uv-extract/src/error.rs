@@ -96,7 +96,7 @@ impl Error {
     /// operating system, or an error with the archive. Both get wrapper into an IO error through
     /// e.g., `io::copy`. This method extracts zip and tar errors, to distinguish them from invalid
     /// archives.
-    pub(crate) fn io_or_compression(err: std::io::Error) -> Self {
+    pub fn io_or_compression(err: std::io::Error) -> Self {
         if err.kind() != std::io::ErrorKind::Other {
             return Self::Io(err);
         }

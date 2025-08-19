@@ -7,7 +7,7 @@ use uv_pep508::{PackageName, uv_pep440::Version};
 
 /// Information about the git repository where uv was built from.
 #[derive(Serialize)]
-pub(crate) struct CommitInfo {
+pub struct CommitInfo {
     short_commit_hash: String,
     commit_hash: String,
     commit_date: String,

@@ -19,7 +19,7 @@ use uv_python::{Interpreter, PythonEnvironment, canonicalize_executable};
 
 /// An ephemeral [`PythonEnvironment`] for running an individual command.
 #[derive(Debug)]
-pub(crate) struct EphemeralEnvironment(PythonEnvironment);
+pub struct EphemeralEnvironment(PythonEnvironment);
 
 impl From<PythonEnvironment> for EphemeralEnvironment {
     fn from(environment: PythonEnvironment) -> Self {
@@ -36,7 +36,7 @@ impl From<EphemeralEnvironment> for PythonEnvironment {
 impl EphemeralEnvironment {
     /// Set the ephemeral overlay for a Python environment.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn set_overlay(&self, contents: impl AsRef<[u8]>) -> Result<(), ProjectError> {
+    pub fn set_overlay(&self, contents: impl AsRef<[u8]>) -> Result<(), ProjectError> {
         let site_packages = self
             .0
             .site_packages()
@@ -49,7 +49,7 @@ impl EphemeralEnvironment {
 
     /// Enable system site packages for a Python environment.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn set_system_site_packages(&self) -> Result<(), ProjectError> {
+    pub fn set_system_site_packages(&self) -> Result<(), ProjectError> {
         self.0
             .set_pyvenv_cfg("include-system-site-packages", "true")?;
         Ok(())
@@ -68,7 +68,7 @@ impl EphemeralEnvironment {
     /// easier for these tools to statically and reliably understand the relationship between
     /// the two environments.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn set_parent_environment(
+    pub fn set_parent_environment(
         &self,
         parent_environment_sys_prefix: &Path,
     ) -> Result<(), ProjectError> {
@@ -80,23 +80,23 @@ impl EphemeralEnvironment {
     }
 
     /// Returns the path to the environment's scripts directory.
-    pub(crate) fn scripts(&self) -> &Path {
+    pub fn scripts(&self) -> &Path {
         self.0.scripts()
     }
 
     /// Returns the path to the environment's Python executable.
-    pub(crate) fn sys_executable(&self) -> &Path {
+    pub fn sys_executable(&self) -> &Path {
         self.0.interpreter().sys_executable()
     }
 
-    pub(crate) fn sys_prefix(&self) -> &Path {
+    pub fn sys_prefix(&self) -> &Path {
         self.0.interpreter().sys_prefix()
     }
 }
 
 /// A [`PythonEnvironment`] stored in the cache.
 #[derive(Debug)]
-pub(crate) struct CachedEnvironment(PythonEnvironment);
+pub struct CachedEnvironment(PythonEnvironment);
 
 impl From<CachedEnvironment> for PythonEnvironment {
     fn from(environment: CachedEnvironment) -> Self {
@@ -106,7 +106,7 @@ impl From<CachedEnvironment> for PythonEnvironment {
 
 impl CachedEnvironment {
     /// Get or create an [`CachedEnvironment`] based on a given set of requirements.
-    pub(crate) async fn from_spec(
+    pub async fn from_spec(
         spec: EnvironmentSpecification<'_>,
         build_constraints: Constraints,
         interpreter: &Interpreter,

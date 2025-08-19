@@ -7,17 +7,17 @@ use uv_pep440::Version;
 use uv_python::PythonRequest;
 
 mod common;
-pub(crate) mod dir;
-pub(crate) mod install;
-pub(crate) mod list;
-pub(crate) mod run;
-pub(crate) mod uninstall;
-pub(crate) mod update_shell;
-pub(crate) mod upgrade;
+pub mod dir;
+pub mod install;
+pub mod list;
+pub mod run;
+pub mod uninstall;
+pub mod update_shell;
+pub mod upgrade;
 
 /// A request to run or install a tool (e.g., `uvx ruff@latest`).
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum ToolRequest<'a> {
+pub enum ToolRequest<'a> {
     // Running the interpreter directly e.g. `uvx python` or `uvx pypy@3.8`
     Python {
         /// The executable name (e.g., `bash`), if the interpreter was given via --from.
@@ -36,7 +36,7 @@ pub(crate) enum ToolRequest<'a> {
 
 impl<'a> ToolRequest<'a> {
     /// Parse a tool request into an executable name and a target.
-    pub(crate) fn parse(command: &'a str, from: Option<&'a str>) -> anyhow::Result<Self> {
+    pub fn parse(command: &'a str, from: Option<&'a str>) -> anyhow::Result<Self> {
         // If --from is used, the command could be an arbitrary binary in the PATH (e.g. `bash`),
         // and we don't try to parse it.
         let (component_to_parse, executable) = match from {
@@ -63,7 +63,7 @@ impl<'a> ToolRequest<'a> {
     }
 
     /// Returns `true` if the target is `latest`.
-    pub(crate) fn is_latest(&self) -> bool {
+    pub fn is_latest(&self) -> bool {
         matches!(
             self,
             Self::Package {
@@ -75,7 +75,7 @@ impl<'a> ToolRequest<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum Target<'a> {
+pub enum Target<'a> {
     /// e.g., `ruff`
     Unspecified(&'a str),
     /// e.g., `ruff[extra]@0.6.0`
@@ -86,7 +86,7 @@ pub(crate) enum Target<'a> {
 
 impl<'a> Target<'a> {
     /// Parse a target into a command name and a requirement.
-    pub(crate) fn parse(target: &'a str) -> Self {
+    pub fn parse(target: &'a str) -> Self {
         // e.g. `ruff`, no special handling
         let Some((name, version)) = target.split_once('@') else {
             return Self::Unspecified(target);

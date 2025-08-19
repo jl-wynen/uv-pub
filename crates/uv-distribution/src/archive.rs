@@ -18,7 +18,7 @@ pub struct Archive {
 
 impl Archive {
     /// Create a new [`Archive`] with the given ID and hashes.
-    pub(crate) fn new(id: ArchiveId, hashes: HashDigests, filename: WheelFilename) -> Self {
+    pub fn new(id: ArchiveId, hashes: HashDigests, filename: WheelFilename) -> Self {
         Self {
             id,
             hashes,
@@ -28,7 +28,7 @@ impl Archive {
     }
 
     /// Returns `true` if the archive exists in the cache.
-    pub(crate) fn exists(&self, cache: &Cache) -> bool {
+    pub fn exists(&self, cache: &Cache) -> bool {
         self.version == ARCHIVE_VERSION && cache.archive(&self.id).exists()
     }
 }

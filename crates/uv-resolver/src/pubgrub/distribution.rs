@@ -4,17 +4,17 @@ use uv_pep440::Version;
 use uv_pypi_types::VerbatimParsedUrl;
 
 #[derive(Debug)]
-pub(crate) enum PubGrubDistribution<'a> {
+pub enum PubGrubDistribution<'a> {
     Registry(&'a PackageName, &'a Version),
     Url(&'a PackageName, &'a VerbatimParsedUrl),
 }
 
 impl<'a> PubGrubDistribution<'a> {
-    pub(crate) fn from_registry(name: &'a PackageName, version: &'a Version) -> Self {
+    pub fn from_registry(name: &'a PackageName, version: &'a Version) -> Self {
         Self::Registry(name, version)
     }
 
-    pub(crate) fn from_url(name: &'a PackageName, url: &'a VerbatimParsedUrl) -> Self {
+    pub fn from_url(name: &'a PackageName, url: &'a VerbatimParsedUrl) -> Self {
         Self::Url(name, url)
     }
 }

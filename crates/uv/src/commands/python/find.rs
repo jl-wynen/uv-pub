@@ -22,7 +22,7 @@ use crate::settings::NetworkSettings;
 
 /// Find a Python interpreter.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn find(
+pub async fn find(
     project_dir: &Path,
     request: Option<String>,
     show_version: bool,
@@ -114,7 +114,7 @@ pub(crate) async fn find(
     Ok(ExitStatus::Success)
 }
 
-pub(crate) async fn find_script(
+pub async fn find_script(
     script: Pep723ItemRef<'_>,
     show_version: bool,
     network_settings: &NetworkSettings,

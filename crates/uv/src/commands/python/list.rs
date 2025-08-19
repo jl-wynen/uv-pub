@@ -52,7 +52,7 @@ struct PrintData {
 
 /// List available Python installations.
 #[allow(clippy::too_many_arguments, clippy::fn_params_excessive_bools)]
-pub(crate) async fn list(
+pub async fn list(
     request: Option<String>,
     kinds: PythonListKinds,
     all_versions: bool,

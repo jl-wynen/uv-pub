@@ -4,7 +4,7 @@ use uv_pypi_types::{ParsedGitUrl, ParsedUrl, VerbatimParsedUrl};
 use uv_redacted::DisplaySafeUrl;
 
 /// Map a URL to a precise URL, if possible.
-pub(crate) fn url_to_precise(url: VerbatimParsedUrl, git: &GitResolver) -> VerbatimParsedUrl {
+pub fn url_to_precise(url: VerbatimParsedUrl, git: &GitResolver) -> VerbatimParsedUrl {
     let ParsedUrl::Git(ParsedGitUrl {
         url: git_url,
         subdirectory,

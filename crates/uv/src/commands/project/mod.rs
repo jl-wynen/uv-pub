@@ -60,21 +60,21 @@ use crate::settings::{
     InstallerSettingsRef, NetworkSettings, ResolverInstallerSettings, ResolverSettings,
 };
 
-pub(crate) mod add;
-pub(crate) mod environment;
-pub(crate) mod export;
-pub(crate) mod init;
+pub mod add;
+pub mod environment;
+pub mod export;
+pub mod init;
 mod install_target;
-pub(crate) mod lock;
+pub mod lock;
 mod lock_target;
-pub(crate) mod remove;
-pub(crate) mod run;
-pub(crate) mod sync;
-pub(crate) mod tree;
-pub(crate) mod version;
+pub mod remove;
+pub mod run;
+pub mod sync;
+pub mod tree;
+pub mod version;
 
 #[derive(thiserror::Error, Debug)]
-pub(crate) enum ProjectError {
+pub enum ProjectError {
     #[error(
         "The lockfile at `uv.lock` needs to be updated, but `--locked` was provided. To update the lockfile, run `uv lock`."
     )]
@@ -271,13 +271,13 @@ pub(crate) enum ProjectError {
 }
 
 #[derive(Debug)]
-pub(crate) struct ConflictError {
+pub struct ConflictError {
     /// The set from which the conflict was derived.
-    pub(crate) set: ConflictSet,
+    pub set: ConflictSet,
     /// The items from the set that were enabled, and thus create the conflict.
-    pub(crate) conflicts: Vec<ConflictItem>,
+    pub conflicts: Vec<ConflictItem>,
     /// Enabled dependency groups with defaults applied.
-    pub(crate) groups: DependencyGroupsWithDefaults,
+    pub groups: DependencyGroupsWithDefaults,
 }
 
 impl std::fmt::Display for ConflictError {
@@ -376,7 +376,7 @@ impl std::error::Error for ConflictError {}
 
 /// A [`SharedState`] instance to use for universal resolution.
 #[derive(Default, Clone)]
-pub(crate) struct UniversalState(SharedState);
+pub struct UniversalState(SharedState);
 
 impl std::ops::Deref for UniversalState {
     type Target = SharedState;
@@ -388,14 +388,14 @@ impl std::ops::Deref for UniversalState {
 
 impl UniversalState {
     /// Fork the [`UniversalState`] to create a [`PlatformState`].
-    pub(crate) fn fork(&self) -> PlatformState {
+    pub fn fork(&self) -> PlatformState {
         PlatformState(self.0.fork())
     }
 }
 
 /// A [`SharedState`] instance to use for platform-specific resolution.
 #[derive(Default, Clone)]
-pub(crate) struct PlatformState(SharedState);
+pub struct PlatformState(SharedState);
 
 impl std::ops::Deref for PlatformState {
     type Target = SharedState;
@@ -407,12 +407,12 @@ impl std::ops::Deref for PlatformState {
 
 impl PlatformState {
     /// Fork the [`PlatformState`] to create a [`UniversalState`].
-    pub(crate) fn fork(&self) -> UniversalState {
+    pub fn fork(&self) -> UniversalState {
         UniversalState(self.0.fork())
     }
 
     /// Create a [`SharedState`] from the [`PlatformState`].
-    pub(crate) fn into_inner(self) -> SharedState {
+    pub fn into_inner(self) -> SharedState {
         self.0
     }
 }
@@ -422,7 +422,7 @@ impl PlatformState {
 /// For a [`Workspace`] with multiple packages, the `Requires-Python` bound is the union of the
 /// `Requires-Python` bounds of all the packages.
 #[allow(clippy::result_large_err)]
-pub(crate) fn find_requires_python(
+pub fn find_requires_python(
     workspace: &Workspace,
     groups: &DependencyGroupsWithDefaults,
 ) -> Result<Option<RequiresPython>, ProjectError> {
@@ -466,7 +466,7 @@ pub(crate) fn find_requires_python(
 /// If no [`Workspace`] is provided, the `requires-python` will be validated against the originating
 /// source (e.g., a `.python-version` file or a `--python` command-line argument).
 #[allow(clippy::result_large_err)]
-pub(crate) fn validate_project_requires_python(
+pub fn validate_project_requires_python(
     interpreter: &Interpreter,
     workspace: Option<&Workspace>,
     groups: &DependencyGroupsWithDefaults,
@@ -553,7 +553,7 @@ fn validate_script_requires_python(
 /// An interpreter suitable for a PEP 723 script.
 #[derive(Debug, Clone)]
 #[allow(clippy::large_enum_variant)]
-pub(crate) enum ScriptInterpreter {
+pub enum ScriptInterpreter {
     /// An interpreter to use to create a new script environment.
     Interpreter(Interpreter),
     /// An interpreter from an existing script environment.
@@ -566,7 +566,7 @@ impl ScriptInterpreter {
     /// If `--active` is set, the active virtual environment will be preferred.
     ///
     /// See: [`Workspace::venv`].
-    pub(crate) fn root(script: Pep723ItemRef<'_>, active: Option<bool>, cache: &Cache) -> PathBuf {
+    pub fn root(script: Pep723ItemRef<'_>, active: Option<bool>, cache: &Cache) -> PathBuf {
         /// Resolve the `VIRTUAL_ENV` variable, if any.
         fn from_virtual_env_variable() -> Option<PathBuf> {
             let value = std::env::var_os(EnvVars::VIRTUAL_ENV)?;
@@ -647,7 +647,7 @@ impl ScriptInterpreter {
     }
 
     /// Discover the interpreter to use for the current [`Pep723Item`].
-    pub(crate) async fn discover(
+    pub async fn discover(
         script: Pep723ItemRef<'_>,
         python_request: Option<PythonRequest>,
         network_settings: &NetworkSettings,
@@ -746,7 +746,7 @@ impl ScriptInterpreter {
     }
 
     /// Consume the [`PythonInstallation`] and return the [`Interpreter`].
-    pub(crate) fn into_interpreter(self) -> Interpreter {
+    pub fn into_interpreter(self) -> Interpreter {
         match self {
             Self::Interpreter(interpreter) => interpreter,
             Self::Environment(venv) => venv.into_interpreter(),
@@ -754,7 +754,7 @@ impl ScriptInterpreter {
     }
 
     /// Grab a file lock for the script to prevent concurrent writes across processes.
-    pub(crate) async fn lock(script: Pep723ItemRef<'_>) -> Result<LockedFile, std::io::Error> {
+    pub async fn lock(script: Pep723ItemRef<'_>) -> Result<LockedFile, std::io::Error> {
         match script {
             Pep723ItemRef::Script(script) => {
                 LockedFile::acquire(
@@ -782,7 +782,7 @@ impl ScriptInterpreter {
 }
 
 #[derive(Debug)]
-pub(crate) enum EnvironmentKind {
+pub enum EnvironmentKind {
     Script,
     Project,
 }
@@ -797,7 +797,7 @@ impl std::fmt::Display for EnvironmentKind {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub(crate) enum EnvironmentIncompatibilityError {
+pub enum EnvironmentIncompatibilityError {
     #[error("The {0} environment's Python version does not satisfy the request: `{1}`")]
     PythonRequest(EnvironmentKind, PythonRequest),
 
@@ -876,7 +876,7 @@ fn environment_is_usable(
 /// An interpreter suitable for the project.
 #[derive(Debug)]
 #[allow(clippy::large_enum_variant)]
-pub(crate) enum ProjectInterpreter {
+pub enum ProjectInterpreter {
     /// An interpreter from outside the project, to create a new project virtual environment.
     Interpreter(Interpreter),
     /// An interpreter from an existing project virtual environment.
@@ -885,7 +885,7 @@ pub(crate) enum ProjectInterpreter {
 
 impl ProjectInterpreter {
     /// Discover the interpreter to use in the current [`Workspace`].
-    pub(crate) async fn discover(
+    pub async fn discover(
         workspace: &Workspace,
         project_dir: &Path,
         groups: &DependencyGroupsWithDefaults,
@@ -1043,7 +1043,7 @@ impl ProjectInterpreter {
     }
 
     /// Convert the [`ProjectInterpreter`] into an [`Interpreter`].
-    pub(crate) fn into_interpreter(self) -> Interpreter {
+    pub fn into_interpreter(self) -> Interpreter {
         match self {
             Self::Interpreter(interpreter) => interpreter,
             Self::Environment(venv) => venv.into_interpreter(),
@@ -1051,7 +1051,7 @@ impl ProjectInterpreter {
     }
 
     /// Grab a file lock for the environment to prevent concurrent writes across processes.
-    pub(crate) async fn lock(workspace: &Workspace) -> Result<LockedFile, std::io::Error> {
+    pub async fn lock(workspace: &Workspace) -> Result<LockedFile, std::io::Error> {
         LockedFile::acquire(
             std::env::temp_dir().join(format!(
                 "uv-{}.lock",
@@ -1065,7 +1065,7 @@ impl ProjectInterpreter {
 
 /// The source of a `Requires-Python` specifier.
 #[derive(Debug, Clone)]
-pub(crate) enum RequiresPythonSource {
+pub enum RequiresPythonSource {
     /// From the PEP 723 inline script metadata.
     Script,
     /// From a `pyproject.toml` in a workspace.
@@ -1073,7 +1073,7 @@ pub(crate) enum RequiresPythonSource {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum PythonRequestSource {
+pub enum PythonRequestSource {
     /// The request was provided by the user.
     UserRequest,
     /// The request was inferred from a `.python-version` or `.python-versions` file.
@@ -1096,21 +1096,21 @@ impl std::fmt::Display for PythonRequestSource {
 
 /// The resolved Python request and requirement for a [`Workspace`].
 #[derive(Debug, Clone)]
-pub(crate) struct WorkspacePython {
+pub struct WorkspacePython {
     /// The source of the Python request.
-    pub(crate) source: PythonRequestSource,
+    pub source: PythonRequestSource,
     /// The resolved Python request, computed by considering (1) any explicit request from the user
     /// via `--python`, (2) any implicit request from the user via `.python-version`, and (3) any
     /// `Requires-Python` specifier in the `pyproject.toml`.
-    pub(crate) python_request: Option<PythonRequest>,
+    pub python_request: Option<PythonRequest>,
     /// The resolved Python requirement for the project, computed by taking the intersection of all
     /// `Requires-Python` specifiers in the workspace.
-    pub(crate) requires_python: Option<RequiresPython>,
+    pub requires_python: Option<RequiresPython>,
 }
 
 impl WorkspacePython {
     /// Determine the [`WorkspacePython`] for the current [`Workspace`].
-    pub(crate) async fn from_request(
+    pub async fn from_request(
         python_request: Option<PythonRequest>,
         workspace: Option<&Workspace>,
         groups: &DependencyGroupsWithDefaults,
@@ -1173,21 +1173,21 @@ impl WorkspacePython {
 
 /// The resolved Python request and requirement for a [`Pep723Script`]
 #[derive(Debug, Clone)]
-pub(crate) struct ScriptPython {
+pub struct ScriptPython {
     /// The source of the Python request.
-    pub(crate) source: PythonRequestSource,
+    pub source: PythonRequestSource,
     /// The resolved Python request, computed by considering (1) any explicit request from the user
     /// via `--python`, (2) any implicit request from the user via `.python-version`, (3) any
     /// `Requires-Python` specifier in the script metadata, and (4) any `Requires-Python` specifier
     /// in the `pyproject.toml`.
-    pub(crate) python_request: Option<PythonRequest>,
+    pub python_request: Option<PythonRequest>,
     /// The resolved Python requirement for the script and its source.
-    pub(crate) requires_python: Option<(RequiresPython, RequiresPythonSource)>,
+    pub requires_python: Option<(RequiresPython, RequiresPythonSource)>,
 }
 
 impl ScriptPython {
     /// Determine the [`ScriptPython`] for the current [`Workspace`].
-    pub(crate) async fn from_request(
+    pub async fn from_request(
         python_request: Option<PythonRequest>,
         workspace: Option<&Workspace>,
         script: Pep723ItemRef<'_>,
@@ -1267,7 +1267,7 @@ enum ProjectEnvironment {
 
 impl ProjectEnvironment {
     /// Initialize a virtual environment for the current project.
-    pub(crate) async fn get_or_init(
+    pub async fn get_or_init(
         workspace: &Workspace,
         groups: &DependencyGroupsWithDefaults,
         python: Option<PythonRequest>,
@@ -1438,7 +1438,7 @@ impl ProjectEnvironment {
     /// Returns an error if the environment was created in `--dry-run` mode, as dropping the
     /// associated temporary directory could lead to errors downstream.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn into_environment(self) -> Result<PythonEnvironment, ProjectError> {
+    pub fn into_environment(self) -> Result<PythonEnvironment, ProjectError> {
         match self {
             Self::Existing(environment) => Ok(environment),
             Self::Replaced(environment) => Ok(environment),
@@ -1449,7 +1449,7 @@ impl ProjectEnvironment {
     }
 
     /// Return the path to the actual target, if this was a dry run environment.
-    pub(crate) fn dry_run_target(&self) -> Option<&Path> {
+    pub fn dry_run_target(&self) -> Option<&Path> {
         match self {
             Self::WouldReplace(path, _, _) | Self::WouldCreate(path, _, _) => Some(path),
             Self::Created(_) | Self::Existing(_) | Self::Replaced(_) => None,
@@ -1500,7 +1500,7 @@ enum ScriptEnvironment {
 
 impl ScriptEnvironment {
     /// Initialize a virtual environment for a PEP 723 script.
-    pub(crate) async fn get_or_init(
+    pub async fn get_or_init(
         script: Pep723ItemRef<'_>,
         python_request: Option<PythonRequest>,
         network_settings: &NetworkSettings,
@@ -1630,7 +1630,7 @@ impl ScriptEnvironment {
     /// Returns an error if the environment was created in `--dry-run` mode, as dropping the
     /// associated temporary directory could lead to errors downstream.
     #[allow(clippy::result_large_err)]
-    pub(crate) fn into_environment(self) -> Result<PythonEnvironment, ProjectError> {
+    pub fn into_environment(self) -> Result<PythonEnvironment, ProjectError> {
         match self {
             Self::Existing(environment) => Ok(environment),
             Self::Replaced(environment) => Ok(environment),
@@ -1641,7 +1641,7 @@ impl ScriptEnvironment {
     }
 
     /// Return the path to the actual target, if this was a dry run environment.
-    pub(crate) fn dry_run_target(&self) -> Option<&Path> {
+    pub fn dry_run_target(&self) -> Option<&Path> {
         match self {
             Self::WouldReplace(path, _, _) | Self::WouldCreate(path, _, _) => Some(path),
             Self::Created(_) | Self::Existing(_) | Self::Replaced(_) => None,
@@ -1664,7 +1664,7 @@ impl std::ops::Deref for ScriptEnvironment {
 }
 
 /// Resolve any [`UnresolvedRequirementSpecification`] into a fully-qualified [`Requirement`].
-pub(crate) async fn resolve_names(
+pub async fn resolve_names(
     requirements: Vec<UnresolvedRequirementSpecification>,
     interpreter: &Interpreter,
     settings: &ResolverInstallerSettings,
@@ -1804,7 +1804,7 @@ pub(crate) async fn resolve_names(
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum PreferenceLocation<'lock> {
+pub enum PreferenceLocation<'lock> {
     /// The preferences should be extracted from a lockfile.
     Lock {
         lock: &'lock Lock,
@@ -1815,7 +1815,7 @@ pub(crate) enum PreferenceLocation<'lock> {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct EnvironmentSpecification<'lock> {
+pub struct EnvironmentSpecification<'lock> {
     /// The requirements to include in the environment.
     requirements: RequirementsSpecification,
     /// The preferences to respect when resolving.
@@ -1834,7 +1834,7 @@ impl From<RequirementsSpecification> for EnvironmentSpecification<'_> {
 impl<'lock> EnvironmentSpecification<'lock> {
     /// Set the [`PreferenceLocation`] for the specification.
     #[must_use]
-    pub(crate) fn with_preferences(self, preferences: PreferenceLocation<'lock>) -> Self {
+    pub fn with_preferences(self, preferences: PreferenceLocation<'lock>) -> Self {
         Self {
             preferences: Some(preferences),
             ..self
@@ -1843,7 +1843,7 @@ impl<'lock> EnvironmentSpecification<'lock> {
 }
 
 /// Run dependency resolution for an interpreter, returning the [`ResolverOutput`].
-pub(crate) async fn resolve_environment(
+pub async fn resolve_environment(
     spec: EnvironmentSpecification<'_>,
     interpreter: &Interpreter,
     build_constraints: Constraints,
@@ -2038,7 +2038,7 @@ pub(crate) async fn resolve_environment(
 }
 
 /// Sync a [`PythonEnvironment`] with a set of resolved requirements.
-pub(crate) async fn sync_environment(
+pub async fn sync_environment(
     venv: PythonEnvironment,
     resolution: &Resolution,
     modifications: Modifications,
@@ -2185,22 +2185,22 @@ pub(crate) async fn sync_environment(
 
 /// The result of updating a [`PythonEnvironment`] to satisfy a set of [`RequirementsSource`]s.
 #[derive(Debug)]
-pub(crate) struct EnvironmentUpdate {
+pub struct EnvironmentUpdate {
     /// The updated [`PythonEnvironment`].
-    pub(crate) environment: PythonEnvironment,
+    pub environment: PythonEnvironment,
     /// The [`Changelog`] of changes made to the environment.
-    pub(crate) changelog: Changelog,
+    pub changelog: Changelog,
 }
 
 impl EnvironmentUpdate {
     /// Convert the [`EnvironmentUpdate`] into a [`PythonEnvironment`].
-    pub(crate) fn into_environment(self) -> PythonEnvironment {
+    pub fn into_environment(self) -> PythonEnvironment {
         self.environment
     }
 }
 
 /// Update a [`PythonEnvironment`] to satisfy a set of [`RequirementsSource`]s.
-pub(crate) async fn update_environment(
+pub async fn update_environment(
     venv: PythonEnvironment,
     spec: RequirementsSpecification,
     modifications: Modifications,
@@ -2458,7 +2458,7 @@ pub(crate) async fn update_environment(
 }
 
 /// Determine the [`RequiresPython`] requirement for a new PEP 723 script.
-pub(crate) async fn init_script_python_requirement(
+pub async fn init_script_python_requirement(
     python: Option<&str>,
     install_mirrors: &PythonInstallMirrors,
     directory: &Path,
@@ -2513,7 +2513,7 @@ pub(crate) async fn init_script_python_requirement(
 
 /// Returns the default dependency groups from the [`PyProjectToml`].
 #[allow(clippy::result_large_err)]
-pub(crate) fn default_dependency_groups(
+pub fn default_dependency_groups(
     pyproject_toml: &PyProjectToml,
 ) -> Result<DefaultGroups, ProjectError> {
     if let Some(defaults) = pyproject_toml
@@ -2541,7 +2541,7 @@ pub(crate) fn default_dependency_groups(
 /// Validate that we aren't trying to install extras or groups that
 /// are declared as conflicting.
 #[allow(clippy::result_large_err)]
-pub(crate) fn detect_conflicts(
+pub fn detect_conflicts(
     target: &InstallTarget,
     extras: &ExtrasSpecification,
     groups: &DependencyGroupsWithDefaults,
@@ -2584,7 +2584,7 @@ pub(crate) fn detect_conflicts(
 
 /// Determine the [`RequirementsSpecification`] for a script.
 #[allow(clippy::result_large_err)]
-pub(crate) fn script_specification(
+pub fn script_specification(
     script: Pep723ItemRef<'_>,
     settings: &ResolverSettings,
 ) -> Result<Option<RequirementsSpecification>, ProjectError> {
@@ -2660,7 +2660,7 @@ pub(crate) fn script_specification(
 
 /// Determine the extra build requires for a script.
 #[allow(clippy::result_large_err)]
-pub(crate) fn script_extra_build_requires(
+pub fn script_extra_build_requires(
     script: Pep723ItemRef<'_>,
     settings: &ResolverSettings,
 ) -> Result<LoweredExtraBuildDependencies, ProjectError> {

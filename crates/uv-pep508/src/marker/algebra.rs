@@ -68,21 +68,21 @@ use crate::{
 };
 
 /// The global node interner.
-pub(crate) static INTERNER: LazyLock<Interner> = LazyLock::new(Interner::default);
+pub static INTERNER: LazyLock<Interner> = LazyLock::new(Interner::default);
 
 /// An interner for decision nodes.
 ///
 /// Interning decision nodes allows isomorphic nodes to be automatically merged.
 /// It also allows nodes to cheaply compared.
 #[derive(Default)]
-pub(crate) struct Interner {
-    pub(crate) shared: InternerShared,
+pub struct Interner {
+    pub shared: InternerShared,
     state: Mutex<InternerState>,
 }
 
 /// The shared part of an [`Interner`], which can be accessed without a lock.
 #[derive(Default)]
-pub(crate) struct InternerShared {
+pub struct InternerShared {
     /// A list of unique [`Node`]s.
     nodes: boxcar::Vec<Node>,
 }
@@ -104,7 +104,7 @@ struct InternerState {
 
 impl InternerShared {
     /// Returns the node for the given [`NodeId`].
-    pub(crate) fn node(&self, id: NodeId) -> &Node {
+    pub fn node(&self, id: NodeId) -> &Node {
         &self.nodes[id.index()]
     }
 }
@@ -112,7 +112,7 @@ impl InternerShared {
 impl Interner {
     /// Locks the interner state, returning a guard that can be used to perform marker
     /// operations.
-    pub(crate) fn lock(&self) -> InternerGuard<'_> {
+    pub fn lock(&self) -> InternerGuard<'_> {
         InternerGuard {
             state: self.state.lock().unwrap(),
             shared: &self.shared,
@@ -121,7 +121,7 @@ impl Interner {
 }
 
 /// A lock of [`InternerState`].
-pub(crate) struct InternerGuard<'a> {
+pub struct InternerGuard<'a> {
     state: MutexGuard<'a, InternerState>,
     shared: &'a InternerShared,
 }
@@ -159,7 +159,7 @@ impl InternerGuard<'_> {
     }
 
     /// Returns a decision node for a single marker expression.
-    pub(crate) fn expression(&mut self, expr: MarkerExpression) -> NodeId {
+    pub fn expression(&mut self, expr: MarkerExpression) -> NodeId {
         let (var, children) = match expr {
             // A variable representing the output of a version key. Edges correspond
             // to disjoint version ranges.
@@ -345,14 +345,14 @@ impl InternerGuard<'_> {
     }
 
     /// Returns a decision node representing the disjunction of two nodes.
-    pub(crate) fn or(&mut self, xi: NodeId, yi: NodeId) -> NodeId {
+    pub fn or(&mut self, xi: NodeId, yi: NodeId) -> NodeId {
         // We take advantage of cheap negation here and implement OR in terms
         // of it's De Morgan complement.
         self.and(xi.not(), yi.not()).not()
     }
 
     /// Returns a decision node representing the conjunction of two nodes.
-    pub(crate) fn and(&mut self, xi: NodeId, yi: NodeId) -> NodeId {
+    pub fn and(&mut self, xi: NodeId, yi: NodeId) -> NodeId {
         if xi.is_true() {
             return yi;
         }
@@ -430,7 +430,7 @@ impl InternerGuard<'_> {
 
     /// Returns `true` if there is no environment in which both marker trees can apply,
     /// i.e. their conjunction is always `false`.
-    pub(crate) fn is_disjoint(&mut self, xi: NodeId, yi: NodeId) -> bool {
+    pub fn is_disjoint(&mut self, xi: NodeId, yi: NodeId) -> bool {
         // `false` is disjoint with any marker.
         if xi.is_false() || yi.is_false() {
             return true;
@@ -526,7 +526,7 @@ impl InternerGuard<'_> {
     // If the provided function `f` returns a `Some` boolean value, the tree will be simplified
     // with the assumption that the given variable is restricted to that value. If the function
     // returns `None`, the variable will not be affected.
-    pub(crate) fn restrict(&mut self, i: NodeId, f: &impl Fn(&Variable) -> Option<bool>) -> NodeId {
+    pub fn restrict(&mut self, i: NodeId, f: &impl Fn(&Variable) -> Option<bool>) -> NodeId {
         if matches!(i, NodeId::TRUE | NodeId::FALSE) {
             return i;
         }
@@ -558,7 +558,7 @@ impl InternerGuard<'_> {
     /// `((os_name == ... and extra == foo) or (sys_platform == ... and extra != foo))`,
     /// this would return a marker
     /// `os_name == ... or sys_platform == ...`.
-    pub(crate) fn without_extras(&mut self, mut i: NodeId) -> NodeId {
+    pub fn without_extras(&mut self, mut i: NodeId) -> NodeId {
         if matches!(i, NodeId::TRUE | NodeId::FALSE) {
             return i;
         }
@@ -587,7 +587,7 @@ impl InternerGuard<'_> {
     /// true.
     ///
     /// This works by assuming all non-`extra` nodes are always true.
-    pub(crate) fn only_extras(&mut self, mut i: NodeId) -> NodeId {
+    pub fn only_extras(&mut self, mut i: NodeId) -> NodeId {
         if matches!(i, NodeId::TRUE | NodeId::FALSE) {
             return i;
         }
@@ -616,7 +616,7 @@ impl InternerGuard<'_> {
     /// For example, with `requires-python = '>=3.8'` and a marker tree of
     /// `python_full_version >= '3.8' and python_full_version <= '3.10'`, this
     /// would result in a marker of `python_full_version <= '3.10'`.
-    pub(crate) fn simplify_python_versions(
+    pub fn simplify_python_versions(
         &mut self,
         i: NodeId,
         py_lower: Bound<&Version>,
@@ -686,7 +686,7 @@ impl InternerGuard<'_> {
     /// For example, with `requires-python = '>=3.8'` and a marker tree of
     /// `python_full_version <= '3.10'`, this would result in a marker of
     /// `python_full_version >= '3.8' and python_full_version <= '3.10'`.
-    pub(crate) fn complexify_python_versions(
+    pub fn complexify_python_versions(
         &mut self,
         i: NodeId,
         py_lower: Bound<&Version>,
@@ -1027,7 +1027,7 @@ impl InternerGuard<'_> {
 /// trees. However, marker trees are typically small, so this may not be high
 /// impact.
 #[derive(PartialOrd, Ord, PartialEq, Eq, Hash, Clone, Debug)]
-pub(crate) enum Variable {
+pub enum Variable {
     /// A string marker, such as `os_name`.
     String(CanonicalMarkerValueString),
     /// A version marker, such as `python_version`.
@@ -1076,12 +1076,12 @@ impl Variable {
 
 /// A decision node in an Algebraic Decision Diagram.
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
-pub(crate) struct Node {
+pub struct Node {
     /// The variable this node represents.
-    pub(crate) var: Variable,
+    pub var: Variable,
     /// The children of this node, with edges representing the possible outputs
     /// of this variable.
-    pub(crate) children: Edges,
+    pub children: Edges,
 }
 
 impl Node {
@@ -1098,14 +1098,14 @@ impl Node {
 ///
 /// The lowest bit of the ID is used represent complemented edges.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub(crate) struct NodeId(usize);
+pub struct NodeId(usize);
 
 impl NodeId {
     // The terminal node representing `true`, or a trivially `true` node.
-    pub(crate) const TRUE: Self = Self(0);
+    pub const TRUE: Self = Self(0);
 
     // The terminal node representing `false`, or an unsatisifable node.
-    pub(crate) const FALSE: Self = Self(1);
+    pub const FALSE: Self = Self(1);
 
     /// Create a new, optionally complemented, [`NodeId`] with the given index.
     fn new(index: usize, complement: bool) -> Self {
@@ -1127,7 +1127,7 @@ impl NodeId {
     }
 
     /// Returns the complement of this node.
-    pub(crate) fn not(self) -> Self {
+    pub fn not(self) -> Self {
         // Toggle the lowest bit.
         Self(self.0 ^ 1)
     }
@@ -1136,7 +1136,7 @@ impl NodeId {
     ///
     /// This method is useful to restore the complemented state of children nodes
     /// when traversing the tree.
-    pub(crate) fn negate(self, parent: Self) -> Self {
+    pub fn negate(self, parent: Self) -> Self {
         if parent.is_complement() {
             self.not()
         } else {
@@ -1145,12 +1145,12 @@ impl NodeId {
     }
 
     /// Returns `true` if this node represents an unsatisfiable node.
-    pub(crate) fn is_false(self) -> bool {
+    pub fn is_false(self) -> bool {
         self == Self::FALSE
     }
 
     /// Returns `true` if this node represents a trivially `true` node.
-    pub(crate) fn is_true(self) -> bool {
+    pub fn is_true(self) -> bool {
         self == Self::TRUE
     }
 }
@@ -1162,7 +1162,7 @@ type SmallVec<T> = smallvec::SmallVec<[T; 5]>;
 /// The edges of a decision node.
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 #[allow(clippy::large_enum_variant)] // Nodes are interned.
-pub(crate) enum Edges {
+pub enum Edges {
     // The edges of a version variable, representing a disjoint set of ranges that cover
     // the output space.
     //

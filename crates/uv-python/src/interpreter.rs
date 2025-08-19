@@ -623,7 +623,7 @@ impl Interpreter {
 
     /// Whether or not this Python interpreter is from a default Python executable name, like
     /// `python`, `python3`, or `python.exe`.
-    pub(crate) fn has_default_executable_name(&self) -> bool {
+    pub fn has_default_executable_name(&self) -> bool {
         let Some(file_name) = self.sys_executable().file_name() else {
             return false;
         };
@@ -892,7 +892,7 @@ struct InterpreterInfo {
 
 impl InterpreterInfo {
     /// Return the resolved [`InterpreterInfo`] for the given Python executable.
-    pub(crate) fn query(interpreter: &Path, cache: &Cache) -> Result<Self, Error> {
+    pub fn query(interpreter: &Path, cache: &Cache) -> Result<Self, Error> {
         let tempdir = tempfile::tempdir_in(cache.root())?;
         Self::setup_python_query_files(tempdir.path())?;
 
@@ -1017,7 +1017,7 @@ impl InterpreterInfo {
     /// Running a Python script is (relatively) expensive, and the markers won't change
     /// unless the Python executable changes, so we use the executable's last modified
     /// time as a cache key.
-    pub(crate) fn query_cached(executable: &Path, cache: &Cache) -> Result<Self, Error> {
+    pub fn query_cached(executable: &Path, cache: &Cache) -> Result<Self, Error> {
         let absolute = std::path::absolute(executable)?;
 
         // Provide a better error message if the link is broken or the file does not exist. Since

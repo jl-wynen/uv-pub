@@ -26,7 +26,7 @@ pub trait HasLength {
 /// and thus can be cloned cheaply. It supports seeking; each cloned instance
 /// maintains its own pointer into the file, and the underlying instance
 /// is seeked prior to each read.
-pub(crate) struct CloneableSeekableReader<R: Read + Seek + HasLength> {
+pub struct CloneableSeekableReader<R: Read + Seek + HasLength> {
     file: Arc<Mutex<R>>,
     pos: u64,
     // TODO determine and store this once instead of per cloneable file
@@ -49,7 +49,7 @@ impl<R: Read + Seek + HasLength> CloneableSeekableReader<R> {
     /// to be fixed and unchanging. Odd behavior may occur if the length
     /// of the stream changes; any subsequent seeks will not take account
     /// of the changed stream length.
-    pub(crate) fn new(file: R) -> Self {
+    pub fn new(file: R) -> Self {
         Self {
             file: Arc::new(Mutex::new(file)),
             pos: 0u64,

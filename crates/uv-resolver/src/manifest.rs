@@ -15,39 +15,39 @@ use crate::{DependencyMode, Exclusions, ResolverEnvironment};
 #[derive(Clone, Debug)]
 pub struct Manifest {
     /// The direct requirements for the project.
-    pub(crate) requirements: Vec<Requirement>,
+    pub requirements: Vec<Requirement>,
 
     /// The constraints for the project.
-    pub(crate) constraints: Constraints,
+    pub constraints: Constraints,
 
     /// The overrides for the project.
-    pub(crate) overrides: Overrides,
+    pub overrides: Overrides,
 
     /// The preferences for the project.
     ///
     /// These represent "preferred" versions of a given package. For example, they may be the
     /// versions that are already installed in the environment, or already pinned in an existing
     /// lockfile.
-    pub(crate) preferences: Preferences,
+    pub preferences: Preferences,
 
     /// The name of the project.
-    pub(crate) project: Option<PackageName>,
+    pub project: Option<PackageName>,
 
     /// Members of the project's workspace.
-    pub(crate) workspace_members: BTreeSet<PackageName>,
+    pub workspace_members: BTreeSet<PackageName>,
 
     /// The installed packages to exclude from consideration during resolution.
     ///
     /// These typically represent packages that are being upgraded or reinstalled
     /// and should be pulled from a remote source like a package index.
-    pub(crate) exclusions: Exclusions,
+    pub exclusions: Exclusions,
 
     /// The lookahead requirements for the project.
     ///
     /// These represent transitive dependencies that should be incorporated when making
     /// determinations around "allowed" versions (for example, "allowed" URLs or "allowed"
     /// pre-release versions).
-    pub(crate) lookaheads: Vec<RequestedRequirements>,
+    pub lookaheads: Vec<RequestedRequirements>,
 }
 
 impl Manifest {

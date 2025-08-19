@@ -42,7 +42,7 @@ impl VersionMap {
     ///
     /// PEP 592: <https://peps.python.org/pep-0592/#warehouse-pypi-implementation-notes>
     #[instrument(skip_all, fields(package_name))]
-    pub(crate) fn from_simple_metadata(
+    pub fn from_simple_metadata(
         simple_metadata: OwnedArchive<SimpleMetadata>,
         package_name: &PackageName,
         index: &IndexUrl,
@@ -118,7 +118,7 @@ impl VersionMap {
     }
 
     #[instrument(skip_all, fields(package_name))]
-    pub(crate) fn from_flat_metadata(
+    pub fn from_flat_metadata(
         flat_metadata: Vec<FlatIndexEntry>,
         tags: Option<&Tags>,
         hasher: &HashStrategy,
@@ -142,7 +142,7 @@ impl VersionMap {
     }
 
     /// Return the [`DistFile`] for the given version, if any.
-    pub(crate) fn get(&self, version: &Version) -> Option<&PrioritizedDist> {
+    pub fn get(&self, version: &Version) -> Option<&PrioritizedDist> {
         match self.inner {
             VersionMapInner::Eager(ref eager) => eager.map.get(version),
             VersionMapInner::Lazy(ref lazy) => lazy.get(version),
@@ -150,7 +150,7 @@ impl VersionMap {
     }
 
     /// Return an iterator over the versions in this map.
-    pub(crate) fn versions(&self) -> impl DoubleEndedIterator<Item = &Version> {
+    pub fn versions(&self) -> impl DoubleEndedIterator<Item = &Version> {
         match &self.inner {
             VersionMapInner::Eager(eager) => either::Either::Left(eager.map.keys()),
             VersionMapInner::Lazy(lazy) => either::Either::Right(lazy.map.keys()),
@@ -158,7 +158,7 @@ impl VersionMap {
     }
 
     /// Return the index URL where this package came from.
-    pub(crate) fn index(&self) -> Option<&IndexUrl> {
+    pub fn index(&self) -> Option<&IndexUrl> {
         match &self.inner {
             VersionMapInner::Eager(_) => None,
             VersionMapInner::Lazy(lazy) => Some(&lazy.index),
@@ -171,7 +171,7 @@ impl VersionMap {
     /// which can be used to lazily request a [`CompatibleDist`]. This is
     /// useful in cases where one can skip materializing a full distribution
     /// for each version.
-    pub(crate) fn iter(
+    pub fn iter(
         &self,
         range: &Ranges<Version>,
     ) -> impl DoubleEndedIterator<Item = (&Version, VersionMapDistHandle<'_>)> {
@@ -226,7 +226,7 @@ impl VersionMap {
     }
 
     /// Return the [`Hashes`] for the given version, if any.
-    pub(crate) fn hashes(&self, version: &Version) -> Option<&[HashDigest]> {
+    pub fn hashes(&self, version: &Version) -> Option<&[HashDigest]> {
         match self.inner {
             VersionMapInner::Eager(ref eager) => {
                 eager.map.get(version).map(PrioritizedDist::hashes)
@@ -239,7 +239,7 @@ impl VersionMap {
     ///
     /// Note that this may include versions of distributions that are not
     /// usable in the current environment.
-    pub(crate) fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         match self.inner {
             VersionMapInner::Eager(VersionMapEager { ref map, .. }) => map.len(),
             VersionMapInner::Lazy(VersionMapLazy { ref map, .. }) => map.len(),
@@ -247,7 +247,7 @@ impl VersionMap {
     }
 
     /// Returns `true` if the map contains at least one stable (non-pre-release) version.
-    pub(crate) fn stable(&self) -> bool {
+    pub fn stable(&self) -> bool {
         match self.inner {
             VersionMapInner::Eager(ref map) => map.stable,
             VersionMapInner::Lazy(ref map) => map.stable,
@@ -255,7 +255,7 @@ impl VersionMap {
     }
 
     /// Returns `true` if the map contains at least one local version (e.g., `2.6.0+cpu`).
-    pub(crate) fn local(&self) -> bool {
+    pub fn local(&self) -> bool {
         match self.inner {
             VersionMapInner::Eager(ref map) => map.local,
             VersionMapInner::Lazy(ref map) => map.local,
@@ -286,7 +286,7 @@ impl From<FlatDistributions> for VersionMap {
 /// a valid distribution. For example, if in the process of building a
 /// distribution no compatible wheel or source distribution could be found,
 /// then building a `CompatibleDist` will fail.
-pub(crate) struct VersionMapDistHandle<'a> {
+pub struct VersionMapDistHandle<'a> {
     inner: VersionMapDistHandleInner<'a>,
 }
 
@@ -300,7 +300,7 @@ enum VersionMapDistHandleInner<'a> {
 
 impl<'a> VersionMapDistHandle<'a> {
     /// Returns a prioritized distribution from this handle.
-    pub(crate) fn prioritized_dist(&self) -> Option<&'a PrioritizedDist> {
+    pub fn prioritized_dist(&self) -> Option<&'a PrioritizedDist> {
         match self.inner {
             VersionMapDistHandleInner::Eager(dist) => Some(dist),
             VersionMapDistHandleInner::Lazy { lazy, dist } => Some(lazy.get_lazy(dist)?),

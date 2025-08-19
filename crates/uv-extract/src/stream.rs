@@ -66,7 +66,7 @@ pub async fn unzip<R: tokio::io::AsyncRead + Unpin>(
     /// Ensure the file path is safe to use as a [`Path`].
     ///
     /// See: <https://docs.rs/zip/latest/zip/read/struct.ZipFile.html#method.enclosed_name>
-    pub(crate) fn enclosed_name(file_name: &str) -> Option<PathBuf> {
+    pub fn enclosed_name(file_name: &str) -> Option<PathBuf> {
         if file_name.contains('\0') {
             return None;
         }

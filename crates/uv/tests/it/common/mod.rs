@@ -1857,4 +1857,4 @@ macro_rules! uv_snapshot {
 
 /// <https://stackoverflow.com/a/31749071/3549270>
 #[allow(unused_imports)]
-pub(crate) use uv_snapshot;
+pub use uv_snapshot;

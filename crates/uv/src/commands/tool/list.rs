@@ -14,7 +14,7 @@ use crate::printer::Printer;
 
 /// List installed tools.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn list(
+pub async fn list(
     show_paths: bool,
     show_version_specifiers: bool,
     show_with: bool,

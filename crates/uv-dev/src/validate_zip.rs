@@ -11,13 +11,13 @@ use uv_pep508::VerbatimUrl;
 use uv_pypi_types::ParsedUrl;
 
 #[derive(Parser)]
-pub(crate) struct ValidateZipArgs {
+pub struct ValidateZipArgs {
     url: VerbatimUrl,
     #[command(flatten)]
     cache_args: CacheArgs,
 }
 
-pub(crate) async fn validate_zip(args: ValidateZipArgs) -> Result<()> {
+pub async fn validate_zip(args: ValidateZipArgs) -> Result<()> {
     let cache = Cache::try_from(args.cache_args)?.init()?;
     let client = RegistryClientBuilder::new(cache).build();
 

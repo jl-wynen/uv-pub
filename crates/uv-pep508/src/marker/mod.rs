@@ -12,7 +12,7 @@
 mod algebra;
 mod environment;
 mod lowering;
-pub(crate) mod parse;
+pub mod parse;
 mod simplify;
 mod tree;
 

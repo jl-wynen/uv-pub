@@ -19,7 +19,7 @@ use crate::commands::project::ProjectError;
 
 /// A target that can be installed from a lockfile.
 #[derive(Debug, Copy, Clone)]
-pub(crate) enum InstallTarget<'lock> {
+pub enum InstallTarget<'lock> {
     /// A project (which could be a workspace root or member).
     Project {
         workspace: &'lock Workspace,
@@ -95,7 +95,7 @@ impl<'lock> Installable<'lock> for InstallTarget<'lock> {
 
 impl<'lock> InstallTarget<'lock> {
     /// Return an iterator over the [`Index`] definitions in the target.
-    pub(crate) fn indexes(self) -> impl Iterator<Item = &'lock Index> {
+    pub fn indexes(self) -> impl Iterator<Item = &'lock Index> {
         match self {
             Self::Project { workspace, .. }
             | Self::Workspace { workspace, .. }
@@ -127,7 +127,7 @@ impl<'lock> InstallTarget<'lock> {
     }
 
     /// Return an iterator over all [`Sources`] defined by the target.
-    pub(crate) fn sources(&self) -> impl Iterator<Item = &Source> {
+    pub fn sources(&self) -> impl Iterator<Item = &Source> {
         match self {
             Self::Project { workspace, .. }
             | Self::Workspace { workspace, .. }
@@ -153,7 +153,7 @@ impl<'lock> InstallTarget<'lock> {
     }
 
     /// Return an iterator over all requirements defined by the target.
-    pub(crate) fn requirements(
+    pub fn requirements(
         &self,
     ) -> impl Iterator<Item = Cow<'lock, uv_pep508::Requirement<VerbatimParsedUrl>>> {
         match self {
@@ -244,13 +244,13 @@ impl<'lock> InstallTarget<'lock> {
         }
     }
 
-    pub(crate) fn build_constraints(&self) -> Constraints {
+    pub fn build_constraints(&self) -> Constraints {
         self.lock().build_constraints(self.install_path())
     }
 
     /// Validate the extras requested by the [`ExtrasSpecification`].
     #[allow(clippy::result_large_err)]
-    pub(crate) fn validate_extras(self, extras: &ExtrasSpecification) -> Result<(), ProjectError> {
+    pub fn validate_extras(self, extras: &ExtrasSpecification) -> Result<(), ProjectError> {
         if extras.is_empty() {
             return Ok(());
         }
@@ -302,7 +302,7 @@ impl<'lock> InstallTarget<'lock> {
 
     /// Validate the dependency groups requested by the [`DependencyGroupSpecifier`].
     #[allow(clippy::result_large_err)]
-    pub(crate) fn validate_groups(
+    pub fn validate_groups(
         self,
         groups: &DependencyGroupsWithDefaults,
     ) -> Result<(), ProjectError> {
@@ -374,7 +374,7 @@ impl<'lock> InstallTarget<'lock> {
     /// Returns the names of all packages in the workspace that will be installed.
     ///
     /// Note this only includes workspace members.
-    pub(crate) fn packages(
+    pub fn packages(
         &self,
         extras: &ExtrasSpecification,
         groups: &DependencyGroupsWithDefaults,

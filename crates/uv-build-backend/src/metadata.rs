@@ -24,7 +24,7 @@ use crate::serde_verbatim::SerdeVerbatim;
 use crate::{BuildBackendSettings, Error};
 
 /// By default, we ignore generated python files.
-pub(crate) const DEFAULT_EXCLUDES: &[&str] = &["__pycache__", "*.pyc", "*.pyo"];
+pub const DEFAULT_EXCLUDES: &[&str] = &["__pycache__", "*.pyc", "*.pyo"];
 
 #[derive(Debug, Error)]
 pub enum ValidationError {
@@ -114,24 +114,24 @@ pub struct PyProjectToml {
 }
 
 impl PyProjectToml {
-    pub(crate) fn name(&self) -> &PackageName {
+    pub fn name(&self) -> &PackageName {
         &self.project.name
     }
 
-    pub(crate) fn version(&self) -> &Version {
+    pub fn version(&self) -> &Version {
         &self.project.version
     }
 
-    pub(crate) fn parse(contents: &str) -> Result<Self, Error> {
+    pub fn parse(contents: &str) -> Result<Self, Error> {
         Ok(toml::from_str(contents)?)
     }
 
-    pub(crate) fn readme(&self) -> Option<&Readme> {
+    pub fn readme(&self) -> Option<&Readme> {
         self.project.readme.as_ref()
     }
 
     /// The license files that need to be included in the source distribution.
-    pub(crate) fn license_files_source_dist(&self) -> impl Iterator<Item = &str> {
+    pub fn license_files_source_dist(&self) -> impl Iterator<Item = &str> {
         let license_file = self
             .project
             .license
@@ -148,7 +148,7 @@ impl PyProjectToml {
     }
 
     /// The license files that need to be included in the wheel.
-    pub(crate) fn license_files_wheel(&self) -> impl Iterator<Item = &str> {
+    pub fn license_files_wheel(&self) -> impl Iterator<Item = &str> {
         // The pre-PEP 639 `license = { file = "..." }` is included inline in `METADATA`.
         self.project
             .license_files
@@ -157,7 +157,7 @@ impl PyProjectToml {
             .map(String::as_str)
     }
 
-    pub(crate) fn settings(&self) -> Option<&BuildBackendSettings> {
+    pub fn settings(&self) -> Option<&BuildBackendSettings> {
         self.tool.as_ref()?.uv.as_ref()?.build_backend.as_ref()
     }
 
@@ -245,7 +245,7 @@ impl PyProjectToml {
     /// <https://packaging.python.org/en/latest/guides/writing-pyproject-toml/>
     /// <https://packaging.python.org/en/latest/specifications/pyproject-toml/>
     /// <https://packaging.python.org/en/latest/specifications/core-metadata/>
-    pub(crate) fn to_metadata(&self, root: &Path) -> Result<Metadata23, Error> {
+    pub fn to_metadata(&self, root: &Path) -> Result<Metadata23, Error> {
         let summary = if let Some(description) = &self.project.description {
             if description.contains('\n') {
                 return Err(ValidationError::DescriptionNewlines.into());
@@ -568,7 +568,7 @@ impl PyProjectToml {
     /// <https://packaging.python.org/en/latest/specifications/entry-points/>
     ///
     /// Returns `None` if no entrypoints were defined.
-    pub(crate) fn to_entry_points(&self) -> Result<Option<String>, ValidationError> {
+    pub fn to_entry_points(&self) -> Result<Option<String>, ValidationError> {
         let mut writer = String::new();
 
         if self.project.scripts.is_none()
@@ -702,7 +702,7 @@ struct Project {
 /// <https://packaging.python.org/en/latest/specifications/pyproject-toml/#readme>.
 #[derive(Deserialize, Debug, Clone)]
 #[serde(untagged, rename_all_fields = "kebab-case")]
-pub(crate) enum Readme {
+pub enum Readme {
     /// Relative path to the README.
     String(PathBuf),
     /// Relative path to the README.
@@ -721,7 +721,7 @@ pub(crate) enum Readme {
 
 impl Readme {
     /// If the readme is a file, return the path to the file.
-    pub(crate) fn path(&self) -> Option<&Path> {
+    pub fn path(&self) -> Option<&Path> {
         match self {
             Self::String(path) => Some(path),
             Self::File { file, .. } => Some(file),
@@ -734,7 +734,7 @@ impl Readme {
 /// <https://packaging.python.org/en/latest/specifications/pyproject-toml/#license>.
 #[derive(Deserialize, Debug, Clone)]
 #[serde(untagged)]
-pub(crate) enum License {
+pub enum License {
     /// An SPDX Expression.
     ///
     /// From the provisional PEP 639.
@@ -771,7 +771,7 @@ impl License {
     deny_unknown_fields,
     expecting = "a table with 'name' and/or 'email' keys"
 )]
-pub(crate) enum Contact {
+pub enum Contact {
     /// TODO(konsti): RFC 822 validation.
     NameEmail { name: String, email: String },
     /// TODO(konsti): RFC 822 validation.
@@ -795,7 +795,7 @@ struct BuildSystem {
 /// The `tool` section as specified in PEP 517.
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) struct Tool {
+pub struct Tool {
     /// uv-specific configuration
     uv: Option<ToolUv>,
 }
@@ -803,7 +803,7 @@ pub(crate) struct Tool {
 /// The `tool.uv` section with build configuration.
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) struct ToolUv {
+pub struct ToolUv {
     /// Configuration for building source distributions and wheels with the uv build backend
     build_backend: Option<BuildBackendSettings>,
 }

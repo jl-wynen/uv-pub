@@ -19,7 +19,7 @@ use crate::{DependencyMode, Manifest, ResolverEnvironment};
 ///
 /// [`Indexes`] would contain a single entry mapping `torch` to `https://download.pytorch.org/whl/cu121`.
 #[derive(Debug, Default, Clone)]
-pub(crate) struct Indexes(ForkMap<Entry>);
+pub struct Indexes(ForkMap<Entry>);
 
 #[derive(Debug, Clone)]
 struct Entry {
@@ -29,7 +29,7 @@ struct Entry {
 
 impl Indexes {
     /// Determine the set of explicit, pinned indexes in the [`Manifest`].
-    pub(crate) fn from_manifest(
+    pub fn from_manifest(
         manifest: &Manifest,
         env: &ResolverEnvironment,
         dependencies: DependencyMode,
@@ -54,12 +54,12 @@ impl Indexes {
     }
 
     /// Returns `true` if the map contains any indexes for a package.
-    pub(crate) fn contains_key(&self, name: &PackageName) -> bool {
+    pub fn contains_key(&self, name: &PackageName) -> bool {
         self.0.contains_key(name)
     }
 
     /// Return the explicit index used for a package in the given fork.
-    pub(crate) fn get(&self, name: &PackageName, env: &ResolverEnvironment) -> Vec<&IndexMetadata> {
+    pub fn get(&self, name: &PackageName, env: &ResolverEnvironment) -> Vec<&IndexMetadata> {
         let entries = self.0.get(name, env);
         entries
             .iter()

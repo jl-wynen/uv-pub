@@ -151,7 +151,7 @@ enum InstallErrorKind {
 
 /// Download and install Python versions.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) async fn install(
+pub async fn install(
     project_dir: &Path,
     install_dir: Option<PathBuf>,
     targets: Vec<String>,
@@ -987,7 +987,7 @@ fn create_bin_links(
     }
 }
 
-pub(crate) fn format_executables(
+pub fn format_executables(
     event: &ChangeEvent,
     executables: &FxHashMap<PythonInstallationKey, FxHashSet<PathBuf>>,
 ) -> String {

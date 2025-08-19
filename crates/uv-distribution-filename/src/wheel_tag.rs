@@ -8,7 +8,7 @@ use uv_small_str::SmallString;
 ///
 /// Wheels tend to include a single language, ABI, and platform tag, so we use a [`SmallVec`] with a
 /// capacity of 1 to optimize for this common case.
-pub(crate) type TagSet<T> = smallvec::SmallVec<[T; 3]>;
+pub type TagSet<T> = smallvec::SmallVec<[T; 3]>;
 
 /// The portion of the wheel filename following the name and version: the optional build tag, along
 /// with the Python tag(s), ABI tag(s), and platform tag(s).
@@ -32,7 +32,7 @@ pub(crate) type TagSet<T> = smallvec::SmallVec<[T; 3]>;
     rkyv::Serialize,
 )]
 #[rkyv(derive(Debug))]
-pub(crate) enum WheelTag {
+pub enum WheelTag {
     Small { small: WheelTagSmall },
     Large { large: Box<WheelTagLarge> },
 }
@@ -60,13 +60,13 @@ impl Display for WheelTag {
 )]
 #[rkyv(derive(Debug))]
 #[allow(clippy::struct_field_names)]
-pub(crate) struct WheelTagSmall {
+pub struct WheelTagSmall {
     /// The Python tag, e.g., `py3` in `1.2.3-py3-none-any`.
-    pub(crate) python_tag: LanguageTag,
+    pub python_tag: LanguageTag,
     /// The ABI tag, e.g., `none` in `1.2.3-py3-none-any`.
-    pub(crate) abi_tag: AbiTag,
+    pub abi_tag: AbiTag,
     /// The platform tag, e.g., `none` in `1.2.3-py3-none-any`.
-    pub(crate) platform_tag: PlatformTag,
+    pub platform_tag: PlatformTag,
 }
 
 impl Display for WheelTagSmall {
@@ -93,19 +93,19 @@ impl Display for WheelTagSmall {
 )]
 #[rkyv(derive(Debug))]
 #[allow(clippy::struct_field_names)]
-pub(crate) struct WheelTagLarge {
+pub struct WheelTagLarge {
     /// The optional build tag, e.g., `73` in `1.2.3-73-py3-none-any`.
-    pub(crate) build_tag: Option<BuildTag>,
+    pub build_tag: Option<BuildTag>,
     /// The Python tag(s), e.g., `py3` in `1.2.3-73-py3-none-any`.
-    pub(crate) python_tag: TagSet<LanguageTag>,
+    pub python_tag: TagSet<LanguageTag>,
     /// The ABI tag(s), e.g., `none` in `1.2.3-73-py3-none-any`.
-    pub(crate) abi_tag: TagSet<AbiTag>,
+    pub abi_tag: TagSet<AbiTag>,
     /// The platform tag(s), e.g., `none` in `1.2.3-73-py3-none-any`.
-    pub(crate) platform_tag: TagSet<PlatformTag>,
+    pub platform_tag: TagSet<PlatformTag>,
     /// The string representation of the tag.
     ///
     /// Preserves any unsupported tags that were filtered out when parsing the wheel filename.
-    pub(crate) repr: SmallString,
+    pub repr: SmallString,
 }
 
 impl Display for WheelTagLarge {

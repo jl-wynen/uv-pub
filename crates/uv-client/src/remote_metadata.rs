@@ -47,7 +47,7 @@ use uv_metadata::find_archive_dist_info;
 /// Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or <https://www.apache.org/licenses/LICENSE-2.0>)
 /// or MIT license ([LICENSE-MIT](LICENSE-MIT) or <https://opensource.org/licenses/MIT>), as per the
 /// rest of the crate.
-pub(crate) async fn wheel_metadata_from_remote_zip(
+pub async fn wheel_metadata_from_remote_zip(
     filename: &WheelFilename,
     debug_name: &Url,
     reader: &mut AsyncHttpRangeReader,

@@ -50,7 +50,7 @@ fn write_cfg(f: &mut impl Write, data: &[(String, String)]) -> io::Result<()> {
 
 /// Create a [`VirtualEnvironment`] at the given location.
 #[allow(clippy::fn_params_excessive_bools)]
-pub(crate) fn create(
+pub fn create(
     location: &Path,
     interpreter: &Interpreter,
     prompt: Prompt,

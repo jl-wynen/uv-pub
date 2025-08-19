@@ -18,7 +18,7 @@
 //! ```
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
-pub(crate) enum UnquoteError {
+pub enum UnquoteError {
     UnterminatedSingleQuote {
         char_cursor: usize,
         byte_cursor: usize,
@@ -149,7 +149,7 @@ fn unquote_open_escape(acc: &mut String, cursor: &mut std::iter::Enumerate<std::
 /// ```no_build
 /// assert_eq!(unquote("foobar").unwrap(), "foobar");
 /// ```
-pub(crate) fn unquote(source: &str) -> Result<Option<String>, UnquoteError> {
+pub fn unquote(source: &str) -> Result<Option<String>, UnquoteError> {
     // If the string does not contain any single-quotes, double-quotes, or escape sequences, it
     // does not require any unquoting.
     if memchr::memchr3(b'\'', b'"', b'\\', source.as_bytes()).is_none() {

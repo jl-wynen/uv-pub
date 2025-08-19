@@ -51,7 +51,7 @@ if __name__ == "__main__":
 }
 
 /// Part of entrypoints parsing
-pub(crate) fn read_scripts_from_section(
+pub fn read_scripts_from_section(
     scripts_section: &HashMap<String, Option<String>>,
     section_name: &str,
     extras: Option<&[String]>,
@@ -177,7 +177,7 @@ fn entrypoint_path(entrypoint: &Script, layout: &Layout) -> PathBuf {
 }
 
 /// Create the wrapper scripts in the bin folder of the venv for launching console scripts.
-pub(crate) fn write_script_entrypoints(
+pub fn write_script_entrypoints(
     layout: &Layout,
     relocatable: bool,
     site_packages: &Path,
@@ -322,7 +322,7 @@ pub fn parse_wheel_file(wheel_text: &str) -> Result<LibKind, Error> {
 }
 
 /// Moves the files and folders in src to dest, updating the RECORD in the process
-pub(crate) fn move_folder_recorded(
+pub fn move_folder_recorded(
     src_dir: &Path,
     dest_dir: &Path,
     site_packages: &Path,
@@ -571,7 +571,7 @@ fn install_script(
 
 /// Move the files from the .data directory to the right location in the venv
 #[instrument(skip_all)]
-pub(crate) fn install_data(
+pub fn install_data(
     layout: &Layout,
     relocatable: bool,
     site_packages: &Path,
@@ -678,7 +678,7 @@ pub(crate) fn install_data(
 ///
 /// We still the path in the absolute path to the site packages and the relative path in the
 /// site packages because we must only record the relative path in RECORD
-pub(crate) fn write_file_recorded(
+pub fn write_file_recorded(
     site_packages: &Path,
     relative_path: &Path,
     content: impl AsRef<[u8]>,
@@ -703,7 +703,7 @@ pub(crate) fn write_file_recorded(
 }
 
 /// Adds `INSTALLER`, `REQUESTED` and `direct_url.json` to the .dist-info dir
-pub(crate) fn write_installer_metadata<Cache: serde::Serialize, Build: serde::Serialize>(
+pub fn write_installer_metadata<Cache: serde::Serialize, Build: serde::Serialize>(
     site_packages: &Path,
     dist_info_prefix: &str,
     requested: bool,
@@ -757,7 +757,7 @@ pub(crate) fn write_installer_metadata<Cache: serde::Serialize, Build: serde::Se
 ///
 /// Returns `sys.executable` if the wheel is not relocatable; otherwise, returns a path relative
 /// to the scripts directory.
-pub(crate) fn get_relocatable_executable(
+pub fn get_relocatable_executable(
     executable: PathBuf,
     layout: &Layout,
     relocatable: bool,
@@ -830,7 +830,7 @@ fn parse_email_message_file(
 /// See: <https://github.com/PyO3/python-pkginfo-rs>
 ///
 /// See: <https://github.com/pypa/pip/blob/36823099a9cdd83261fdbc8c1d2a24fa2eea72ca/src/pip/_internal/utils/wheel.py#L38>
-pub(crate) fn find_dist_info(path: impl AsRef<Path>) -> Result<String, Error> {
+pub fn find_dist_info(path: impl AsRef<Path>) -> Result<String, Error> {
     // Iterate over `path` to find the `.dist-info` directory. It should be at the top-level.
     let Some(dist_info) = fs::read_dir(path.as_ref())?.find_map(|entry| {
         let entry = entry.ok()?;
@@ -861,7 +861,7 @@ pub(crate) fn find_dist_info(path: impl AsRef<Path>) -> Result<String, Error> {
 }
 
 /// Read the `dist-info` metadata from a directory.
-pub(crate) fn dist_info_metadata(
+pub fn dist_info_metadata(
     dist_info_prefix: &str,
     wheel: impl AsRef<Path>,
 ) -> Result<Vec<u8>, Error> {
@@ -876,7 +876,7 @@ pub(crate) fn dist_info_metadata(
 /// Returns (`script_name`, module, function)
 ///
 /// Extras are supposed to be ignored, which happens if you pass None for extras.
-pub(crate) fn parse_scripts(
+pub fn parse_scripts(
     wheel: impl AsRef<Path>,
     dist_info_prefix: &str,
     extras: Option<&[String]>,

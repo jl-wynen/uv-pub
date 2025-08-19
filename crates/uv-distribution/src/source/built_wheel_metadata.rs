@@ -13,24 +13,24 @@ use uv_pypi_types::{HashDigest, HashDigests};
 
 /// The information about the wheel we either just built or got from the cache.
 #[derive(Debug, Clone)]
-pub(crate) struct BuiltWheelMetadata {
+pub struct BuiltWheelMetadata {
     /// The path to the built wheel.
-    pub(crate) path: Box<Path>,
+    pub path: Box<Path>,
     /// The expected path to the downloaded wheel's entry in the cache.
-    pub(crate) target: Box<Path>,
+    pub target: Box<Path>,
     /// The parsed filename.
-    pub(crate) filename: WheelFilename,
+    pub filename: WheelFilename,
     /// The computed hashes of the source distribution from which the wheel was built.
-    pub(crate) hashes: HashDigests,
+    pub hashes: HashDigests,
     /// The cache information for the underlying source distribution.
-    pub(crate) cache_info: CacheInfo,
+    pub cache_info: CacheInfo,
     /// The build information for the wheel.
-    pub(crate) build_info: BuildInfo,
+    pub build_info: BuildInfo,
 }
 
 impl BuiltWheelMetadata {
     /// Create a [`BuiltWheelMetadata`] from a [`BuiltWheelFile`].
-    pub(crate) fn from_file(
+    pub fn from_file(
         file: BuiltWheelFile,
         hashes: HashDigests,
         cache_info: CacheInfo,
@@ -55,18 +55,18 @@ impl Hashed for BuiltWheelMetadata {
 
 /// The path to a built wheel file, along with its parsed filename.
 #[derive(Debug, Clone)]
-pub(crate) struct BuiltWheelFile {
+pub struct BuiltWheelFile {
     /// The path to the built wheel.
-    pub(crate) path: Box<Path>,
+    pub path: Box<Path>,
     /// The expected path to the downloaded wheel's entry in the cache.
-    pub(crate) target: Box<Path>,
+    pub target: Box<Path>,
     /// The parsed filename.
-    pub(crate) filename: WheelFilename,
+    pub filename: WheelFilename,
 }
 
 impl BuiltWheelFile {
     /// Find a compatible wheel in the cache.
-    pub(crate) fn find_in_cache(
+    pub fn find_in_cache(
         tags: &Tags,
         cache_shard: &CacheShard,
     ) -> Result<Option<Self>, std::io::Error> {
@@ -93,7 +93,7 @@ impl BuiltWheelFile {
     }
 
     /// Returns `true` if the wheel matches the given package name and version.
-    pub(crate) fn matches(&self, name: Option<&PackageName>, version: Option<&Version>) -> bool {
+    pub fn matches(&self, name: Option<&PackageName>, version: Option<&Version>) -> bool {
         name.is_none_or(|name| self.filename.name == *name)
             && version.is_none_or(|version| self.filename.version == *version)
     }

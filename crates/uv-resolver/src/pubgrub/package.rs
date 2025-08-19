@@ -97,7 +97,7 @@ pub enum PubGrubPackageInner {
 
 impl PubGrubPackage {
     /// Create a [`PubGrubPackage`] from a package name and extra.
-    pub(crate) fn from_package(
+    pub fn from_package(
         name: PackageName,
         extra: Option<ExtraName>,
         group: Option<GroupName>,
@@ -130,7 +130,7 @@ impl PubGrubPackage {
     }
 
     /// Returns the name of this PubGrub package, if it has one.
-    pub(crate) fn name(&self) -> Option<&PackageName> {
+    pub fn name(&self) -> Option<&PackageName> {
         match &**self {
             // A root can never be a dependency of another package, and a `Python` pubgrub
             // package is never returned by `get_dependencies`. So these cases never occur.
@@ -146,7 +146,7 @@ impl PubGrubPackage {
 
     /// Returns the name of this PubGrub package, if it is not the root package, a Python version
     /// constraint, or a system package.
-    pub(crate) fn name_no_root(&self) -> Option<&PackageName> {
+    pub fn name_no_root(&self) -> Option<&PackageName> {
         match &**self {
             PubGrubPackageInner::Root(_)
             | PubGrubPackageInner::Python(_)
@@ -160,7 +160,7 @@ impl PubGrubPackage {
 
     /// Returns the marker expression associated with this PubGrub package, if
     /// it has one.
-    pub(crate) fn marker(&self) -> MarkerTree {
+    pub fn marker(&self) -> MarkerTree {
         match &**self {
             // A root can never be a dependency of another package, and a `Python` pubgrub
             // package is never returned by `get_dependencies`. So these cases never occur.
@@ -178,7 +178,7 @@ impl PubGrubPackage {
     /// one.
     ///
     /// Note that if this returns `Some`, then `dev` must return `None`.
-    pub(crate) fn extra(&self) -> Option<&ExtraName> {
+    pub fn extra(&self) -> Option<&ExtraName> {
         match &**self {
             // A root can never be a dependency of another package, and a `Python` pubgrub
             // package is never returned by `get_dependencies`. So these cases never occur.
@@ -199,7 +199,7 @@ impl PubGrubPackage {
     /// package, if it has one.
     ///
     /// Note that if this returns `Some`, then `extra` must return `None`.
-    pub(crate) fn dev(&self) -> Option<&GroupName> {
+    pub fn dev(&self) -> Option<&GroupName> {
         match &**self {
             // A root can never be a dependency of another package, and a `Python` pubgrub
             // package is never returned by `get_dependencies`. So these cases never occur.
@@ -218,7 +218,7 @@ impl PubGrubPackage {
     ///
     /// If this package can't possibly be classified as conflicting, then
     /// this returns `None`.
-    pub(crate) fn conflicting_item(&self) -> Option<ConflictItemRef<'_>> {
+    pub fn conflicting_item(&self) -> Option<ConflictItemRef<'_>> {
         let package = self.name_no_root()?;
         match (self.extra(), self.dev()) {
             (None, None) => Some(ConflictItemRef::from(package)),
@@ -235,12 +235,12 @@ impl PubGrubPackage {
     }
 
     /// Returns `true` if this PubGrub package is the root package.
-    pub(crate) fn is_root(&self) -> bool {
+    pub fn is_root(&self) -> bool {
         matches!(&**self, PubGrubPackageInner::Root(_))
     }
 
     /// Returns `true` if this PubGrub package is a proxy package.
-    pub(crate) fn is_proxy(&self) -> bool {
+    pub fn is_proxy(&self) -> bool {
         matches!(
             &**self,
             PubGrubPackageInner::Extra { .. }
@@ -260,7 +260,7 @@ impl PubGrubPackage {
     /// "printable" `PubGrubPackage` coupled with a `Requires-Python`. But at
     /// time of writing, this was a larger refactor, particularly in the error
     /// reporting where this routine is used.
-    pub(crate) fn simplify_markers(&mut self, python_requirement: &PythonRequirement) {
+    pub fn simplify_markers(&mut self, python_requirement: &PythonRequirement) {
         match *Arc::make_mut(&mut self.0) {
             PubGrubPackageInner::Root(_)
             | PubGrubPackageInner::Python(_)
@@ -276,7 +276,7 @@ impl PubGrubPackage {
 
     /// This isn't actually used anywhere, but can be useful for printf-debugging.
     #[allow(dead_code)]
-    pub(crate) fn kind(&self) -> &'static str {
+    pub fn kind(&self) -> &'static str {
         match &**self {
             PubGrubPackageInner::Root(_) => "root",
             PubGrubPackageInner::Python(_) => "python",
@@ -289,7 +289,7 @@ impl PubGrubPackage {
     }
 
     /// Returns a new [`PubGrubPackage`] representing the base package with the given name.
-    pub(crate) fn base(name: &PackageName) -> Self {
+    pub fn base(name: &PackageName) -> Self {
         Self::from_package(name.clone(), None, None, MarkerTree::TRUE)
     }
 }

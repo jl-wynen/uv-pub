@@ -31,19 +31,19 @@ static SUGGESTIONS: LazyLock<FxHashMap<PackageName, PackageName>> = LazyLock::ne
 /// A rich reporter for operational diagnostics, i.e., errors that occur during resolution and
 /// installation.
 #[derive(Debug, Default)]
-pub(crate) struct OperationDiagnostic {
+pub struct OperationDiagnostic {
     /// The hint to display to the user upon resolution failure.
-    pub(crate) hint: Option<String>,
+    pub hint: Option<String>,
     /// Whether native TLS is enabled.
-    pub(crate) native_tls: bool,
+    pub native_tls: bool,
     /// The context to display to the user upon resolution failure.
-    pub(crate) context: Option<&'static str>,
+    pub context: Option<&'static str>,
 }
 
 impl OperationDiagnostic {
     /// Create an [`OperationDiagnostic`] with the given native TLS setting.
     #[must_use]
-    pub(crate) fn native_tls(native_tls: bool) -> Self {
+    pub fn native_tls(native_tls: bool) -> Self {
         Self {
             native_tls,
             ..Default::default()
@@ -52,7 +52,7 @@ impl OperationDiagnostic {
 
     /// Set the hint to display to the user upon resolution failure.
     #[must_use]
-    pub(crate) fn with_hint(self, hint: String) -> Self {
+    pub fn with_hint(self, hint: String) -> Self {
         Self {
             hint: Some(hint),
             ..self
@@ -61,7 +61,7 @@ impl OperationDiagnostic {
 
     /// Set the context to display to the user upon resolution failure.
     #[must_use]
-    pub(crate) fn with_context(self, context: &'static str) -> Self {
+    pub fn with_context(self, context: &'static str) -> Self {
         Self {
             context: Some(context),
             ..self
@@ -71,7 +71,7 @@ impl OperationDiagnostic {
     /// Attempt to report an error with rich diagnostic context.
     ///
     /// Returns `Some` if the error was not handled.
-    pub(crate) fn report(self, err: pip::operations::Error) -> Option<pip::operations::Error> {
+    pub fn report(self, err: pip::operations::Error) -> Option<pip::operations::Error> {
         match err {
             pip::operations::Error::Resolve(uv_resolver::ResolveError::NoSolution(err)) => {
                 if let Some(context) = self.context {
@@ -146,7 +146,7 @@ impl OperationDiagnostic {
 }
 
 /// Render a distribution failure (read, download or build) with a help message.
-pub(crate) fn dist_error(
+pub fn dist_error(
     kind: DistErrorKind,
     dist: Box<Dist>,
     chain: &DerivationChain,
@@ -194,7 +194,7 @@ pub(crate) fn dist_error(
 }
 
 /// Render a requested distribution failure (read, download or build) with a help message.
-pub(crate) fn requested_dist_error(
+pub fn requested_dist_error(
     kind: DistErrorKind,
     dist: Box<RequestedDist>,
     chain: &DerivationChain,
@@ -242,7 +242,7 @@ pub(crate) fn requested_dist_error(
 }
 
 /// Render an error in fetching a package's dependencies.
-pub(crate) fn dependencies_error(
+pub fn dependencies_error(
     error: Box<uv_resolver::ResolveError>,
     name: &PackageName,
     version: &Version,
@@ -290,19 +290,19 @@ pub(crate) fn dependencies_error(
 }
 
 /// Render a [`uv_resolver::NoSolutionError`].
-pub(crate) fn no_solution(err: &uv_resolver::NoSolutionError) {
+pub fn no_solution(err: &uv_resolver::NoSolutionError) {
     let report = miette::Report::msg(format!("{err}")).context(err.header());
     anstream::eprint!("{report:?}");
 }
 
 /// Render a [`uv_resolver::NoSolutionError`] with dedicated context.
-pub(crate) fn no_solution_context(err: &uv_resolver::NoSolutionError, context: &'static str) {
+pub fn no_solution_context(err: &uv_resolver::NoSolutionError, context: &'static str) {
     let report = miette::Report::msg(format!("{err}")).context(err.header().with_context(context));
     anstream::eprint!("{report:?}");
 }
 
 /// Render a [`uv_resolver::NoSolutionError`] with a help message.
-pub(crate) fn no_solution_hint(err: Box<uv_resolver::NoSolutionError>, help: String) {
+pub fn no_solution_hint(err: Box<uv_resolver::NoSolutionError>, help: String) {
     #[derive(Debug, miette::Diagnostic, thiserror::Error)]
     #[error("{header}")]
     #[diagnostic()]
@@ -325,7 +325,7 @@ pub(crate) fn no_solution_hint(err: Box<uv_resolver::NoSolutionError>, help: Str
 }
 
 /// Render a [`uv_resolver::NoSolutionError`] with a help message.
-pub(crate) fn native_tls_hint(err: uv_client::Error) {
+pub fn native_tls_hint(err: uv_client::Error) {
     #[derive(Debug, miette::Diagnostic)]
     #[diagnostic()]
     struct Error {

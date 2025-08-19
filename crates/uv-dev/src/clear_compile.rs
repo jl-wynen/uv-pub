@@ -5,12 +5,12 @@ use tracing::info;
 use walkdir::WalkDir;
 
 #[derive(Parser)]
-pub(crate) struct ClearCompileArgs {
+pub struct ClearCompileArgs {
     /// Compile all `.py` in this or any subdirectory to bytecode
     root: PathBuf,
 }
 
-pub(crate) fn clear_compile(args: &ClearCompileArgs) -> anyhow::Result<()> {
+pub fn clear_compile(args: &ClearCompileArgs) -> anyhow::Result<()> {
     let mut removed_files = 0;
     let mut removed_directories = 0;
     for entry in WalkDir::new(&args.root).contents_first(true) {
